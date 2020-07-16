@@ -192,13 +192,13 @@ export class HomeComponent implements OnInit {
 
 
          // tslint:disable-next-line:triple-equals
-         if (this.userType == this.reevaluatorRole) {
-         this.checkEvaluatedRemarks();
-         this.setRemarksForReEvaluation();
-         // tslint:disable-next-line:triple-equals
-         } else if (this.data.criteria != '') {
-          this.setEvaluationCriteria();
-         }
+        //  if (this.userType == this.reevaluatorRole) {
+        //  this.checkEvaluatedRemarks();
+        //  this.setRemarksForReEvaluation();
+        //  // tslint:disable-next-line:triple-equals
+        //  } else if (this.data.criteria != '') {
+        //   this.setEvaluationCriteria();
+        //  }
 
           this.isEditable = this.data.isEditable || this.isEditable;
           if (this.data.criteria) { this.calculateScore(); }

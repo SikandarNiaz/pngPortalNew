@@ -56,21 +56,23 @@
 
             <ng-container #sectionSeven *ngIf="sec?.imageViewType===7">
               <section-seven-view [data]="sec" class="width-100" [isEditable]="isEditable"
-                 (showModal)="showChildModal($event)" (assetTypeId)="calculateFacing($event)"></section-seven-view>
-
-                 
-
+                 (showModal)="showChildModal($event)"></section-seven-view>
             </ng-container>
+            <!-- (assetTypeId)="calculateFacing($event)" -->
+            <ng-container *ngIf="sec?.imageViewType===9">
+              <section-nine-view class="width-100" [data]="sec"  [isEditable]="isEditable" (showModal)="showChildModal($event)">
+              </section-nine-view>
+          </ng-container>
 
             <!-- [productList]="productList" [isEditable]="isEditable" (productList)="calculateMSLAgain($event)" -->
             <ng-container *ngIf="sec?.imageViewType===3">
               <section-three-view class="width-100" [data]="sec" [isEditable]="isEditable"
-                (productList)="calculateMSLAgain($event)" (showModal)="showChildModal($event)">
+                 (showModal)="showChildModal($event)">
               </section-three-view>
             </ng-container>
             <ng-container *ngIf="sec?.imageViewType===5">
               <section-five class="width-100" [data]="sec" [isEditable]="isEditable"
-                (productList)="calculateMSLAgain($event)" (showModal)="showChildModal($event)">
+                 (showModal)="showChildModal($event)">
               </section-five>
             </ng-container>
 
@@ -118,18 +120,18 @@
                   <td>
                     <label class="container" style="margin-bottom: 8px;">
                       <p style="padding-top: 5px; margin-bottom: 5px ">{{item?.title}}</p>
-                      <ng-container *ngIf=" item?.id!=20 && isCritical">
+                      <!-- <ng-container *ngIf=" item?.id!=20 && isCritical"> -->
                         <input class="checkbox" type="checkbox"
                             name="{{item?.title}}" [checked]=item?.isChecked id="{{item?.id}}"
                             (click)="counter(checked,item,i);createTickForSlider(item)" #checked>
                         <span class="checkmark"></span>
-                    </ng-container>
-                    <ng-container *ngIf=" item?.id==20 && !isNoNCritical">
+                    <!-- </ng-container> -->
+                    <!-- <ng-container *ngIf=" item?.id==20 && !isNoNCritical">
                         <input class="checkbox" type="checkbox"
                             name="{{item?.title}}" [checked]=item?.isChecked id="{{item?.id}}"
                             (click)="counter(checked,item,i)" #checked>
                         <span class="checkmark"></span>
-                    </ng-container>
+                    </ng-container> -->
 
                     </label>
                   </td>
@@ -203,7 +205,7 @@
             <div class="col-md-11 mt-1 ">
               <table class="table table-bordered sm-table">
                 <tr *ngFor="let tab of data?.shopDetails?.tagsList;let j=index ">
-                  <th style="background: lightgray; ">{{tab.heading}}</th>
+                  <th style="background:  #00A647; ">{{tab.heading}}</th>
                   <td style="word-break: break-word ">{{tab.value}}</td>
                 </tr>
 
@@ -324,7 +326,7 @@
             <div class="col-md-11 mt-1 ">
               <table class="table table-bordered sm-table">
                 <tr *ngFor="let tab of data?.shopDetails?.tagsList;let j=index ">
-                  <th style="background: lightgray; ">{{tab.heading}}</th>
+                  <th style="background:  #00A647; ">{{tab.heading}}</th>
                   <td style="word-break: break-word ">{{tab.value}}</td>
                 </tr>
 
