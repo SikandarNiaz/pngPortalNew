@@ -358,4 +358,9 @@ export class DashboardService {
     const url = this.ip + 'merchandiser-roaster';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
+
+  getKey(obj) {
+    const body = this.UrlEncodeMaker(obj);
+    return this.http.post(this.ip + 'tableauTicket',  body, this.httpOptions);
+  }
 }

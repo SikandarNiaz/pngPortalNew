@@ -56,7 +56,7 @@
 
             <ng-container #sectionSeven *ngIf="sec?.imageViewType===7">
               <section-seven-view [data]="sec" class="width-100" [isEditable]="isEditable"
-                 (showModal)="showChildModal($event)"></section-seven-view>
+              (psku)="setPSKUCriteria()" (showModal)="showChildModal($event)"></section-seven-view>
             </ng-container>
             <!-- (assetTypeId)="calculateFacing($event)" -->
             <ng-container *ngIf="sec?.imageViewType===9">
@@ -109,66 +109,93 @@
             <table class="table table-bordered sm-table table-hover" style="line-height:1">
               <thead class="thead-light">
                 <tr style="  text-align: center; ">
-                  <th>Title</th>
-                  <th>Score</th>
-                  <th>Achieved</th>
+                  <th>Criteria</th>
+  
                 </tr>
               </thead>
               <!-- {{cloneArray[0] | json }} -->
               <tbody>
                 <tr *ngFor="let item of cloneArray;let i=index" style="  text-align: center; ">
-                  <td>
-                    <label class="container" style="margin-bottom: 8px;">
-                      <p style="padding-top: 5px; margin-bottom: 5px ">{{item?.title}}</p>
-                      <!-- <ng-container *ngIf=" item?.id!=20 && isCritical"> -->
-                        <input class="checkbox" type="checkbox"
-                            name="{{item?.title}}" [checked]=item?.isChecked id="{{item?.id}}"
-                            (click)="counter(checked,item,i);createTickForSlider(item)" #checked>
-                        <span class="checkmark"></span>
-                    <!-- </ng-container> -->
-                    <!-- <ng-container *ngIf=" item?.id==20 && !isNoNCritical">
-                        <input class="checkbox" type="checkbox"
-                            name="{{item?.title}}" [checked]=item?.isChecked id="{{item?.id}}"
-                            (click)="counter(checked,item,i)" #checked>
-                        <span class="checkmark"></span>
-                    </ng-container> -->
 
-                    </label>
-                  </td>
-                  <td>
-                    <label class="container" for="score" style=" margin-top: 5px;  margin-bottom: 2px;">
-                      {{item?.score}}
-                    </label>
-                  </td>
+                  <ng-container *ngIf="item.parentId==-1">
+                    <td>
+                       <mat-accordion>
+                           <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false" >
+                       <mat-expansion-panel-header [collapsedHeight]="'40px'">
+                         <label class="container" style="margin-bottom: 8px;">
+                           <p style="padding-top: 5px; margin-bottom: 5px ">{{item?.title}}</p>
+     
+                         </label>
+                    
+                       <mat-panel-description>
+                       </mat-panel-description>
+                       </mat-expansion-panel-header>
+                       <table class="table table-bordered sm-table table-hover" style="line-height:1">
+                        <thead class="thead-light">
+                          <tr style="  text-align: center; ">
+                            <th>Title</th>
+                            <th>Score</th>
+                            <th>Achieved</th>
+            
+                          </tr>
+                        </thead>
 
-                  <td>                
-                    <label class="container" for="achievedScore" style=" margin-top: 5px; margin-bottom: 2px; ">
-                      <span>
-                        {{item?.achievedScore}}
-                      </span>
-              
-
-
-                    </label>
-                  </td>
+                        <tbody>
+                       <tr *ngFor="let item2 of cloneArray;let i=index" style="  text-align: center; ">
+                      
+                        <ng-container *ngIf="item2.parentId==item.id">
+                          <td>
+                            <label class="container" style="margin-bottom: 8px;">
+                              <ng-container *ngIf="item2.id!=116">
+                              <input class="checkbox" type="checkbox"
+                                    name="{{item2?.title}}" [checked]=item2?.isChecked id="{{item2?.id}}"
+                                    (click)="counter(checked,item2,i);createTickForSlider(item2)" #checked>
+                                <span class="checkmark"></span>
+                              <p style="padding-top: 5px; margin-bottom: 5px ">{{item2?.title}}</p>
+                                
+                            </ng-container>
+                            <ng-container *ngIf="item2.id==116">
+                              <input name="{{item2?.title}}"  id="{{item2?.id}}">
+                              <p style="padding-top: 5px; margin-bottom: 5px ">{{item2?.title}}</p>
+                                
+                            </ng-container>
+                            </label>
+                          </td>
+                          <td>
+                            <label class="container" for="score" style=" margin-top: 5px;  margin-bottom: 2px;">
+                              {{item2?.score}}
+                            </label>
+                          </td>
+        
+                          <td>                
+                            <label class="container" for="achievedScore" style=" margin-top: 5px; margin-bottom: 2px; ">
+                              <span>
+                                {{item2?.achievedScore}}
+                              </span>
+                      
+        
+        
+                            </label>
+                          </td>
+                        </ng-container>
+           
+                     </tr>
+                     </tbody>
+                     </table>
+                       </mat-expansion-panel>
+                       </mat-accordion>
+                     </td>
+                   </ng-container>
+                 
                 </tr>
                 <!-- <hr> -->
                 <tr style="font-weight:700;text-align:center">
                   <td>
-                    <label class="container" for="">Total Score:</label>
+                    <label class="container" for="">Total Score: {{totalAchieveScore.toFixed()}}/{{score.toFixed()}}</label>
 
                   </td>
-                  <td>
-                    <label class="container" for="score">
-                      {{score.toFixed()}}
-                    </label>
-                  </td>
-                  <td>
-                    <label class="container" for="totalAchieveScore">
-                      {{totalAchieveScore.toFixed()}}
-                    </label>
-
-                  </td>
+               
                 </tr>
               
                 <!-- <hr> -->
@@ -237,7 +264,7 @@
               <tbody>
                 
                 <tr *ngFor="let item of cloneArray;let i=index" style="  text-align: center; ">
-                  <ng-container *ngIf="!item.remarkId">
+                  <ng-container *ngIf="!item.remarkId && item.parentId!=-1">
                   <td>
                     <label class="container" style="margin-bottom: 8px;">
                       <p style="padding-top: 5px; margin-bottom: 5px ">{{item?.title}}</p>
@@ -501,3 +528,4 @@
       </div>
   </div>
 </div>
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { config } from 'src/assets/config';
@@ -10,27 +10,30 @@ import { config } from 'src/assets/config';
 })
 export class TopnavComponent implements OnInit {
     public pushRightClass: string;
-    showButton=true;
+    showButton = true;
     userName;
-    main_logo=config.main_logo;
-
+    main_logo = config.main_logo;
+   @Output('hideSideBar') hideBar: any = new EventEmitter<any>();
     constructor(public router: Router, private translate: TranslateService) {
         this.router.events.subscribe(val => {
             if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
                 this.toggleSidebar();
             }
+
         });
 
-        this.userName=localStorage.getItem('user_name');
+        this.userName = localStorage.getItem('user_name');
+
+
     }
 
     ngOnInit() {
         this.pushRightClass = 'push-right';
         let url: any = new Array();
         url = this.router.url.split('/');
-        let t: any = url.find(d => d === 'shop_detail')
+        const t: any = url.find(d => d === 'shop_detail');
         if (t) {
-            this.showButton = false
+            this.showButton = false;
         }
     }
 
@@ -53,3 +56,4 @@ export class TopnavComponent implements OnInit {
         this.translate.use(language);
     }
 }
+

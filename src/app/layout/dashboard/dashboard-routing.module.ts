@@ -31,6 +31,12 @@ import { SupervisorWwwrSummaryComponent } from './innerComponents/supervisor-www
 import { ShopListReportComponent } from './innerComponents/shop-list-report/shop-list-report.component';
 import { MerchandiserRoasterComponent } from './innerComponents/merchandiser-roaster/merchandiser-roaster.component';
 import { MerchandiserScoreComponent } from './innerComponents/merchandiser-score/merchandiser-score.component';
+import { SkuDashboardTableauComponent } from './Tableau/sku-dashboard-tableau/sku-dashboard-tableau.component';
+import { SosDashboardTableauComponent } from './Tableau/sos-dashboard-tableau/sos-dashboard-tableau.component';
+import { ProductivityDashboardTableauComponent } from './Tableau/productivity-dashboard-tableau/productivity-dashboard-tableau.component';
+import { StfDashboardComponent } from './Tableau/stf-dashboard/stf-dashboard.component';
+import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-error-report.component';
+
 
 
 const routes: Routes = [
@@ -65,7 +71,11 @@ const routes: Routes = [
             { path: 'upload_routes/shops_for_single_route', component: ShopsForSingleRouteComponent },
             { path: 'add_device', component: AddDeviceComponent },
             { path: 'merchandiser_roster', component: MerchandiserRoasterComponent },
-            { path: 'merchandiser_score', component: MerchandiserScoreComponent }
+            { path: 'sku-dashboard', component: SkuDashboardTableauComponent },
+            { path: 'sos-dashboard', component: SosDashboardTableauComponent },
+            { path: 'productivity-tableau', component: ProductivityDashboardTableauComponent },
+            { path: 'stf-dashboard', component: StfDashboardComponent },
+            { path: 'vo_error_report', component: VoErrorReportComponent}
 
 
 

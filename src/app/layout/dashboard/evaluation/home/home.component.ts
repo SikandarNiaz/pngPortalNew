@@ -1,3 +1,25 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {Location} from '@angular/common';
 import { EvaluationService } from '../evaluation.service';
@@ -46,6 +68,8 @@ export class HomeComponent implements OnInit {
   evaluationArray: any = [];
   products: any = [];
   productList: any = [];
+  totalSkus = 0;
+  achievedSkus = 0;
   msl: any;
   p: any = {};
   availabilityCount: number;
@@ -192,15 +216,14 @@ export class HomeComponent implements OnInit {
 
 
          // tslint:disable-next-line:triple-equals
-        //  if (this.userType == this.reevaluatorRole) {
-        //  this.checkEvaluatedRemarks();
-        //  this.setRemarksForReEvaluation();
-        //  // tslint:disable-next-line:triple-equals
-        //  } else if (this.data.criteria != '') {
-        //   this.setEvaluationCriteria();
-        //  }
-
-          this.isEditable = this.data.isEditable || this.isEditable;
+         if (this.userType == this.reevaluatorRole) {
+         this.checkEvaluatedRemarks();
+         this.setRemarksForReEvaluation();
+         // tslint:disable-next-line:triple-equals
+         } else {
+          this.setPSKUCriteria();
+         }
+          this.isEditable = true;
           if (this.data.criteria) { this.calculateScore(); }
          }
 
@@ -262,6 +285,67 @@ checkEvaluatedRemarks() {
     }
 
     this.totalAchieveScore = this.getTotalAchieveScore();
+  }
+
+
+  setPSKUCriteria() {
+
+    if (this.sectionList.length > 0) {
+      for (const element of this.sectionList) {
+        if (element.imageViewType === 7) {
+          element.skuTable.forEach(p => {
+           this.totalSkus++;
+           if (p.available_sku >= 1) {
+             this.achievedSkus++;
+           }
+          });
+        }
+      }
+    }
+    console.log('TOTAL: ', this.totalSkus++);
+    console.log('Achieved: ', this.achievedSkus);
+    const percentage = ((this.achievedSkus / this.totalSkus) * 100).toFixed();
+    console.log('percentage: ', percentage);
+    this.setScore(percentage);
+    this.totalAchieveScore = this.getTotalAchieveScore();
+    this.totalSkus = 0;
+    this.achievedSkus = 0;
+  }
+
+  setScore(score) {
+    if (score > 80) {
+      score = 25;
+    } else if (score >= 71 && score <= 80) {
+      score = 20;
+     } else if (score >= 61 && score <= 70) {
+       score = 15;
+     } else if (score >= 56 && score <= 60) {
+      score = 10;
+    } else if (score >= 51 && score <= 55) {
+      score = 5;
+    } else {
+      score = 0;
+    }
+    for (const element1 of this.cloneArray) {
+      // tslint:disable-next-line:triple-equals
+      if (element1.id == 116) {
+        const obj = {
+          id: element1.id,
+          title: element1.title,
+          score: element1.score,
+          criteriaMapId: element1.criteriaMapId,
+          parentId: element1.parentId,
+          achievedScore: score,
+          isEditable: element1.isEditable,
+          isChecked: 0
+        };
+        this.cloneArray.splice(this.m, 1, obj);
+      } else {
+        this.m++;
+      }
+    }
+    this.m = 0;
+
   }
 
   setRemarksForReEvaluation() {
@@ -403,7 +487,7 @@ return total;
       score: criteria.score,
       criteriaMapId: criteria.criteriaMapId,
       // achievedScore: (criteria.isEditable)? (this.criteriaDesireScore==criteria.score)?0:this.criteriaDesireScore : 0,
-      assetTypeId: criteria.assetTypeId,
+      parentId: criteria.parentId,
       achievedScore: criteria.isEditable ? this.criteriaDesireScore : 0,
       isEditable: criteria.isEditable,
       isChecked: 1
@@ -512,7 +596,7 @@ return total;
           title: criteria.title,
           score: criteria.score,
           criteriaMapId: criteria.criteriaMapId,
-          assetTypeId: criteria.assetTypeId,
+          parentId: criteria.parentId,
           achievedScore: criteria.score > criteria.achievedScore || criteria.score < 0 ? criteria.score : criteria.achievedScore,
           isEditable: criteria.isEditable,
           isChecked: 0
@@ -547,7 +631,7 @@ return total;
         score: criteria.score,
         criteriaMapId: criteria.criteriaMapId,
         achievedScore: criteria.score > criteria.achievedScore ? criteria.score : criteria.achievedScore,
-        assetTypeId: criteria.assetTypeId,
+        parentId: criteria.parentId,
         isEditable: criteria.isEditable,
         isChecked: 0
       };
@@ -798,3 +882,4 @@ return total;
 }
 
 }
+

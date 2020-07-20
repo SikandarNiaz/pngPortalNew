@@ -8,7 +8,8 @@
 }
 
 mat-toolbar {
-    background: lightgray
+    background: #00A647;
+    
 }
 
 .nav-brand {
@@ -61,3 +62,9 @@ mat-toolbar {
         display: block !important;
     }
 }
+
+#navbtn {
+    float: left;
+    width:20%;
+    cursor: pointer;
+  }

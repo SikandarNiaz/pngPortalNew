@@ -53,6 +53,12 @@ import { MerchandiserRoasterComponent } from './innerComponents/merchandiser-roa
 import {MatTabsModule} from '@angular/material/tabs';
 import {EvaluationModule} from './evaluation/evaluation.module';
 import { MerchandiserScoreComponent } from './innerComponents/merchandiser-score/merchandiser-score.component';
+import { TableauHelperComponent } from './Tableau/tableau-helper/tableau-helper.component';
+import { SkuDashboardTableauComponent } from './Tableau/sku-dashboard-tableau/sku-dashboard-tableau.component';
+import { SosDashboardTableauComponent } from './Tableau/sos-dashboard-tableau/sos-dashboard-tableau.component';
+import { ProductivityDashboardTableauComponent } from './Tableau/productivity-dashboard-tableau/productivity-dashboard-tableau.component';
+import { StfDashboardComponent } from './Tableau/stf-dashboard/stf-dashboard.component';
+import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-error-report.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -96,6 +102,6 @@ ReactiveFormsModule
           TposmDeploymentReportComponent, LineChartComponent,
           UpdatePasswordComponent, RawDataComponent, MatTableComponent,
           DataAvailabilityComponent, MerchandiserListComponent,
-          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent]
+          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent, TableauHelperComponent, SkuDashboardTableauComponent, SosDashboardTableauComponent, ProductivityDashboardTableauComponent, StfDashboardComponent, VoErrorReportComponent]
 })
 export class DashboardModule {}

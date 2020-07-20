@@ -73,5 +73,11 @@ export class EvaluationService {
     return this.http.post(url, urlencoded, this.httpOptions);
 
   }
+  updateData(obj) {
+    const urlencoded = this.UrlEncodeMaker(obj);
 
+    const url = this.ip + 'updateEvaluationData';
+    return this.http.post(url, urlencoded, this.httpOptions);
+
+  }
 }

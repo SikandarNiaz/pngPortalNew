@@ -1,5 +1,4 @@
-<mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
-<mat-tab label="Merchandiser List">
+
 <div class="animated slideInLeft">
     <mat-card class="mb-20" style="padding-top: 1px; padding-bottom: 1px;">
 
@@ -103,7 +102,7 @@
                                 <td>{{item?.supervisor_name}}</td>
                                 <!-- <td style="color:blue;cursor:pointer" [routerLink]="['/dashboard/evaluation/list']" [queryParams]="{ surveyorId: item.id,startDate: modifyDate(startDate),endDate: modifyDate(startDate)}">
                                     {{item?.captured_shops}}</td> -->
-                                <td style="color:blue;cursor:pointer" (click)="gotoNewPage(item)">
+                                <td style="color:#00A647;cursor:pointer" (click)="gotoNewPage(item)">
                                         {{item?.captured_shops}}</td>
                                     <td>{{item?.evaluated_shops}}</td>
                                 <td>{{item?.approved_shops}}</td>
@@ -127,12 +126,7 @@
         </mat-card>
     </div>
 </ng-container>
-</mat-tab>
-<mat-tab *ngIf="userTypeId!=ReEvaluatorId" label="Shop List">
-    <app-details-page *matTabContent [startDate]="startDate">
-    </app-details-page>
-    </mat-tab>
-</mat-tab-group>
+
 <div class="row " *ngIf="loading">
     <div class="col-md-12 text-center">
         <div class="img-center">

@@ -35,13 +35,16 @@
     }
     &:before {
         content: '';
-        background: #B70000;
+        background: #00A647;
         position: absolute;
         top: 50%;
         left: 0;
         bottom: 0;
         right: 0;
     }
+}
+.mat-raised-button{
+    background: #00A647;
 }
 
 .login-page2 {

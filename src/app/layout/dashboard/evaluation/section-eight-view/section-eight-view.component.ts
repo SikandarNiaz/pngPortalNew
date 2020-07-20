@@ -35,6 +35,7 @@ export class SectionEightViewComponent implements OnInit {
   updatingMSL: boolean;
   colorUpdateList: any = [];
   surveyId: any;
+  visibilityData: any;
   flag = 0;
   evaluatorId: any;
   MSLCount = 0;
@@ -64,6 +65,7 @@ export class SectionEightViewComponent implements OnInit {
       this.data = changes.data.currentValue;
       this.selectedImage = this.data.imageList[0];
       this.products = this.data.chillerTable || [];
+      this.visibilityData = this.data.genericTable || [];
     }
 
 if (this.products.length > 0) {
@@ -142,20 +144,18 @@ getTotalCount(availableDepth, desiredDepth) {
   }
 
 
-  toggleValue(product, flag) {
+  changeAvailability(product) {
     this.loading = true;
     if (this.isEditable) {
       this.changeColor = true;
       this.colorUpdateList.push(product.id);
        const obj = {
         msdId: product.detailId,
-        facing: product.face_unit,
-        unit_available: product.unit_available,
-        surveyId: product.surveyId,
+        newValue: product.unit_available,
         evaluatorId: this.evaluatorId,
-        flag: flag
+        type: 5
       };
-  this.httpService.updateChillerData(obj).subscribe((data: any) => {
+  this.httpService.updateData(obj).subscribe((data: any) => {
     if (data.success) {
       this.loading = false;
       this.toastr.success('Data Updated Successfully');
@@ -180,7 +180,6 @@ getTotalCount(availableDepth, desiredDepth) {
         localStorage.setItem('productList', JSON.stringify(this.products));
 
 
-      this.facing = this.getFacingCount(this.products);
       this.availableDepth = this.getAvailDepthCount(this.products);
       this.total = this.getTotalCount(this.availableDepth, this.desiredDepth);
 
@@ -198,5 +197,85 @@ getTotalCount(availableDepth, desiredDepth) {
 
     }
 }
+
+changeFacing(product) {
+  this.loading = true;
+  if (this.isEditable) {
+    this.changeColor = true;
+    this.colorUpdateList.push(product.id);
+     const obj = {
+      msdId: product.detailId,
+      newValue: product.face_unit,
+      surveyId: product.surveyId,
+      evaluatorId: this.evaluatorId,
+      type: 6
+    };
+this.httpService.updateData(obj).subscribe((data: any) => {
+  if (data.success) {
+    this.loading = false;
+    this.toastr.success('Data Updated Successfully');
+    this.childModal.hide();
+    const key = data.detailId;
+    this.products.forEach(e => {
+      if (key === e.detailId) {
+        const i = this.products.findIndex(p => p.detailId === key);
+        const obj = {
+          id: e.detailId,
+          stock: e.stock,
+          unit_available: e.unit_available,
+          product_title: e.product_title,
+          face_unit: e.face_unit,
+          color: 'red'
+        };
+
+
+        this.products.splice(i, 1, obj);
+        // console.log(this.products[i])
+      }
+      localStorage.setItem('productList', JSON.stringify(this.products));
+
+
+    this.facing = this.getFacingCount(this.products);
+    this.total = this.getTotalCount(this.availableDepth, this.desiredDepth);
+
+    });
+
+     this.productForEmit.emit(this.products);
+    // this.toastr.success('Status updated successfully.','Update MSL');
+    this.updatingMSL = false;
+
+
+  } else {
+    this.toastr.error(data.message, 'Update Data');
+  }
+});
+
+  }
+}
+
+changeHangerFacing(product) {
+  this.loading = true;
+  if (this.isEditable) {
+    this.changeColor = true;
+    this.colorUpdateList.push(product.id);
+     const obj = {
+      msdId: product.detail_id,
+      newValue: product.face_unit,
+      evaluatorId: this.evaluatorId,
+      type: 7
+    };
+this.httpService.updateData(obj).subscribe((data: any) => {
+  if (data.success) {
+    this.loading = false;
+    this.toastr.success('Data Updated Successfully');
+  } else {
+    this.toastr.error(data.message, 'Update Data');
+  }
+});
+
+  }
+}
+
+
 }
 

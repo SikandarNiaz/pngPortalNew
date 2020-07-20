@@ -1,6 +1,7 @@
 <div class="container-fluid">
+    <ng-container *ngIf="isEditable==false">
     <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div>
-
+    
     <div class="row">
 
         <div class="col-md-12 text-center">
@@ -26,8 +27,6 @@
                     <img src="{{ip}}{{selectedImage?.url}}" class="img-thumbnail" style="        height: 450px;  width: 100%;  " (click)="showChildModal(selectedImage)">
                     <div class="row justify-content-center" style="word-break: break-word !important">
                 <div>
-                    <div for="cat" class="cat" style="word-break: break-word"><strong>Remarks: </strong>{{selectedImage?.shopRemarks}}</div>
-                    <div for="cat" class="cat" style="word-break: break-word"><strong>Time Spent: </strong>{{selectedImage?.timeStamp}}</div>
                 </div>
                 </div>
                 </div>
@@ -80,7 +79,7 @@
     
             </div>
         </div>
-    
+        
         <div class="col-7 tableFixHead" *ngIf="products.length>0">
             <!-- <table class="table">
                 <thead style="background:lightgray">
@@ -100,7 +99,6 @@
                         <th>Product Title</th>
                         <th>Availability
                         </th>
-                        <th>D.Facing</th>
                         <th>A.Facing</th>
 
                     </tr>
@@ -115,30 +113,16 @@
                         <!-- <td style="width:250px !important" style="cursor:pointer" [ngStyle]="{'background-color':product.color}" (click)="toggleValue(product)">
                             {{updateString(product?.available_sku)}}
                         </td> -->
-                        <ng-container *ngIf="isEditable==false">
-                        <td style="width:100px !important" [ngClass]="{'background-color': product?.MSL=='Yes' || product?.product_id==61 || product?.product_id==62}" >
+                        
+                        <td style="width:200px !important" [ngClass]="{'background-color': product?.MSL=='Yes' || product?.product_id==61 || product?.product_id==62}" >
                             {{updateString(product?.available_sku)}}
                         </td>
-                        <td style="width:100px !important" >
-                            {{product?.desired_facing}}</td>
+
                         
-                        <td style="width:100px !important" >
+                        <td style="width:200px !important" >
                             {{product?.face_unit}}</td>
-                        </ng-container>
-
-                        <ng-container *ngIf="isEditable==true">
-                            <td style="cursor:pointer" (click)="changeSku(product)" [ngClass]="{'background-color': product?.MSL=='Yes' || product?.product_id==61 || product?.product_id==62}">
-                            {{updateString(product?.available_sku)}}</td>
-                            <td style="width:100px !important">    
-                                <input type="number" [(ngModel)]="product.desired_facing"  style="width: 4em" readonly/></td>
-
-                                <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                    <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
-
-                        </ng-container>
+                      
                         
-
-
                         <!-- <td (click)="product.available_sku = (!product.available_sku)">{{toggleValue(product?.available_sku)}}</td> -->
 
                     </tr>
@@ -146,7 +130,6 @@
                         <!-- <td></td> -->
                         <th>Availability / Total</th>
                         <td>{{availability}} / {{products.length}}</td>
-                        <td>{{totalDesiredFacing}}</td>
                         <td>{{facing}}</td>
                         <!-- <th>
                             {{MSLNAvailabilityCount}} / {{MSLCount}}
@@ -157,5 +140,253 @@
             </table>
         </div>
     </div>
-   
+    <div class="row justify-content-center">
+        <ng-container class="mt-2 justify-content-center " *ngIf="data?.tagsList">
+            <div class="col-md-11 mt-5 ">
+                <table class="table table-bordered ">
+                    <tr *ngFor="let tab of data.tagsList;let j=index ">
+                        <th style="width:50%;background: #00A647; ">{{tab.heading}}</th>
+                        <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
+                    </tr>
+    
+                </table>
+    
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length>0">
+     
+            <table class="table table-bordered table-hover w-100" >
+                <thead style="background: #00A647">
+                    <tr>
+                        <!-- <th>Brand Title</th> -->
+                        <th>Secondary Category</th>
+                        <th>Remarks</th>
+                        <th>Secondary Utilization</th>
+
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr *ngFor="let data of secondaryData">
+                        <td style="width:500px !important">{{data?.categoryTitle}}</td>
+                        <td style="width:300px !important">{{data?.remarks}}</td>
+                        
+                            <td style="width:200px !important">{{data?.utilization}}</td>
+                            
+
+                          
+                    </tr>
+                </tbody>
+    
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+    <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length>0">
+ 
+        <table class="table table-bordered table-hover w-100" >
+            <thead style="background: #00A647">
+                <tr>
+                    <!-- <th>Brand Title</th> -->
+                    <th>KBD Question</th>
+                    <th>Selected Option</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let data of kbdData">
+                    <td style="width:800px !important">{{data?.question}}</td>
+                    <td>
+                        {{data?.answer}}
+                     </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+</ng-container>
+
+
+
+
+
+<ng-container *ngIf="isEditable==true">
+    <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div>
+    
+    <div class="row">
+
+        <div class="col-md-12 text-center">
+            <h4><u>{{data?.sectionTitle }} </u><i color="warn" [ngClass]="{'fa fa-cog fa-spin':loading}"></i></h4>
+        </div>
+
+
+        <div class="col-5">
+
+
+
+            <div class="row">
+
+                <div class="col-12" style="
+                max-height: 500px !important;
+            ">
+                  
+
+                    <label class="title" for="title">{{selectedImage?.title}}</label>
+                    <img src="{{ip}}{{selectedImage?.url}}" class="img-thumbnail" style="        height: 450px;  width: 100%;  " (click)="showChildModal(selectedImage)">
+                    <div class="row justify-content-center" style="word-break: break-word !important">
+                <div>
+                </div>
+                </div>
+                </div>
+
+                <div class="col-12 ml-3 mt-2">
+                    <div class="row">
+    
+                        <ng-container *ngFor="let img of data?.imageList ;let i=index ">
+                            <div class="col-2 mb-1 card  mt-5 mr-2" (click)="setSelectedImage(img)" style="padding: 0% !important;cursor:pointer" [ngClass]="{'bgColor': img?.url==selectedImage.url}">
+                                <img src="{{ip}}{{img?.url}} " width="100" class="img-thumbnail side-image" style="height: 80px !important;width: 120px !important;">
+                            
+                            </div>
+    
+    
+    
+                        </ng-container>
+                    </div>
+                  
+                </div>
+    
+    
+            </div>
+        </div>
+        
+        <div class="col-7 tableFixHead" *ngIf="products.length>0">
+            
+            <table class="table table-bordered table-hover w-100" >
+                <thead style="background:lightgray">
+                    <tr>
+                        <!-- <th>Brand Title</th> -->
+                        <th>Product Title</th>
+                        <th>Availability
+                        </th>
+                        <th>A.Facing</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let product of products;let j= index">
+                         <!-- <td>{{product?.category_title}}</td> -->
+                        <td style="width:800px !important">{{product?.product_title}}</td>
+                        
+                      
+                        <td style="cursor:pointer" (click)="changeSku(product)" [ngClass]="{'background-color': product?.MSL=='Yes' }">
+                            {{updateString(product?.available_sku)}}</td>
+                            
+                        <td style="width:200px !important" [ngStyle]="{'background-color':product.color}">    
+                            <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
+                        
+                      
+                        
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <th>Availability / Total</th>
+                        <td>{{availability}} / {{products.length}}</td>
+                        <td>{{facing}}</td>
+                      
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <ng-container class="mt-2 justify-content-center " *ngIf="data?.tagsList">
+            <div class="col-md-11 mt-5 ">
+                <table class="table table-bordered ">
+                    <tr *ngFor="let tab of data.tagsList;let j=index ">
+                        <th style="width:50%;background: #00A647; ">{{tab.heading}}</th>
+                        <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
+                    </tr>
+    
+                </table>
+    
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length>0">
+     
+            <table class="table table-bordered table-hover w-100" >
+                <thead style="background: #00A647">
+                    <tr>
+                        <!-- <th>Brand Title</th> -->
+                        <th>Secondary Category</th>
+                        <th>Remarks</th>
+                        <th>Secondary Utilization</th>
+                       
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr *ngFor="let data of secondaryData">
+                        <td style="width:500px !important">{{data?.categoryTitle}}</td>
+                        <td style="width:300px !important">{{data?.remarks}}</td>
+                        <td style="width:200px !important">    
+                            <input type="number" [(ngModel)]="data.utilization" maxlength="3"  style="width: 4em" (blur)="changeUtilization(data)"/></td>
+                           
+                            
+
+                          
+                    </tr>
+                </tbody>
+    
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+    <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length>0">
+ 
+        <table class="table table-bordered table-hover w-100" >
+            <thead style="background: #00A647">
+                <tr>
+                    <!-- <th>Brand Title</th> -->
+                    <th>KBD Question</th>
+                    <th>Selected Value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let data of kbdData">
+                    <td style="width:700px !important">{{data?.question}}</td>
+                    <td>
+                        <select #newValue (change)="changeKbd(newValue.value, data)">
+                            <ng-container *ngFor="let options of data.optionList"> 
+                                <option *ngIf="data.answer==options.title" [value]="options.id" selected="selected">  {{options?.title}} </option>
+                                    <option *ngIf="data.answer!=options.title" [value]="options.id">  {{options?.title}} </option>
+                                    </ng-container>
+                         </select>
+                         </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+</ng-container>
+    
 </div>
+
+
+
+
+<ng-container *ngIf="isEditable==true">
+   
+</ng-container>

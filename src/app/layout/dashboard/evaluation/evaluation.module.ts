@@ -29,12 +29,13 @@ import { SectionEightViewComponent } from './section-eight-view/section-eight-vi
 import {MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import { MatButtonModule, MatIconModule, MatTableModule,
  MatSelectModule,MatPaginatorModule, MatNativeDateModule, MatMenuModule } from '@angular/material';
+import { SectionNineViewComponent } from './section-nine-view/section-nine-view.component';
 
 @NgModule({
   declarations: [HomeComponent, DetailsPageComponent, MainPageComponent,
     SectionOneViewComponent, SectionTwoViewComponent,
      SectionThreeViewComponent, SectionFourViewComponent,
-     SectionFiveComponent, SectionSixComponent, SectionSevenViewComponent, SectionEightViewComponent],
+     SectionFiveComponent, SectionSixComponent, SectionSevenViewComponent, SectionEightViewComponent, SectionNineViewComponent],
   imports: [
     CommonModule,
     EvaluationRoutingModule,

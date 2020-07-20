@@ -123,9 +123,9 @@
                             <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
                                 <input type="number" [(ngModel)]="product.stock"  style="width: 4em" readonly/></td>
                                 <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                    <input type="number" [(ngModel)]="product.unit_available" maxlength="3"  style="width: 4em" (blur)="toggleValue(product,1)"/></td>
+                                    <input type="number" [(ngModel)]="product.unit_available" maxlength="3"  style="width: 4em" (blur)="changeAvailability(product)"/></td>
                                     <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                        <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="toggleValue(product,2)"/></td>
+                                        <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
                                     </ng-container>
     
     
@@ -148,9 +148,73 @@
             </table>
         <!-- </form> -->
         </div>
+
+        <div class="col-7 tableFixHead" *ngIf="visibilityData.length>0">
+         
+            <table class="table table-bordered table-hover w-100" >
+                <thead style="background:lightgray">
+                    <tr>
+                        <!-- <th>Brand Title</th> -->
+                        <th>Product Title</th>
+                        <th>D.Facing</th>
+                        <th>A.Facing</th>
+                       
+    
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr *ngFor="let data of visibilityData;let j= index">
+                        
+                        <ng-container *ngIf="isEditable==false">
+                        <td style="width:700px !important">{{data?.product_title}}</td>
+                        
+                        
+                        <td style="width:100px !important">{{data?.desired_facing}}</td>
+                        <td style="width:100px !important">{{data?.face_unit}}</td>
+                        </ng-container>
+                        <ng-container *ngIf="isEditable==true">
+                            <td style="width:700px !important">{{data?.product_title}}</td>
+                                <td style="width:100px !important">    
+                                    <input type="number" [(ngModel)]="data.desired_facing"  style="width: 4em" readonly/></td>
+                                    <td style="width:100px !important" [ngStyle]="{'background-color':data.color}">    
+                                        <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (blur)="changeHangerFacing(data)"/></td>
+                            </ng-container>
+                      
+                  
+    
+    
+                    </tr>
+    
+                </tbody>
+          
+            </table>
+    
+            
+    
+    
+        </div>
     </div>
 
-    <div bsModal #childModal="bs-modal" [config]="{ignoreBackdropClick: true, keyboard: false, backdrop: false}" class="modal fade" tabindex="-1"
+
+
+            <div class="row justify-content-center">
+                <ng-container class="mt-2 justify-content-center " *ngIf="data?.tagsList">
+                    <div class="col-md-11 mt-5 ">
+                        <table class="table table-bordered ">
+                            <tr *ngFor="let tab of data.tagsList;let j=index ">
+                                <th style="width:50%;background: #00A647; ">{{tab.heading}}</th>
+                                <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
+                            </tr>
+            
+                        </table>
+            
+                    </div>
+                </ng-container>
+            </div>
+  
+
+    <!-- <div bsModal #childModal="bs-modal" [config]="{ignoreBackdropClick: true, keyboard: false, backdrop: false}" class="modal fade" tabindex="-1"
     role="dialog" aria-labelledby="dialog-child-name">
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -187,7 +251,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
   </div>

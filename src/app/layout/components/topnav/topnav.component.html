@@ -1,10 +1,13 @@
-<mat-toolbar class="fix-nav" color="warn">
+<mat-toolbar class="fix-nav">
     <button type="button" mat-icon-button class="visible-md" (click)="toggleSidebar()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
     <div class="nav-brand mt10 ">
+        <button id="navbtn" mat-icon-button>
+        <mat-icon  (click)="hideBar.emit()">reorder</mat-icon>
+        </button>
         <img src="{{main_logo}}" height="50">
-
+        
     </div>
     <form class="hidden-sm" style="margin-left: 20px; margin-top: 5px">
         <!-- <mat-icon>account_circle </mat-icon> -->
@@ -34,9 +37,9 @@
         </button>
     </mat-menu> -->
     <!--  -->
-    <span style="color:rgb(245, 241, 241);">{{userName}}</span>
+    <span style="color:#000000;">{{userName}}</span>
 
-    <button *ngIf="userName && showButton" class="hidden-sm" mat-icon-button [matMenuTriggerFor]="profile">
+        <button *ngIf="userName && showButton" class="hidden-sm" mat-icon-button [matMenuTriggerFor]="profile">
 
         <mat-icon>account_circle</mat-icon><br>
     </button>

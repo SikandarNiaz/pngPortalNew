@@ -153,4 +153,11 @@ export class DetailsPageComponent implements OnInit {
     }
 
 }
+
+// gotoNewPage(item) {
+//        // tslint:disable-next-line:triple-equals
+//       if (item.flag == -1) {
+//       window.open(`${environment.hash}dashboard/evaluation/list/details/${item.survey_id}`, '_blank');
+//        }
+//       }
 }

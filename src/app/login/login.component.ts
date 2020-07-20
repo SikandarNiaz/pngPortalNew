@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('user_name', res.user.userName);
             localStorage.setItem('menu', JSON.stringify(res.list));
             localStorage.setItem('Reevaluator', res.ReEvaluator);
+            localStorage.setItem('Evaluator', res.Evaluator);
 
 
             this.router.navigate(['/dashboard']);

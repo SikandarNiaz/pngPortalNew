@@ -9,6 +9,14 @@ div.ngxImageZoomContainer {
     overflow: scroll;
 }
 
+.tableHead {
+    // overflow-y: auto;
+    // height: 100px;
+    height: auto;
+    overflow: scroll;
+    max-height:200px;
+}
+
 .max-width-150>td {
     width: 75px !important;
     word-break: break-all;
@@ -58,5 +66,5 @@ table {
 }
 
 .background-color {
-    background-color: lightblue !important
+    background-color:  #00A647 !important
 }

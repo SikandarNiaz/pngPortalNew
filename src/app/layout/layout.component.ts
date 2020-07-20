@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-layout',
@@ -7,17 +8,35 @@ import { Router } from '@angular/router';
     styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit {
-    hideSideBar: boolean = false; //make default value to false after completing SMS manager;
+    hideSideBar = false; // make default value to false after completing SMS manager;
+    url: any;
+
     constructor(public router: Router) { }
 
     ngOnInit() {
+        this.router.events.pipe(filter(e => e instanceof NavigationEnd)
+        ).subscribe((e: NavigationEnd) => {
+            this.url = e.url;
+            // tslint:disable-next-line:triple-equals
+            if (e.url == '/dashboard/sos-dashboard' || e.url == '/dashboard/sku-dashboard' || e.url == '/dashboard/productivity-tableau' || e.url == '/dashboard/stf-dashboard') {
+                this.hideSideBar = true;
+            }
+        });
         let url: any = new Array();
         url = this.router.url.split('/');
-        let t: any = url.find(d => d === 'shop_detail');
-        let r:any=url.find(d => d === 'details');
+        const t: any = url.find(d => d === 'shop_detail');
+        const r: any = url.find(d => d === 'details');
         if (t || r) {
-            this.hideSideBar = true
+            this.hideSideBar = true;
         }
 
+    }
+
+    hideBarStatus() {
+        if (this.hideSideBar === true) {
+            this.hideSideBar = false;
+        } else {
+            this.hideSideBar = true;
+        }
     }
 }
