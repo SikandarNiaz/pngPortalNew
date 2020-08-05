@@ -1,25 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {Location} from '@angular/common';
 import { EvaluationService } from '../evaluation.service';
@@ -64,6 +42,7 @@ export class HomeComponent implements OnInit {
   childArray: any = [];
   selectedCriteria: any = {};
   isTotalScore = 0;
+  surveyorId = -1;
   remarkId: any = [];
   evaluationArray: any = [];
   products: any = [];
@@ -223,7 +202,7 @@ export class HomeComponent implements OnInit {
          } else {
           this.setPSKUCriteria();
          }
-          this.isEditable = true;
+         this.isEditable = this.data.isEditable || this.isEditable;
           if (this.data.criteria) { this.calculateScore(); }
          }
 
@@ -683,12 +662,21 @@ return total;
 
     if (req) {
 
+
+      for (const element of this.data.shopDetails.tagsList) {
+        // tslint:disable-next-line:triple-equals
+        if (element.heading == 'surveyorId') {
+          this.surveyorId = element.value;
+        }
+      }
+
       // tslint:disable-next-line:triple-equals
       if (this.userType == this.reevaluatorRole) {
         const obj = {
           criteria: this.cloneArray,
           surveyId: this.surveyId,
           evaluatorId: user_id,
+          surveyorId: this.surveyorId,
           evaluationRemark: this.selectedEvaluationRemark,
           status: this.checkForSlectedRemarks(this.cloneArray)
         };
@@ -724,6 +712,7 @@ return total;
           criteria: this.cloneArray,
           surveyId: this.surveyId,
           evaluatorId: user_id,
+          surveyorId: this.surveyorId,
           status: this.checkForSlectedRemarks(this.cloneArray)
         };
 

@@ -264,7 +264,7 @@
               <tbody>
                 
                 <tr *ngFor="let item of cloneArray;let i=index" style="  text-align: center; ">
-                  <ng-container *ngIf="!item.remarkId && item.parentId!=-1">
+                  <ng-container *ngIf="!item.remarkId">
                   <td>
                     <label class="container" style="margin-bottom: 8px;">
                       <p style="padding-top: 5px; margin-bottom: 5px ">{{item?.title}}</p>
