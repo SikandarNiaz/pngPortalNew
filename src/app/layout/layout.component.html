@@ -1,22 +1,14 @@
-<!-- <app-nav></app-nav> -->
-
 
 <app-topnav (hideSideBar)="hideBarStatus()"></app-topnav>
-<ng-container *ngIf="!hideSideBar">
-    <app-sidebar></app-sidebar>
-    <div class="main-container">
+<ng-container >
+    <app-sidebar *ngIf="!hideSideBar"></app-sidebar>
+    <div class="main-container"  [ngClass]="{'main-container': !hideSideBar, 'container-fluid mt-12':hideSideBar}">
 
         <router-outlet></router-outlet>
     </div>
 </ng-container>
 
-<ng-container *ngIf="hideSideBar">
-    <div class="container-fluid mt-12" *ngIf="url=='/dashboard/sos-dashboard' || url == '/dashboard/sku-dashboard' ||  url=='/dashboard/productivity-tableau' || url=='/dashboard/stf-dashboard'; else elseBlock">
-        <router-outlet></router-outlet>
-    </div>
-    <ng-template #elseBlock>
-        <div class="container-fluid mt-6">
-            <router-outlet></router-outlet>
-        </div>
-    </ng-template>
-</ng-container>
+
+
+
+
