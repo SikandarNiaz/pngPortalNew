@@ -85,7 +85,7 @@ export class FilterBarComponent implements OnInit {
   loading = true;
   sortOrder = true;
   sortBy: 'completed';
-  selectedRemark =0;
+  selectedRemark = 0;
   remarksList = [];
 
   // @ViewChild('remarksModal') remarksModal: ModalDirective;
@@ -1086,7 +1086,8 @@ export class FilterBarComponent implements OnInit {
         startDate: moment(this.startDate).format('YYYY-MM-DD'),
         endDate: moment(this.endDate).format('YYYY-MM-DD'),
         zoneId: this.selectedZone.id || -1,
-        regionId: this.selectedRegion.id || -1
+        regionId: this.selectedRegion.id || -1,
+        environment: environment.hash
       };
 
       const url = 'vo-error-report';
