@@ -3,6 +3,7 @@ import { DashboardService } from '../../dashboard.service';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { ExcelService } from '../../excel.service';
 
 @Component({
   selector: 'app-merchandiser-roaster',
@@ -22,43 +23,64 @@ export class MerchandiserRoasterComponent implements OnInit {
   selectedRegion: any = {};
   selectedId = -1;
   loadingReportMessage = false;
-  selectedEvaluator = -1;
+  downloadList = [{ key: 'xlsx', title: 'Excel', icon: 'fa fa-file-excel-o' }];
+  selectedEvaluator: any = {};
   evaluatorList: any = [];
   userTypeId: any;
   ReEvaluatorId: any;
-  merchandiserList: any = [];
+  obj: any = {};
+  merchandiserList: any;
+  myMap = new Map();
   loading = true;
   loadingData: boolean;
   regions: any = [];
   p = 1;
+  selectedFileType: {};
+  ids: Array<number>;
+  flag = -1;
+
+
   sortOrder = true;
   sortBy: 'merchandiser_code';
-  constructor(private httpService: DashboardService, private toastr: ToastrService) {
+  constructor(private httpService: DashboardService, private toastr: ToastrService, private excelService: ExcelService) {
+    this.ids = [1, 2, 3, 4, 5, 6, 7];
     this.zones = JSON.parse(localStorage.getItem('zoneList'));
   }
 
   ngOnInit() {
     this.loadingData = false;
     this.userTypeId = localStorage.getItem('user_type');
-    this.getMerchandiserList();
+    this.ReEvaluatorId = localStorage.getItem('Reevaluator');
     this.sortIt('merchandiser_code');
+    this.loadEvaluators();
+    this.getMerchandiserList();
   }
 
 
 
   getMerchandiserList() {
     this.loadingData = true;
-    const obj = {
+    // tslint:disable-next-line:triple-equals
+    if (this.userTypeId == this.ReEvaluatorId) {
+      this.obj = {
+        evaluatorId: this.selectedEvaluator.id || -1,
+        startDate: moment(this.startDate).format('YYYY-MM-DD'),
+        endDate: moment(this.endDate).format('YYYY-MM-DD'),
+        merId: this.selectedId
+      };
+    } else {
+    this.obj = {
       evaluatorId: localStorage.getItem('user_id'),
       startDate: moment(this.startDate).format('YYYY-MM-DD'),
       endDate: moment(this.endDate).format('YYYY-MM-DD'),
       merId: this.selectedId
     };
+  }
 
-    this.httpService.getMerchandiserRoaster(obj).subscribe((data: any) => {
+    this.httpService.getMerchandiserRoaster(this.obj).subscribe((data: any) => {
       // console.log('merchandiser list for evaluation',data);
       if (data) {
-        this.merchandiserList = data;
+        this.myMap = data;
         this.loadingData = false;
         this.loading = false;
       }
@@ -105,4 +127,40 @@ export class MerchandiserRoasterComponent implements OnInit {
     this.sortOrder = !this.sortOrder;
   }
 
+  loadEvaluators() {
+    this.httpService.getEvaluatorList().subscribe(
+      data => {
+        if (data) { this.evaluatorList = data; }
+      },
+      error => {
+        error.status === 0 ? this.toastr.error('Please check Internet Connection', 'Error') : this.toastr.error(error.description, 'Error');
+      }
+    );
+  }
+
+  downloadFile(file, dataTable) {
+    // this.loading=true;
+    console.log(file, dataTable);
+    const type = file.key;
+    const data: any = dataTable;
+    const fileTitle = 'Merchandiser Roster';
+
+    this.excelService.exportAsExcelFile(data, fileTitle);
+
+    this.selectedFileType = {};
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
+  }
+
+
+  putValue(map, index) {
+    for (const element of map) {
+      // tslint:disable-next-line:triple-equals
+      if (element.key == index) {
+        return element.value;
+      }
+    }
+    return '';
+  }
 }
