@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
   isFromShop = true;
   rotationDegree = 0;
   isEditable: any = false;
+  visitDay = '';
   selectedIndex = -1;
   facing: any;
   desiredFacing: any;
@@ -202,7 +203,7 @@ export class HomeComponent implements OnInit {
          } else {
           this.setPSKUCriteria();
          }
-         this.isEditable = this.data.isEditable || this.isEditable;
+         this.isEditable = true;
           if (this.data.criteria) { this.calculateScore(); }
          }
 
@@ -273,18 +274,18 @@ checkEvaluatedRemarks() {
       for (const element of this.sectionList) {
         if (element.imageViewType === 7) {
           element.skuTable.forEach(p => {
+            // tslint:disable-next-line:triple-equals
+            if (p.is_competition == 1) {
            this.totalSkus++;
-           if (p.available_sku >= 1) {
+           if (p.available_sku >= 1 ) {
              this.achievedSkus++;
+           }
            }
           });
         }
       }
     }
-    console.log('TOTAL: ', this.totalSkus++);
-    console.log('Achieved: ', this.achievedSkus);
     const percentage = ((this.achievedSkus / this.totalSkus) * 100).toFixed();
-    console.log('percentage: ', percentage);
     this.setScore(percentage);
     this.totalAchieveScore = this.getTotalAchieveScore();
     this.totalSkus = 0;
@@ -667,6 +668,9 @@ return total;
         // tslint:disable-next-line:triple-equals
         if (element.heading == 'surveyorId') {
           this.surveyorId = element.value;
+        // tslint:disable-next-line:triple-equals
+        } else if (element.heading == 'Visit Date') {
+          this.visitDay = element.value;
         }
       }
 
@@ -677,6 +681,7 @@ return total;
           surveyId: this.surveyId,
           evaluatorId: user_id,
           surveyorId: this.surveyorId,
+          visitDate: this.visitDay,
           evaluationRemark: this.selectedEvaluationRemark,
           status: this.checkForSlectedRemarks(this.cloneArray)
         };
@@ -712,6 +717,7 @@ return total;
           criteria: this.cloneArray,
           surveyId: this.surveyId,
           evaluatorId: user_id,
+          visitDate: this.visitDay,
           surveyorId: this.surveyorId,
           status: this.checkForSlectedRemarks(this.cloneArray)
         };
