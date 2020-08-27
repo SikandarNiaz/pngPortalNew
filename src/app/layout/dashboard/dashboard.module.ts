@@ -59,6 +59,7 @@ import { SosDashboardTableauComponent } from './Tableau/sos-dashboard-tableau/so
 import { ProductivityDashboardTableauComponent } from './Tableau/productivity-dashboard-tableau/productivity-dashboard-tableau.component';
 import { StfDashboardComponent } from './Tableau/stf-dashboard/stf-dashboard.component';
 import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-error-report.component';
+import { MerchandiserWiseScoreComponent } from './innerComponents/merchandiser-wise-score/merchandiser-wise-score.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -102,6 +103,6 @@ ReactiveFormsModule
           TposmDeploymentReportComponent, LineChartComponent,
           UpdatePasswordComponent, RawDataComponent, MatTableComponent,
           DataAvailabilityComponent, MerchandiserListComponent,
-          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent, TableauHelperComponent, SkuDashboardTableauComponent, SosDashboardTableauComponent, ProductivityDashboardTableauComponent, StfDashboardComponent, VoErrorReportComponent]
+          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent, TableauHelperComponent, SkuDashboardTableauComponent, SosDashboardTableauComponent, ProductivityDashboardTableauComponent, StfDashboardComponent, VoErrorReportComponent, MerchandiserWiseScoreComponent]
 })
 export class DashboardModule {}
