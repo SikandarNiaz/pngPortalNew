@@ -146,6 +146,7 @@ getTotalCount(availableDepth, desiredDepth) {
 
   changeAvailability(product) {
     this.loading = true;
+    if (product.unit_available != null) {
     if (this.isEditable) {
       this.changeColor = true;
       this.colorUpdateList.push(product.id);
@@ -196,10 +197,15 @@ getTotalCount(availableDepth, desiredDepth) {
   });
 
     }
+  } else {
+    this.toastr.error('Availability Value is Incorrect');
+    this.loading = false;
+  }
 }
 
 changeFacing(product) {
   this.loading = true;
+  if (product.face_unit != null) {
   if (this.isEditable) {
     this.changeColor = true;
     this.colorUpdateList.push(product.id);
@@ -251,10 +257,15 @@ this.httpService.updateData(obj).subscribe((data: any) => {
 });
 
   }
+} else {
+  this.toastr.error('Facing Value is Incorrect');
+  this.loading = false;
+}
 }
 
 changeHangerFacing(product) {
   this.loading = true;
+  if (product.face_unit != null) {
   if (this.isEditable) {
     this.changeColor = true;
     this.colorUpdateList.push(product.id);
@@ -274,8 +285,11 @@ this.httpService.updateData(obj).subscribe((data: any) => {
 });
 
   }
+} else {
+  this.toastr.error('Facing Value is Incorrect');
+  this.loading = false;
 }
 
-
+}
 }
 

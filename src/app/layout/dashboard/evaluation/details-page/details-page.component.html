@@ -19,7 +19,7 @@
 
     <mat-card-content>
         <mat-card-title>
-            {{tableTitle | uppercase}} {{title| uppercase}} <i color="warn" [ngClass]="{'fa fa-cog fa-spin':loading}"></i>
+            {{tableTitle | uppercase}} {{title| uppercase}} <i [ngClass]="{'fa fa-cog fa-spin':loading}"></i>
             <p *ngIf="!loading && tableData==0">No data available</p>
             <!-- <button type="button" class="btn btn-primary" >Open child modal</button> -->
 
