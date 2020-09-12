@@ -264,6 +264,7 @@
               <tbody>
                 
                 <tr *ngFor="let item of cloneArray;let i=index" style="  text-align: center; ">
+                  <ng-container *ngIf="item.parentId!=-1">
                   <ng-container *ngIf="!item.remarkId">
                   <td>
                     <label class="container" style="margin-bottom: 8px;">
@@ -327,7 +328,7 @@
                 </td>
               </ng-container>
               
-              
+            </ng-container>
                 </tr>
                 <!-- <hr> -->
 

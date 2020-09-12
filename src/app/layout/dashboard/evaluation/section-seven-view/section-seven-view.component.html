@@ -114,7 +114,7 @@
                             {{updateString(product?.available_sku)}}
                         </td> -->
                         
-                        <td style="width:200px !important" [ngClass]="{'background-color': product?.is_competition==1}" >
+                        <td style="width:200px !important" [ngClass]="{'background-color': product?.is_competition==1 && product?.nestle_brand_id==2}" >
                             {{updateString(product?.available_sku)}}
                         </td>
 
@@ -284,7 +284,7 @@
                         <td style="width:800px !important">{{product?.product_title}}</td>
                         
                       
-                        <td style="cursor:pointer" (click)="changeSku(product)" [ngClass]="{'background-color': product?.is_competition==1 }">
+                        <td style="cursor:pointer" (click)="changeSku(product)" [ngClass]="{'background-color': product?.is_competition==1 && product?.nestle_brand_id==2}">
                             {{updateString(product?.available_sku)}}</td>
                             
                         <td style="width:200px !important" [ngStyle]="{'background-color':product.color}">    

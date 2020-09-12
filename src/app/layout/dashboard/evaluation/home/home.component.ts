@@ -275,7 +275,7 @@ checkEvaluatedRemarks() {
         if (element.imageViewType === 7) {
           element.skuTable.forEach(p => {
             // tslint:disable-next-line:triple-equals
-            if (p.is_competition == 1) {
+            if (p.is_competition == 1 && p.nestle_brand_id==2) {
            this.totalSkus++;
            if (p.available_sku >= 1 ) {
              this.achievedSkus++;
