@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitte
 import { ModalDirective } from 'ngx-bootstrap';
 import { environment } from 'src/environments/environment';
 import { config } from 'src/assets/config';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'section-two-view',
@@ -20,7 +21,8 @@ export class SectionTwoViewComponent implements OnInit {
   configFile = config;
   reevaluatorRole: any;
   userType: any;
-
+  imageAtt: any = {};
+i = 0;
   ip: any = this.configFile.ip;
   hover = 'hover';
   zoomOptions = {
@@ -34,6 +36,22 @@ export class SectionTwoViewComponent implements OnInit {
   ngOnInit() {
     this.reevaluatorRole = localStorage.getItem('Reevaluator');
     this.userType = localStorage.getItem('user_type');
+    this.imageAtt = this.data.imageList;
+    for (let i = 0; i < this.data.imageList.length; i++) {
+
+      const obj = {
+        url: this.data.imageList[i].url,
+        time: this.data.imageList[i].time,
+        title: this.data.imageList[i].title,
+        shopRemarks: this.data.imageList[i].shopRemarks,
+        visitDate: this.data.imageList[i].visitDate,
+        visitDateTime: this.data.imageList[i].visitDateTime,
+        surveyId: this.data.imageList[i].surveyId,
+        timeRequired: this.setTimeFormat(this.data.imageList[i].timeRequired)
+      };
+      this.data.imageList.splice(i, 1, obj);
+    }
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -41,6 +59,15 @@ export class SectionTwoViewComponent implements OnInit {
     this.data = changes.data.currentValue;
     this.selectedImage = this.data.imageList[0];
 
+  }
+
+  setTimeFormat(time) {
+    const h = Math.floor(time / 60);
+    const m = time % 60;
+    const hours = h < 10 ? '0' + h : h;
+    const min = m < 10 ? '0' + m : m;
+    console.log('new time' , hours + ':' + min + ':00');
+    return hours + ':' + min + ':00';
   }
 
   openSurvey(img) {

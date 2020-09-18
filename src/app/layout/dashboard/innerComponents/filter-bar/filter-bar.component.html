@@ -1627,3 +1627,107 @@
 
     </mat-card-content>
 </mat-card>
+
+
+<mat-card class="mb-20" *ngIf="router.url==='/dashboard/sos-report' ">
+
+    <mat-card-content>
+        <mat-card-title>
+            {{title| uppercase}} <i color="warn" [ngClass]="{'fa fa-cog fa-spin':loadingData}"></i>
+            <small style="color:lightseagreen !important" class="mtb-5-IMP" *ngIf="loadingReportMessage">Your file is being prepared for download</small>
+
+        </mat-card-title>
+
+        <section class="example-section">
+        <mat-form-field class="example-margin mr-10-IMP">
+            <mat-select placeholder="Criteria" name='criteria' [(ngModel)]="selectedCriteria">
+                <mat-option [value]="criteria" *ngFor="let criteria of criteriaList">{{criteria.title}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </section>
+        <section class="example-section">
+            <mat-form-field class="example-margin mr-10-IMP">
+                <mat-select placeholder="Zone" name='zone' [(ngModel)]="selectedZone" (ngModelChange)="zoneChange()">
+
+                    <mat-option [value]="zone" *ngFor="let zone of zones">{{zone.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="regions.length>0" class="example-margin mr-10-IMP">
+                <mat-select placeholder="Region" name='region' [(ngModel)]="selectedRegion" (ngModelChange)="regionChange()">
+
+                    <mat-option [value]="region" *ngFor="let region of regions">{{region.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </section>
+        <section class="example-section">
+
+            <mat-form-field *ngIf="channels.length>0" class="example-margin mr-10-IMP">
+                <!-- {{selectedChannel |json }} -->
+                <mat-select placeholder="Channel" name='channel' [(ngModel)]="selectedChannel" multiple #channelSelect="ngModel" [compareWith]="equals">
+                    <mat-option disabled="disabled" class="filter-option"> <button mat-raised-button class="mat-primary fill text-sm" (click)="selectAll(channelSelect, channels)">
+                            Select All
+                          </button>
+                        <button mat-raised-button color="warn" class="ml-1 mat-accent fill text-sm" (click)="deselectAll(channelSelect)">
+                            Deselect All
+                          </button>
+                    </mat-option>
+
+                    <mat-option [value]="channel" *ngFor="let channel of channels">{{channel.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field *ngIf="areas.length>0" class="example-margin mr-10-IMP">
+                <mat-select placeholder="Areas" name='area' [(ngModel)]="selectedAreas" multiple #areaSelect="ngModel" [compareWith]="equals">
+                    <mat-option disabled="disabled" class="filter-option"> <button mat-raised-button class="mat-primary fill text-sm" (click)="selectAll(areaSelect, areas)">
+                            Select All
+                          </button>
+                        <button mat-raised-button color="warn" class="ml-1 mat-accent fill text-sm" (click)="deselectAll(areaSelect)">
+                            Deselect All
+                          </button>
+                    </mat-option>
+
+                    <mat-option [value]="area" *ngFor="let area of areas">{{area.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="distributionList.length>0" class="example-margin mr-10-IMP">
+                <mat-select placeholder="Distributions" name='distribution' [(ngModel)]="selectedDistributions" multiple #distributionSelect="ngModel" [compareWith]="equals">
+                    <mat-option disabled="disabled" class="filter-option"> <button mat-raised-button class="mat-primary fill text-sm" (click)="selectAll(distributionSelect, distributionList)">
+                            Select All
+                          </button>
+                        <button mat-raised-button color="warn" class="ml-1 mat-accent fill text-sm" (click)="deselectAll(distributionSelect)">
+                            Deselect All
+                          </button>
+                    </mat-option>
+
+                    <mat-option [value]="distribution" *ngFor="let distribution of distributionList">{{distribution.title}}</mat-option>
+                </mat-select>
+            </mat-form-field> 
+
+        </section>
+        <section class="example-section">
+            <mat-form-field class="example-full-width mr-10-IMP">
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker0" [(ngModel)]="startDate" placeholder="Choose a start date" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker0"></mat-datepicker-toggle>
+                <mat-datepicker #picker0></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width mr-10-IMP">
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker1" [(ngModel)]="endDate" placeholder="Choose a end date" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+        </section>
+
+        <section class="example-section">
+            <button *ngIf="router.url==='/dashboard/sos-report'" [disabled]="selectedChannel.length<1" mat-raised-button color="warn" (click)="getSOSReport()">Download</button>
+            <span *ngIf="selectedChannel.length<1" class="channel-message"><small>(channel selection is mandatory)</small></span>
+
+        </section>
+
+    </mat-card-content>
+</mat-card>
+

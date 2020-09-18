@@ -51,9 +51,12 @@ export class FilterBarComponent implements OnInit {
   loadingData: boolean;
   regions: any = [];
   channels: any = [];
-
+  criteriaList: any = [{id: 1, title: 'Visits Base'}, {id: 2, title: 'Unique'}];
+  selectedCriteria: any = {};
   selectedZone: any = {};
   selectedRegion: any = {};
+  selectedAreas: any = [];
+  selectedDistributions: any = [];
   selectedChannel: any = [];
   startDate = new Date();
   endDate = new Date();
@@ -76,7 +79,9 @@ export class FilterBarComponent implements OnInit {
   selectedProduct: any = [];
   selectedImpactType: any = {};
   impactTypeList: any = [];
-
+  reportTypeList: any=[{id:1, title: 'National'}, {id: 2, title: 'Zonal'}, {id:3, title:'Regional'}
+,{id:4, title:'Area'}, {id:5,title:'Distribution'}];
+selectedReportType:any={};
   queryList: any = [];
   selectedQuery: any = {};
 
@@ -127,6 +132,7 @@ export class FilterBarComponent implements OnInit {
   }
   ngOnInit() {
     this.httpService.checkDate();
+    this.selectedCriteria = this.criteriaList[0];
     console.log('router', this.router.url);
     this.lastVisit = this.dataService.getLastVisit();
     this.mustHave = this.dataService.getYesNo();
@@ -686,6 +692,23 @@ export class FilterBarComponent implements OnInit {
     });
     return result;
   }
+  typeArrayMaker(arr, type) {
+    const all = arr.filter(a => a === 'all');
+    const result: any = [];
+    if (all[0] === 'all') {
+      if (type === 1) {
+      arr = this.channels;
+      } else if (type === 2) {
+        arr = this.areas;
+      } else if (type === 3) {
+        arr = this.distributionList;
+      }
+    }
+    arr.forEach(e => {
+      result.push(e.id);
+    });
+    return result;
+  }
 
   getOOSShopListReport() {
     if (this.endDate >= this.startDate) {
@@ -1120,4 +1143,51 @@ export class FilterBarComponent implements OnInit {
     }
   }
 
+  getSOSReport() {
+    if (this.endDate >= this.startDate) {
+      this.loadingData = true;
+      this.loadingReportMessage = true;
+      const obj = {
+        zoneId: this.selectedZone.id || -1,
+        regionId: this.selectedRegion.id || -1,
+        startDate: moment(this.startDate).format('YYYY-MM-DD'),
+        endDate: moment(this.endDate).format('YYYY-MM-DD'),
+        channelId: this.typeArrayMaker(this.selectedChannel, 1),
+        cityId: this.selectedCity.id || -1,
+        distributionId: this.typeArrayMaker(this.selectedDistributions, 3),
+        areaId: this.typeArrayMaker(this.selectedAreas, 2),
+        criteria: this.selectedCriteria.id,
+        pageType: 1,
+        angularRequest: 'Y'
+      };
+
+      const url = 'shareofshelf';
+      const body = this.httpService.UrlEncodeMaker(obj);
+      this.httpService.getKeyForProductivityReport(body, url).subscribe(
+        data => {
+          console.log(data, 'query list');
+          const res: any = data;
+
+          if (res) {
+            const obj2 = {
+              key: res.key,
+              fileType: res.fileType
+            };
+            const url = 'downloadReport';
+            this.getproductivityDownload(obj2, url);
+          } else {
+            this.clearLoading();
+
+            this.toastr.info('Something went wrong,Please retry', 'dashboard Data Availability Message');
+          }
+        },
+        error => {
+          this.clearLoading();
+        }
+      );
+    } else {
+      this.clearLoading();
+      this.toastr.info('Something went wrong,Please retry', 'dashboard Data Availability Message');
+    }
+  }
 }

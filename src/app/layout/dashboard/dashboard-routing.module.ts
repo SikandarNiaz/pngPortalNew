@@ -37,7 +37,7 @@ import { ProductivityDashboardTableauComponent } from './Tableau/productivity-da
 import { StfDashboardComponent } from './Tableau/stf-dashboard/stf-dashboard.component';
 import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-error-report.component';
 import { MerchandiserWiseScoreComponent } from './innerComponents/merchandiser-wise-score/merchandiser-wise-score.component';
-
+import { SosReportComponent } from './innerComponents/sos-report/sos-report.component';
 
 
 const routes: Routes = [
@@ -79,7 +79,8 @@ const routes: Routes = [
             { path: 'vo_error_report', component: VoErrorReportComponent},
             { path: 'merchandiser_score', component: MerchandiserScoreComponent },
             { path: 'merchandiser_wise_score', component: MerchandiserWiseScoreComponent },
-            { path: 'merchandiser_score/:surveyorId/:startDate/:endDate', component: MerchandiserScoreComponent }
+            { path: 'merchandiser_score/:surveyorId/:startDate/:endDate', component: MerchandiserScoreComponent },
+            { path: 'sos-report', component: SosReportComponent }
 
 
 
