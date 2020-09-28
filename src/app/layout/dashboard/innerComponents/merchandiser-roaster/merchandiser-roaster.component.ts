@@ -38,6 +38,8 @@ export class MerchandiserRoasterComponent implements OnInit {
   selectedFileType: {};
   ids: Array<number>;
   flag = -1;
+  totalEvaluated = 0;
+  tmpTotal = 0;
 
 
   sortOrder = true;
@@ -158,9 +160,17 @@ export class MerchandiserRoasterComponent implements OnInit {
     for (const element of map) {
       // tslint:disable-next-line:triple-equals
       if (element.key == index) {
+        this.tmpTotal = this.tmpTotal + element.value;
         return element.value;
       }
     }
     return '';
+  }
+
+
+  showTotal() {
+    this.totalEvaluated = this.tmpTotal;
+    this.tmpTotal = 0;
+    return this.totalEvaluated;
   }
 }

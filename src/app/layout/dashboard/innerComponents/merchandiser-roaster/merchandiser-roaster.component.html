@@ -105,6 +105,8 @@
                                   </th>
                                   <th  style="cursor: pointer">Sat
                                   </th>
+                                  <th  style="cursor: pointer">Total
+                                </th>
                                                
                                           
   
@@ -118,7 +120,7 @@
                                 <ng-container *ngFor="let i of ids">
                                     <td style="color:blue">{{ putValue(item.value | keyvalue,i) }}</td>
                                     </ng-container>
-  
+                                    <td>{{showTotal()}}</td>
                                  
                                                   
                             </tr>
