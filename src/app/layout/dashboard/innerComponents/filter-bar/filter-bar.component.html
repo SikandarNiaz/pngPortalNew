@@ -1629,7 +1629,7 @@
 </mat-card>
 
 
-<mat-card class="mb-20" *ngIf="router.url==='/dashboard/sos-report' ">
+<mat-card class="mb-20" *ngIf="router.url==='/dashboard/sos-report' || router.url==='/dashboard/oos-detail-report'">
 
     <mat-card-content>
         <mat-card-title>
@@ -1723,7 +1723,8 @@
         </section>
 
         <section class="example-section">
-            <button *ngIf="router.url==='/dashboard/sos-report'" [disabled]="selectedChannel.length<1" mat-raised-button color="warn" (click)="getSOSReport()">Download</button>
+            <button *ngIf="router.url==='/dashboard/sos-report'" [disabled]="selectedChannel.length<1" mat-raised-button color="warn" (click)="getOperationReports(1)">Download</button>
+            <button *ngIf="router.url==='/dashboard/oos-detail-report'" [disabled]="selectedChannel.length<1" mat-raised-button color="warn" (click)="getOperationReports(8)">Download</button>
             <span *ngIf="selectedChannel.length<1" class="channel-message"><small>(channel selection is mandatory)</small></span>
 
         </section>
