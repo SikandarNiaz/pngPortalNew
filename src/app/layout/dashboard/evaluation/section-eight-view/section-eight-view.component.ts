@@ -43,7 +43,7 @@ export class SectionEightViewComponent implements OnInit {
   facing: any;
   availableDepth: any;
   desiredDepth: any;
-  stock: any;
+  dFacing: any;
   total: any;
 
   selectedProduct: any = {};
@@ -72,7 +72,7 @@ if (this.products.length > 0) {
       this.facing = this.getFacingCount(this.products);
       this.availableDepth = this.getAvailDepthCount(this.products);
       this.desiredDepth = this.getDesDepthCount(this.products);
-      this.stock = this.getStockCount(this.products);
+      this.dFacing = this.getDesiredFacingCount(this.products);
       this.total = this.getTotalCount(this.availableDepth, this.desiredDepth);
       }
 
@@ -93,7 +93,7 @@ if (this.products.length > 0) {
 getAvailDepthCount(products) {
   let sum = 0;
   products.forEach(el => {
-    sum =  + el.unit_available + sum;
+    sum =  + el.face_unit + sum;
   });
   return sum;
 }
@@ -101,15 +101,15 @@ getAvailDepthCount(products) {
 getDesDepthCount(products) {
   let sum = 0;
   products.forEach(el => {
-    sum = sum + el.desiredDepth;
+    sum = sum + el.desired_facing;
   });
   return sum;
 }
 
-getStockCount(products) {
+getDesiredFacingCount(products) {
   let sum = 0;
   products.forEach(el => {
-    sum = sum + el.stock;
+    sum = sum + el.desired_facing;
   });
   return sum;
 }

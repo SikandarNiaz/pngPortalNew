@@ -57,21 +57,6 @@
   
                       </ng-container>
                   </div>
-                  <!-- this.table is moved to home page -->
-                  <!-- <div class="row justify-content-center">
-                  <ng-container class="mt-5 justify-content-center " *ngIf="data?.tagsList ">
-                      <div class="col-md-11 mt-5 ">
-                          <table class="table table-bordered ">
-                              <tr *ngFor="let tab of data.tagsList;let j=index ">
-                                  <th style="width:50%;background: lightgray; ">{{tab.heading}}</th>
-                                  <td style="width:50%;word-break: break-word ">{{tab.value}}</td>
-                              </tr>
-      
-                          </table>
-      
-                      </div>
-                  </ng-container>
-              </div> -->
               </div>
   
   
@@ -98,8 +83,8 @@
                         <!-- <th>Brand Title</th> -->
                         <th>Product Title</th>
                         <!-- <th>D.Depth</th> -->
-                        <th>Stock</th>
                         <th>A.Depth</th>
+                        <th>D.Facing</th>
                         <th>Facing</th>
   
                     </tr>
@@ -107,23 +92,24 @@
   
                 <tbody>
                     <tr *ngFor="let product of products;let j= index">
-                         <!-- <td>{{product?.category_title}}</td> -->
                         <td style="width:900px !important ">{{product?.product_title}}</td>
-                        <!-- <td style="width:100px !important">
-                            {{product?.desiredDepth}}</td> -->
+                   
                             <ng-container *ngIf="isEditable==false">
-                                <td style="width:100px !important" >
-                                    {{product?.stock}}</td>
                                     <td style="width:100px !important" >
                                         {{product.unit_available}}</td>
+                                        <td style="width:100px !important" >
+                                            {{product.desired_facing}}</td>
                                         <td style="width:100px !important" >
                                             {{product.face_unit}}</td>
                             </ng-container>
                             <ng-container *ngIf="isEditable==true">
-                            <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                <input type="number" [(ngModel)]="product.stock"  style="width: 4em" readonly/></td>
+                                
                                 <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
                                     <input type="number" [(ngModel)]="product.unit_available" maxlength="3"  style="width: 4em" (blur)="changeAvailability(product)"/></td>
+
+                                    <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
+                                        <input type="number" [(ngModel)]="product.desired_facing"  style="width: 4em" readonly/></td>
+                                    
                                     <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
                                         <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
                                     </ng-container>
@@ -134,14 +120,11 @@
                                   <tr>
                                       <!-- <th>Total ({{total}}%)</th> -->
                                       <td>Total ({{total}})%</td>
-                                      <td>{{stock}}</td>
                                       <td>{{availableDepth}}</td>
+                                      <td>{{dFacing}}</td>
                                       <td>{{facing}}</td>
                                   </tr>
   
-  
-                        <!-- <td (click)="product.available_sku = (!product.available_sku)">{{toggleValue(product?.available_sku)}}</td> -->
-                        <!-- <td></td> -->
     
                 </tbody>
   
