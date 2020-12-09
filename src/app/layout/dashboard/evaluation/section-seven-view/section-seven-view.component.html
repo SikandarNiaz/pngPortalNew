@@ -1,43 +1,57 @@
 <div class="container-fluid">
-    <ng-container *ngIf="isEditable==false">
-    <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div>
-    
+  <ng-container *ngIf="isEditable == false">
+    <div
+      class="row"
+      style="border-bottom: 2px solid black; width: 100%; margin: 5px 0"
+    ></div>
+
     <div class="row">
+      <div class="col-md-12 text-center">
+        <h4>
+          <u>{{ data?.sectionTitle }} </u
+          ><i color="warn" [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i>
+        </h4>
+      </div>
 
-        <div class="col-md-12 text-center">
-            <h4><u>{{data?.sectionTitle }} </u><i color="warn" [ngClass]="{'fa fa-cog fa-spin':loading}"></i></h4>
-        </div>
-
-
-        <div class="col-5">
-
-
-
-            <div class="row">
-
-                <div class="col-12" style="
-                max-height: 500px !important;
-            ">
-                    <!--  -->
-                    <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="4" [lensWidth]="300" [lensHeight]="300" [enableLens]="true" [circularLens]="true" [thumbImage]="ip+selectedImage?.url" [fullImage]="ip+selectedImage?.url"></ngx-image-zoom> -->
-                    <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="2" [lensWidth]="250" [lensHeight]="250" [enableLens]="true" [circularLens]="true" [thumbImage]=ip+selectedImage?.url [fullImage]=ip+selectedImage?.url>
+      <div class="col-5">
+        <div class="row">
+          <div class="col-12" style="max-height: 500px !important">
+            <!--  -->
+            <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="4" [lensWidth]="300" [lensHeight]="300" [enableLens]="true" [circularLens]="true" [thumbImage]="ip+selectedImage?.url" [fullImage]="ip+selectedImage?.url"></ngx-image-zoom> -->
+            <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="2" [lensWidth]="250" [lensHeight]="250" [enableLens]="true" [circularLens]="true" [thumbImage]=ip+selectedImage?.url [fullImage]=ip+selectedImage?.url>
                     </ngx-image-zoom> -->
 
-                    <label class="title" for="title">{{selectedImage?.title}}</label>
-                    <img src="{{ip}}{{selectedImage?.url}}" class="img-thumbnail" style="        height: 410px;  width: 100%;  " (click)="showChildModal(selectedImage)">
-                    <div class="row justify-content-center" style="word-break: break-word !important">
-                <div>
-                </div>
-                </div>
-                </div>
+            <label class="title" for="title">{{ selectedImage?.title }}</label>
+            <img
+              src="{{ ip }}{{ selectedImage?.url }}"
+              class="img-thumbnail"
+              style="height: 410px; width: 100%"
+              (click)="showChildModal(selectedImage)"
+            />
+            <div
+              class="row justify-content-center"
+              style="word-break: break-word !important"
+            >
+              <div></div>
+            </div>
+          </div>
 
-                <div class="col-12 ml-3 mt-2">
-                    <div class="row">
-    
-                        <ng-container *ngFor="let img of data?.imageList ;let i=index ">
-                            <div class="col-2 mb-1 card  mt-5 mr-2" (click)="setSelectedImage(img)" style="padding: 0% !important;cursor:pointer" [ngClass]="{'bgColor': img?.url==selectedImage.url}">
-                                <img src="{{ip}}{{img?.url}} " width="100" class="img-thumbnail side-image" style="height: 80px !important;width: 120px !important;">
-                                <!-- <div class="row justify-content-center" style="word-break: break-word !important">
+          <div class="col-12 ml-3 mt-2">
+            <div class="row">
+              <ng-container *ngFor="let img of data?.imageList; let i = index">
+                <div
+                  class="col-2 mb-1 card mt-5 mr-2"
+                  (click)="setSelectedImage(img)"
+                  style="padding: 0% !important; cursor: pointer"
+                  [ngClass]="{ bgColor: img?.url == selectedImage.url }"
+                >
+                  <img
+                    src="{{ ip }}{{ img?.url }} "
+                    width="100"
+                    class="img-thumbnail side-image"
+                    style="height: 80px !important; width: 120px !important"
+                  />
+                  <!-- <div class="row justify-content-center" style="word-break: break-word !important">
                                     <div for="date"><strong>Date:</strong>{{img?.visitDate}}</div>
                                     <br/>
     
@@ -47,20 +61,15 @@
     
     
                                 </div> -->
-                                <!--  -->
-                            </div>
-                            <!-- <div class="col-md-3" style="font-size:15px !important" (click)="setSelectedImage(img)"> -->
-    
-    
-    
-                            <!-- </div> -->
-    
-    
-    
-                        </ng-container>
-                    </div>
-                    <!-- this.table is moved to home page -->
-                    <!-- <div class="row justify-content-center">
+                  <!--  -->
+                </div>
+                <!-- <div class="col-md-3" style="font-size:15px !important" (click)="setSelectedImage(img)"> -->
+
+                <!-- </div> -->
+              </ng-container>
+            </div>
+            <!-- this.table is moved to home page -->
+            <!-- <div class="row justify-content-center">
                     <ng-container class="mt-5 justify-content-center " *ngIf="data?.tagsList ">
                         <div class="col-md-11 mt-5 ">
                             <table class="table table-bordered ">
@@ -74,14 +83,12 @@
                         </div>
                     </ng-container>
                 </div> -->
-                </div>
-    
-    
-            </div>
+          </div>
         </div>
-        
-        <div class="col-7 tableFixHead" *ngIf="products.length>0">
-            <!-- <table class="table">
+      </div>
+
+      <div class="col-7 tableFixHead" *ngIf="products.length > 0">
+        <!-- <table class="table">
                 <thead style="background:lightgray">
                     <tr>
                         <th>Brand Title</th>
@@ -92,301 +99,306 @@
                     </tr>
                 </thead>
             </table> -->
-            <table class="table table-bordered table-hover w-100" >
-                <thead style="background:lightgray">
-                    <tr>
-                        <!-- <th>Brand Title</th> -->
-                        <th>Product Title</th>
-                        <th>Availability
-                        </th>
-                        <th>A.Facing</th>
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: lightgray">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>Product Title</th>
+              <th>Availability</th>
+              <th>A.Facing</th>
+            </tr>
+          </thead>
 
-                    </tr>
-                </thead>
+          <tbody>
+            <tr *ngFor="let product of products; let j = index">
+              <!-- <td>{{product?.category_title}}</td> -->
+              <td style="width: 800px !important">
+                {{ product?.product_title }}
+              </td>
 
-                <tbody>
-                    <tr *ngFor="let product of products;let j= index">
-                         <!-- <td>{{product?.category_title}}</td> -->
-                        <td style="width:800px !important">{{product?.product_title}}</td>
-                        
-                        
-                        <!-- <td style="width:250px !important" style="cursor:pointer" [ngStyle]="{'background-color':product.color}" (click)="toggleValue(product)">
+              <!-- <td style="width:250px !important" style="cursor:pointer" [ngStyle]="{'background-color':product.color}" (click)="toggleValue(product)">
                             {{updateString(product?.available_sku)}}
                         </td> -->
-                        
-                        <td style="width:200px !important" [ngClass]="{'background-color': product?.is_competition==1 && product?.nestle_brand_id==2}" >
-                            {{updateString(product?.available_sku)}}
-                        </td>
 
-                        
-                        <td style="width:200px !important" >
-                            {{product?.face_unit}}</td>
-                      
-                        
-                        <!-- <td (click)="product.available_sku = (!product.available_sku)">{{toggleValue(product?.available_sku)}}</td> -->
+              <td
+                style="width: 200px !important"
+                [ngClass]="{
+                  'background-color':
+                    product?.is_competition == 1 &&
+                    product?.nestle_brand_id == 2
+                }"
+              >
+                {{ updateString(product?.available_sku) }}
+              </td>
 
-                    </tr>
-                    <tr>
-                        <!-- <td></td> -->
-                        <th>Availability / Total</th>
-                        <td>{{availability}} / {{products.length}}</td>
-                        <td>{{facing}}</td>
-                        <!-- <th>
+              <td style="width: 200px !important">
+                {{ product?.face_unit }}
+              </td>
+
+              <!-- <td (click)="product.available_sku = (!product.available_sku)">{{toggleValue(product?.available_sku)}}</td> -->
+            </tr>
+            <tr>
+              <!-- <td></td> -->
+              <th>Availability / Total</th>
+              <td>{{ availability }} / {{ products.length }}</td>
+              <td>{{ facing }}</td>
+              <!-- <th>
                             {{MSLNAvailabilityCount}} / {{MSLCount}}
                         </th> -->
-                    </tr>
-                </tbody>
-
-            </table>
-        </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row justify-content-center">
-        <ng-container class="mt-2 justify-content-center " *ngIf="data?.tagsList">
-            <div class="col-md-11 mt-5 ">
-                <table class="table table-bordered ">
-                    <tr *ngFor="let tab of data.tagsList;let j=index ">
-                        <th style="width:50%;background: #00A647; ">{{tab.heading}}</th>
-                        <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
-                    </tr>
-    
-                </table>
-    
-            </div>
-        </ng-container>
-    </div>
-
-    <div class="row">
-        <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length>0">
-     
-            <table class="table table-bordered table-hover w-100" >
-                <thead style="background: #00A647">
-                    <tr>
-                        <!-- <th>Brand Title</th> -->
-                        <th>Secondary Category</th>
-                        <th>Remarks</th>
-                        <th>Secondary Utilization</th>
-
-                    </tr>
-                </thead>
-    
-                <tbody>
-                    <tr *ngFor="let data of secondaryData">
-                        <td style="width:500px !important">{{data?.categoryTitle}}</td>
-                        <td style="width:300px !important">{{data?.remarks}}</td>
-                        
-                            <td style="width:200px !important">{{data?.utilization}}</td>
-                            
-
-                          
-                    </tr>
-                </tbody>
-    
-            </table>
+      <ng-container class="mt-2 justify-content-center" *ngIf="data?.tagsList">
+        <div class="col-md-11 mt-5">
+          <table class="table table-bordered">
+            <tr *ngFor="let tab of data.tagsList; let j = index">
+              <th style="width: 50%; background: #00a647">{{ tab.heading }}</th>
+              <td style="width: 50%; word-break: break-all">{{ tab.value }}</td>
+            </tr>
+          </table>
         </div>
+      </ng-container>
     </div>
 
     <div class="row">
-    <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length>0">
- 
-        <table class="table table-bordered table-hover w-100" >
-            <thead style="background: #00A647">
-                <tr>
-                    <!-- <th>Brand Title</th> -->
-                    <th>KBD Question</th>
-                    <th>Selected Option</th>
-                </tr>
-            </thead>
+      <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length > 0">
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: #00a647">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>Secondary Category</th>
+              <th>Remarks</th>
+              <th>Secondary Utilization</th>
+            </tr>
+          </thead>
 
-            <tbody>
-                <tr *ngFor="let data of kbdData">
-                    <td style="width:800px !important">{{data?.question}}</td>
-                    <td>
-                        {{data?.answer}}
-                     </td>
-                </tr>
-            </tbody>
+          <tbody>
+            <tr *ngFor="let data of secondaryData">
+              <td style="width: 500px !important">{{ data?.categoryTitle }}</td>
+              <td style="width: 300px !important">{{ data?.remarks }}</td>
 
+              <td style="width: 200px !important">{{ data?.utilization }}</td>
+            </tr>
+          </tbody>
         </table>
+      </div>
     </div>
-    </div>
-</ng-container>
 
-
-
-
-
-<ng-container *ngIf="isEditable==true">
-    <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div>
-    
     <div class="row">
+      <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length > 0">
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: #00a647">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>KBD Question</th>
+              <th>Selected Option</th>
+            </tr>
+          </thead>
 
-        <div class="col-md-12 text-center">
-            <h4><u>{{data?.sectionTitle }} </u><i color="warn" [ngClass]="{'fa fa-cog fa-spin':loading}"></i></h4>
-        </div>
+          <tbody>
+            <tr *ngFor="let data of kbdData">
+              <td style="width: 800px !important">{{ data?.question }}</td>
+              <td>
+                {{ data?.answer }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
 
+  <ng-container *ngIf="isEditable == true">
+    <div
+      class="row"
+      style="border-bottom: 2px solid black; width: 100%; margin: 5px 0"
+    ></div>
 
-        <div class="col-5">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h4>
+          <u>{{ data?.sectionTitle }} </u
+          ><i color="warn" [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i>
+        </h4>
+      </div>
 
+      <div class="col-5">
+        <div class="row">
+          <div class="col-12" style="max-height: 500px !important">
+            <label class="title" for="title">{{ selectedImage?.title }}</label>
+            <img
+              src="{{ ip }}{{ selectedImage?.url }}"
+              class="img-thumbnail"
+              style="height: 450px; width: 100%"
+              (click)="showChildModal(selectedImage)"
+            />
+            <div
+              class="row justify-content-center"
+              style="word-break: break-word !important"
+            >
+              <div></div>
+            </div>
+          </div>
 
-
+          <div class="col-12 ml-3 mt-2">
             <div class="row">
-
-                <div class="col-12" style="
-                max-height: 500px !important;
-            ">
-                  
-
-                    <label class="title" for="title">{{selectedImage?.title}}</label>
-                    <img src="{{ip}}{{selectedImage?.url}}" class="img-thumbnail" style="        height: 450px;  width: 100%;  " (click)="showChildModal(selectedImage)">
-                    <div class="row justify-content-center" style="word-break: break-word !important">
-                <div>
+              <ng-container *ngFor="let img of data?.imageList; let i = index">
+                <div
+                  class="col-2 mb-1 card mt-5 mr-2"
+                  (click)="setSelectedImage(img)"
+                  style="padding: 0% !important; cursor: pointer"
+                  [ngClass]="{ bgColor: img?.url == selectedImage.url }"
+                >
+                  <img
+                    src="{{ ip }}{{ img?.url }} "
+                    width="100"
+                    class="img-thumbnail side-image"
+                    style="height: 80px !important; width: 120px !important"
+                  />
                 </div>
-                </div>
-                </div>
-
-                <div class="col-12 ml-3 mt-2">
-                    <div class="row">
-    
-                        <ng-container *ngFor="let img of data?.imageList ;let i=index ">
-                            <div class="col-2 mb-1 card  mt-5 mr-2" (click)="setSelectedImage(img)" style="padding: 0% !important;cursor:pointer" [ngClass]="{'bgColor': img?.url==selectedImage.url}">
-                                <img src="{{ip}}{{img?.url}} " width="100" class="img-thumbnail side-image" style="height: 80px !important;width: 120px !important;">
-                            
-                            </div>
-    
-    
-    
-                        </ng-container>
-                    </div>
-                  
-                </div>
-    
-    
+              </ng-container>
             </div>
+          </div>
         </div>
-        
-        <div class="col-7 tableFixHead" *ngIf="products.length>0">
-            
-            <table class="table table-bordered table-hover w-100" >
-                <thead style="background:lightgray">
-                    <tr>
-                        <!-- <th>Brand Title</th> -->
-                        <th>Product Title</th>
-                        <th>Availability
-                        </th>
-                        <th>A.Facing</th>
+      </div>
 
-                    </tr>
-                </thead>
+      <div class="col-7 tableFixHead" *ngIf="products.length > 0">
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: lightgray">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>Product Title</th>
+              <th>Availability</th>
+              <th>A.Facing</th>
+            </tr>
+          </thead>
 
-                <tbody>
-                    <tr *ngFor="let product of products;let j= index">
-                         <!-- <td>{{product?.category_title}}</td> -->
-                        <td style="width:800px !important">{{product?.product_title}}</td>
-                        
-                      
-                        <td style="cursor:pointer" (click)="changeSku(product)" [ngClass]="{'background-color': product?.is_competition==1 && product?.nestle_brand_id==2}">
-                            {{updateString(product?.available_sku)}}</td>
-                            
-                        <td style="width:200px !important" [ngStyle]="{'background-color':product.color}">    
-                            <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
-                        
-                      
-                        
-                    </tr>
-                    <tr>
-                        <!-- <td></td> -->
-                        <th>Availability / Total</th>
-                        <td>{{availability}} / {{products.length}}</td>
-                        <td>{{facing}}</td>
-                      
-                    </tr>
-                </tbody>
+          <tbody>
+            <tr *ngFor="let product of products; let j = index">
+              <!-- <td>{{product?.category_title}}</td> -->
+              <td style="width: 800px !important">
+                {{ product?.product_title }}
+              </td>
 
-            </table>
-        </div>
+              <td
+                style="cursor: pointer"
+                (click)="changeSku(product)"
+                [ngClass]="{
+                  'background-color':
+                    product?.is_competition == 1 &&
+                    product?.nestle_brand_id == 2
+                }"
+              >
+                {{ updateString(product?.available_sku) }}
+              </td>
+
+              <td
+                style="width: 200px !important"
+                [ngStyle]="{ 'background-color': product.color }"
+              >
+                <input
+                  type="number"
+                  [(ngModel)]="product.face_unit"
+                  maxlength="3"
+                  style="width: 4em"
+                  (blur)="changeFacing(product)"
+                />
+              </td>
+            </tr>
+            <tr>
+              <!-- <td></td> -->
+              <th>Availability / Total</th>
+              <td>{{ availability }} / {{ products.length }}</td>
+              <td>{{ facing }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row justify-content-center">
-        <ng-container class="mt-2 justify-content-center " *ngIf="data?.tagsList">
-            <div class="col-md-11 mt-5 ">
-                <table class="table table-bordered ">
-                    <tr *ngFor="let tab of data.tagsList;let j=index ">
-                        <th style="width:50%;background: #00A647; ">{{tab.heading}}</th>
-                        <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
-                    </tr>
-    
-                </table>
-    
-            </div>
-        </ng-container>
-    </div>
-
-    <div class="row">
-        <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length>0">
-     
-            <table class="table table-bordered table-hover w-100" >
-                <thead style="background: #00A647">
-                    <tr>
-                        <!-- <th>Brand Title</th> -->
-                        <th>Secondary Category</th>
-                        <th>Remarks</th>
-                        <th>Secondary Utilization</th>
-                       
-                    </tr>
-                </thead>
-    
-                <tbody>
-                    <tr *ngFor="let data of secondaryData">
-                        <td style="width:500px !important">{{data?.categoryTitle}}</td>
-                        <td style="width:300px !important">{{data?.remarks}}</td>
-                        <td style="width:200px !important">    
-                            <input type="number" [(ngModel)]="data.utilization" maxlength="3"  style="width: 4em" (blur)="changeUtilization(data)"/></td>
-                           
-                            
-
-                          
-                    </tr>
-                </tbody>
-    
-            </table>
+      <ng-container class="mt-2 justify-content-center" *ngIf="data?.tagsList">
+        <div class="col-md-11 mt-5">
+          <table class="table table-bordered">
+            <tr *ngFor="let tab of data.tagsList; let j = index">
+              <th style="width: 50%; background: #00a647">{{ tab.heading }}</th>
+              <td style="width: 50%; word-break: break-all">{{ tab.value }}</td>
+            </tr>
+          </table>
         </div>
+      </ng-container>
     </div>
 
     <div class="row">
-    <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length>0">
- 
-        <table class="table table-bordered table-hover w-100" >
-            <thead style="background: #00A647">
-                <tr>
-                    <!-- <th>Brand Title</th> -->
-                    <th>KBD Question</th>
-                    <th>Selected Value</th>
-                </tr>
-            </thead>
+      <div class="col-12 mt-4 tableHead" *ngIf="secondaryData.length > 0">
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: #00a647">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>Secondary Category</th>
+              <th>Remarks</th>
+              <th>Secondary Utilization</th>
+            </tr>
+          </thead>
 
-            <tbody>
-                <tr *ngFor="let data of kbdData">
-                    <td style="width:700px !important">{{data?.question}}</td>
-                    <td>
-                        <select #newValue (change)="changeKbd(newValue.value, data)">
-                            <ng-container *ngFor="let options of data.optionList"> 
-                                <option *ngIf="data.answer==options.title" [value]="options.id" selected="selected">  {{options?.title}} </option>
-                                    <option *ngIf="data.answer!=options.title" [value]="options.id">  {{options?.title}} </option>
-                                    </ng-container>
-                         </select>
-                         </td>
-                </tr>
-            </tbody>
-
+          <tbody>
+            <tr *ngFor="let data of secondaryData">
+              <td style="width: 500px !important">{{ data?.categoryTitle }}</td>
+              <td style="width: 300px !important">{{ data?.remarks }}</td>
+              <td style="width: 200px !important">
+                <input
+                  type="number"
+                  [(ngModel)]="data.utilization"
+                  maxlength="3"
+                  style="width: 4em"
+                  (blur)="changeUtilization(data)"
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-12 mt-4 tableHead" *ngIf="kbdData.length > 0">
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: #00a647">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>KBD Question</th>
+              <th>Selected Value</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let data of kbdData">
+              <td style="width: 700px !important">{{ data?.question }}</td>
+              <td>
+                <select #newValue (change)="changeKbd(newValue.value, data)">
+                  <ng-container *ngFor="let options of data.optionList">
+                    <option
+                      *ngIf="data.answer == options.title"
+                      [value]="options.id"
+                      selected="selected"
+                    >
+                      {{ options?.title }}
+                    </option>
+                    <option
+                      *ngIf="data.answer != options.title"
+                      [value]="options.id"
+                    >
+                      {{ options?.title }}
+                    </option>
+                  </ng-container>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</ng-container>
-    
+  </ng-container>
 </div>
-
-
-
-
-<ng-container *ngIf="isEditable==true">
-   
-</ng-container>
