@@ -455,7 +455,7 @@
         </div>
         <div class="col-md" style="text-align: end; padding: 0 20px 5px 0; ">
           <button class="btn btn-default mr-2 btn-sm" (click)="cancelCriteriaSelection()">Cancel</button>
-          <button [disabled]="(criteriaDesireScore==0  && selectedRemarksList?.length==0)"
+          <button [disabled]="!selectedCriteria?.isEditable && selectedRemarksList?.length == 0"
             class="btn btn-primary btn-sm"
             (click)="getCriteriaWithRemarks(selectedRemarksList,selectedCriteria)">Submit</button>
 
