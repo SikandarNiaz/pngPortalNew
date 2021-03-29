@@ -151,11 +151,12 @@ export class SectionSevenViewComponent implements OnInit {
       this.colorUpdateList.push(value.id);
       const obj = {
         msdId: value.id,
-        facing: -1,
+        categoryTitle: this.data.sectionTitle,
+        title: value.product_title,
         type: 1,
         newValue: !!value.available_sku ? 0 : 1,
         surveyId: value.survey_id,
-        evaluatorId: this.evaluatorId
+        evaluatorId: this.evaluatorId,
       };
 
 
@@ -225,10 +226,11 @@ export class SectionSevenViewComponent implements OnInit {
       const obj = {
         msdId: value.id,
         newValue: value.face_unit,
+        categoryTitle: this.data.sectionTitle,
+        title: value.product_title,
         type: 2,
-        unitAvailable: -1,
         surveyId: value.survey_id,
-        evaluatorId: this.evaluatorId
+        evaluatorId: this.evaluatorId,
       };
 
 
@@ -296,12 +298,12 @@ export class SectionSevenViewComponent implements OnInit {
       const obj = {
         msdId: value.secondarySurveyId,
         newValue: value.utilization,
+        categoryTitle: this.data.sectionTitle,
+        title: value.categoryTitle,
         type: 3,
-        evaluatorId: this.evaluatorId
+        surveyId: value.survey_id,
+        evaluatorId: this.evaluatorId,
       };
-
-
-
 
   this.httpService.updateData(obj).subscribe((data: any) => {
     if (data.success) {
@@ -363,16 +365,24 @@ export class SectionSevenViewComponent implements OnInit {
   }
   changeKbd(newVal, value ) {
     this.loading = true;
+    let selectedOption;
+    for(const option of value.optionList){
+      if(newVal==option.id){
+        selectedOption=option;
+        break;
+      }
+    }
     if (this.isEditable) {
 
       const obj = {
         msdId: value.merchQuestId,
-        newValue: newVal,
+        title: value.question,
+        categoryTitle: this.data.sectionTitle,
+        newValueId: selectedOption.id,
+        newValue: selectedOption.title,
         type: 4,
         evaluatorId: this.evaluatorId
       };
-
-
 
 
   this.httpService.updateData(obj).subscribe((data: any) => {

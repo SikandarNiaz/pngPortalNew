@@ -150,11 +150,13 @@ getTotalCount(availableDepth, desiredDepth) {
     if (this.isEditable) {
       this.changeColor = true;
       this.colorUpdateList.push(product.id);
-       const obj = {
+      const obj = {
         msdId: product.detailId,
         newValue: product.unit_available,
         evaluatorId: this.evaluatorId,
-        type: 5
+        title: product.product_title,
+        categoryTitle: this.data.sectionTitle,
+        type: 5,
       };
   this.httpService.updateData(obj).subscribe((data: any) => {
     if (data.success) {
@@ -209,12 +211,13 @@ changeFacing(product) {
   if (this.isEditable) {
     this.changeColor = true;
     this.colorUpdateList.push(product.id);
-     const obj = {
+    const obj = {
       msdId: product.detailId,
       newValue: product.face_unit,
-      surveyId: product.surveyId,
       evaluatorId: this.evaluatorId,
-      type: 6
+      title: product.product_title,
+      categoryTitle: this.data.sectionTitle,
+      type: 6,
     };
 this.httpService.updateData(obj).subscribe((data: any) => {
   if (data.success) {

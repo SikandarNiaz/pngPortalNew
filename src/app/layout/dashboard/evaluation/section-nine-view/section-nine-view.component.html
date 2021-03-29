@@ -75,7 +75,7 @@
                             <td style="width:100px !important">    
                                 <input type="number" [(ngModel)]="data.desired_facing"  style="width: 4em" readonly/></td>
                                 <td style="width:100px !important" [ngStyle]="{'background-color':data.color}">    
-                                    <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(data)"/></td>
+                                    <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (change)="changeFacing(data)"/></td>
                         </ng-container>
                   
               

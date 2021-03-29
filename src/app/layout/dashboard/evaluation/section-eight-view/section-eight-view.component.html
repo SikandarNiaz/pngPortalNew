@@ -105,13 +105,13 @@
                             <ng-container *ngIf="isEditable==true">
                                 
                                 <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                    <input type="number" [(ngModel)]="product.unit_available" maxlength="3"  style="width: 4em" (blur)="changeAvailability(product)"/></td>
+                                    <input type="number" [(ngModel)]="product.unit_available" maxlength="3"  style="width: 4em" (change)="changeAvailability(product)"/></td>
 
                                     <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
                                         <input type="number" [(ngModel)]="product.desired_facing"  style="width: 4em" readonly/></td>
                                     
                                     <td style="width:100px !important" [ngStyle]="{'background-color':product.color}">    
-                                        <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (blur)="changeFacing(product)"/></td>
+                                        <input type="number" [(ngModel)]="product.face_unit" maxlength="3"  style="width: 4em" (change)="changeFacing(product)"/></td>
                                     </ng-container>
     
     
@@ -161,7 +161,7 @@
                                 <td style="width:100px !important">    
                                     <input type="number" [(ngModel)]="data.desired_facing"  style="width: 4em" readonly/></td>
                                     <td style="width:100px !important" [ngStyle]="{'background-color':data.color}">    
-                                        <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (blur)="changeHangerFacing(data)"/></td>
+                                        <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (change)="changeHangerFacing(data)"/></td>
                             </ng-container>
                       
                   

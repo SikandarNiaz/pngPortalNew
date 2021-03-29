@@ -140,11 +140,13 @@ changeFacing(product) {
   if (this.isEditable) {
     this.changeColor = true;
     this.colorUpdateList.push(product.id);
-     const obj = {
-      msdId: product.detail_id,
+    const obj = {
+      msdId: product.detailId,
       newValue: product.face_unit,
       evaluatorId: this.evaluatorId,
-      type: 7
+      title: product.product_title,
+      categoryTitle: this.data.sectionTitle,
+      type: 7,
     };
 this.httpService.updateData(obj).subscribe((data: any) => {
   if (data.success) {
