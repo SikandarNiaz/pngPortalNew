@@ -6,20 +6,12 @@
   </div>
 
   <div class="row animated slideInLeft" *ngIf="data?.section">
-    <div
-      id="style-2"
-      class="col"
-      [ngClass]="{ 'col-12': this.isDragging }"
-      style="
+    <div id="style-2" class="col" [ngClass]="{ 'col-12': this.isDragging }" style="
         overflow-y: scroll !important;
         overflow-x: hidden !important;
         height: 90vh;
         width: 100% !important;
-      "
-      mwlResizable
-      [enableGhostResize]="true"
-      [resizeEdges]="{ bottom: true, right: true, top: true, left: true }"
-    >
+      " mwlResizable [enableGhostResize]="true" [resizeEdges]="{ bottom: true, right: true, top: true, left: true }">
       <!-- <div class="row">
                 <div class="col-11"></div>
                 <div class="col-1" style="text-align: end;">
@@ -35,11 +27,7 @@
                 </div>
             </div> -->
       <div class="icon-bar">
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="this.isDragging = !this.isDragging"
-        >
+        <button type="button" class="btn btn-primary" (click)="this.isDragging = !this.isDragging">
           <span *ngIf="!this.isDragging" title="expand view">
             <i class="fa fa-arrow-right"></i>
           </span>
