@@ -39,6 +39,8 @@ import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-err
 import { MerchandiserWiseScoreComponent } from './innerComponents/merchandiser-wise-score/merchandiser-wise-score.component';
 import { SosReportComponent } from './innerComponents/sos-report/sos-report.component';
 import { PngOosReportComponent } from './innerComponents/png-oos-report/png-oos-report.component';
+import { SurveyShopsSurveyorComponent } from './innerComponents/survey-shops-surveyor/survey-shops-surveyor.component';
+import { SurveyShopListComponent } from './innerComponents/survey-shop-list/survey-shop-list.component';
 
 
 const routes: Routes = [
@@ -82,7 +84,10 @@ const routes: Routes = [
             { path: 'merchandiser_wise_score', component: MerchandiserWiseScoreComponent },
             { path: 'merchandiser_score/:surveyorId/:startDate/:endDate', component: MerchandiserScoreComponent },
             { path: 'sos-report', component: SosReportComponent },
-            { path: 'oos-detail-report', component: PngOosReportComponent }
+            { path: 'oos-detail-report', component: PngOosReportComponent },
+            { path: 'survey_shop_view', component: SurveyShopsSurveyorComponent },
+            { path: 'survey_shop_list', component: SurveyShopListComponent },
+            { path: 'survey_shop_list/:surveyorId/:startDate/:endDate', component: SurveyShopListComponent },
 
 
 
