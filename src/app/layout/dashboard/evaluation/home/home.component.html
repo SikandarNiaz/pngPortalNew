@@ -58,6 +58,14 @@
               >
               </section-one-view>
             </ng-container>
+            <ng-container *ngIf="sec?.imageViewType === 18">
+              <section-one-detail
+                class="width-100"
+                [data]="sec"
+                (showModal)="showChildModal($event)"
+              >
+              </section-one-detail>
+            </ng-container>
 
             <ng-container #sectionSeven *ngIf="sec?.imageViewType === 7">
               <section-seven-view
