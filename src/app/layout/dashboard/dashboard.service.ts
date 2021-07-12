@@ -383,4 +383,14 @@ export class DashboardService {
     const url = this.ip + "evaluatorSummaryData";
     return this.http.post(url, urlEncode, this.httpOptions);
   }
+  getSurveySurveyorList(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "survey-shop-view";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
+  getSurveyShopList(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "survey-shop-view";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
 }

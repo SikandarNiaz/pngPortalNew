@@ -62,6 +62,8 @@ import { VoErrorReportComponent } from './innerComponents/vo-error-report/vo-err
 import { MerchandiserWiseScoreComponent } from './innerComponents/merchandiser-wise-score/merchandiser-wise-score.component';
 import { SosReportComponent } from './innerComponents/sos-report/sos-report.component';
 import { PngOosReportComponent } from './innerComponents/png-oos-report/png-oos-report.component';
+import { SurveyShopsSurveyorComponent } from './innerComponents/survey-shops-surveyor/survey-shops-surveyor.component';
+import { SurveyShopListComponent } from './innerComponents/survey-shop-list/survey-shop-list.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -105,6 +107,6 @@ ReactiveFormsModule
           TposmDeploymentReportComponent, LineChartComponent,
           UpdatePasswordComponent, RawDataComponent, MatTableComponent,
           DataAvailabilityComponent, MerchandiserListComponent,
-          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent, TableauHelperComponent, SkuDashboardTableauComponent, SosDashboardTableauComponent, ProductivityDashboardTableauComponent, StfDashboardComponent, VoErrorReportComponent, MerchandiserWiseScoreComponent, SosReportComponent, PngOosReportComponent]
+          AbnormalityComponent, TimeAnalysisReportComponent, MerchandiserAttendanceComponent, DailyEvaluationReportComponent, EmailManagerComponent, MessageStatusListComponent, AddNewMessageComponent, UploadRoutesComponent, SingleRouteDetailComponent, ShopsForSingleRouteComponent, AddEditGroupComponent, AddDeviceComponent, SupervisorWwwrSummaryComponent, ShopListReportComponent, MerchandiserRoasterComponent, MerchandiserScoreComponent, TableauHelperComponent, SkuDashboardTableauComponent, SosDashboardTableauComponent, ProductivityDashboardTableauComponent, StfDashboardComponent, VoErrorReportComponent, MerchandiserWiseScoreComponent, SosReportComponent, PngOosReportComponent, SurveyShopsSurveyorComponent, SurveyShopListComponent]
 })
 export class DashboardModule {}
