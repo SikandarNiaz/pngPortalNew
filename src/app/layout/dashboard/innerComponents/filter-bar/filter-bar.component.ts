@@ -170,7 +170,7 @@ export class FilterBarComponent implements OnInit {
   }
 
   getQueryTypeList() {
-    this.httpService.getQueryTypeList().subscribe(
+    this.httpService.getQueryTypeList(-1).subscribe(
       (data) => {
         console.log("qurry list", data);
         if (data) {
