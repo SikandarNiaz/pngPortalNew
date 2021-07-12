@@ -393,4 +393,10 @@ export class DashboardService {
     const url = this.ip + "survey-shop-view";
     return this.http.post(url, urlEncode, this.httpOptions);
   }
+
+  getRegions() {
+    const url = this.ip + "/loadFilters";
+    const filter = JSON.stringify({ act: 13 });
+    return this.http.post(url, filter);
+  }
 }
