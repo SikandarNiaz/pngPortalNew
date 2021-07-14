@@ -399,4 +399,20 @@ export class DashboardService {
     const filter = JSON.stringify({ act: 13 });
     return this.http.post(url, filter);
   }
+  getDistributionCheckInList(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "distCheckInList";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
+
+  getSurveyors(clusterId, zoneId, regionId) {
+    const filter = JSON.stringify({
+      act: 19,
+      clusterId: clusterId,
+      zoneId: zoneId,
+      regionId: regionId,
+    });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
 }
