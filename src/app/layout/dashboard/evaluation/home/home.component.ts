@@ -1,18 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {Location} from '@angular/common';
-import { EvaluationService } from '../evaluation.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { ModalDirective } from 'ngx-bootstrap';
-import { ToastrService } from 'ngx-toastr';
-import { ResizeEvent } from 'angular-resizable-element';
-import { config } from 'src/assets/config';
-import {MatAccordion} from '@angular/material/expansion';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Location } from "@angular/common";
+import { EvaluationService } from "../evaluation.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from "src/environments/environment";
+import { ModalDirective } from "ngx-bootstrap";
+import { ToastrService } from "ngx-toastr";
+import { ResizeEvent } from "angular-resizable-element";
+import { config } from "src/assets/config";
+import { MatAccordion } from "@angular/material/expansion";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
   data: any = [];
@@ -23,12 +23,10 @@ export class HomeComponent implements OnInit {
   loading = false;
   selectedShop: any = {};
 
-  @ViewChild('childModal') childModal: ModalDirective;
-  @ViewChild('remarksModal') remarksModal: ModalDirective;
-  @ViewChild('evaluationRemarksModal') evaluationRemarksModal: ModalDirective;
-  @ViewChild('sosModal') sosModal: ModalDirective;
-
-
+  @ViewChild("childModal") childModal: ModalDirective;
+  @ViewChild("remarksModal") remarksModal: ModalDirective;
+  @ViewChild("evaluationRemarksModal") evaluationRemarksModal: ModalDirective;
+  @ViewChild("sosModal") sosModal: ModalDirective;
 
   score: any = 0;
 
@@ -57,7 +55,7 @@ export class HomeComponent implements OnInit {
   isFromShop = true;
   rotationDegree = 0;
   isEditable: any = false;
-  visitDay = '';
+  visitDay = "";
   selectedIndex = -1;
   facing: any;
   desiredFacing: any;
@@ -73,6 +71,7 @@ export class HomeComponent implements OnInit {
   isNoNCritical = false;
   isDragging = false;
   selectedSoS: any = {};
+  evaluatorRole: any;
   j = -1;
   i = 0;
   m = 0;
@@ -83,20 +82,21 @@ export class HomeComponent implements OnInit {
     private httpService: EvaluationService,
     private evaluationService: EvaluationService,
     private readonly location: Location
-
   ) {
     this.surveyId;
 
-    this.activatedRoutes.queryParams.subscribe(q => {
-      if (q.location) { this.isFromShop = false; }
+    this.activatedRoutes.queryParams.subscribe((q) => {
+      if (q.location) {
+        this.isFromShop = false;
+      }
     });
-    this.activatedRoutes.params.subscribe(params => {
+    this.activatedRoutes.params.subscribe((params) => {
       this.p = params;
       this.surveyId = params.id;
 
       const obj = {
         surveyId: this.surveyId,
-        userTypeId: localStorage.getItem('user_type')
+        userTypeId: localStorage.getItem("user_type"),
         // userId:localStorage.getItem('user_id')
       };
 
@@ -106,27 +106,24 @@ export class HomeComponent implements OnInit {
   value = 5;
   options: any = {
     showTicksValues: true,
-    stepsArray: [
-      { value: 1 },
-
-    ]
+    stepsArray: [{ value: 1 }],
   };
 
   createTickForSlider(maxTicks) {
     const result: any = [];
 
-   for (let index = 0; index < maxTicks.score; index++) {
-     result.push({value: index});
-
-   }
+    for (let index = 0; index < maxTicks.score; index++) {
+      result.push({ value: index });
+    }
     this.options.stepsArray = result;
   }
 
   ngOnInit() {
-    this.location.replaceState('/details/');
+    this.location.replaceState("/details/");
     this.availabilityCount = 0;
-    this.reevaluatorRole = localStorage.getItem('Reevaluator');
-    this.userType = localStorage.getItem('user_type');
+    this.reevaluatorRole = localStorage.getItem("Reevaluator");
+    this.evaluatorRole = localStorage.getItem("Evaluator");
+    this.userType = localStorage.getItem("user_type");
   }
   formatLabel(value: number | null) {
     if (!value) {
@@ -154,94 +151,90 @@ export class HomeComponent implements OnInit {
   }
   getData(obj) {
     this.httpService.getShopDetails(obj).subscribe(
-      data => {
+      (data) => {
         if (data) {
           this.data = data;
-         if (this.p.isEditable) {
-          this.isEditable = false;
-          document.title = this.data.section[0].sectionTitle;
-          if (this.data.criteria) {
-            this.evaluationArray = this.data.criteria;
-            this.cloneArray = this.evaluationArray.slice();
-            this.totalAchieveScore = this.getTotalAchieveScore();
+          if (this.p.isEditable) {
+            this.isEditable = false;
+            document.title = this.data.section[0].sectionTitle;
+            if (this.data.criteria) {
+              this.evaluationArray = this.data.criteria;
+              this.cloneArray = this.evaluationArray.slice();
+              this.totalAchieveScore = this.getTotalAchieveScore();
+            }
+
+            // console.log(this.data)
+            this.remarksList = this.data.remarks;
+            this.productList = this.data.productList;
+            this.sectionList = this.data.section;
+
+            this.existingRemarks = this.data.ExistingRemarks || [];
+            this.setRemarksForReEvaluation();
+            this.checkEvaluatedRemarks();
+
+            if (this.data.criteria) {
+              this.calculateScore();
+            }
+          } else {
+            document.title = this.data.section[0].sectionTitle;
+            if (this.data.criteria) {
+              this.evaluationArray = this.data.criteria;
+              this.cloneArray = this.evaluationArray.slice();
+              this.totalAchieveScore = this.getTotalAchieveScore();
+            }
+
+            // console.log(this.data)
+            this.remarksList = this.data.remarks;
+            this.productList = this.data.productList;
+            this.sectionList = this.data.section;
+
+            this.existingRemarks = this.data.ExistingRemarks || [];
+            this.evaluationRemarks = this.data.EvaluationRemarks || [];
+
+            // tslint:disable-next-line:triple-equals
+            if (this.userType == this.reevaluatorRole) {
+              this.checkEvaluatedRemarks();
+              this.setRemarksForReEvaluation();
+              // tslint:disable-next-line:triple-equals
+            } else {
+              this.setPSKUCriteria();
+            }
+            this.isEditable = true;
+            if (this.data.criteria) {
+              this.calculateScore();
+            }
           }
-
-          // console.log(this.data)
-          this.remarksList = this.data.remarks;
-          this.productList = this.data.productList;
-          this.sectionList = this.data.section;
-
-          this.existingRemarks = this.data.ExistingRemarks || [];
-         this.setRemarksForReEvaluation();
-         this.checkEvaluatedRemarks();
-
-          if (this.data.criteria) { this.calculateScore(); }
-
-
-         } else {
-          document.title = this.data.section[0].sectionTitle;
-          if (this.data.criteria) {
-            this.evaluationArray = this.data.criteria;
-            this.cloneArray = this.evaluationArray.slice();
-            this.totalAchieveScore = this.getTotalAchieveScore();
-          }
-
-          // console.log(this.data)
-          this.remarksList = this.data.remarks;
-          this.productList = this.data.productList;
-          this.sectionList = this.data.section;
-
-          this.existingRemarks = this.data.ExistingRemarks || [];
-          this.evaluationRemarks = this.data.EvaluationRemarks || [];
-
-
-         // tslint:disable-next-line:triple-equals
-         if (this.userType == this.reevaluatorRole) {
-         this.checkEvaluatedRemarks();
-         this.setRemarksForReEvaluation();
-         // tslint:disable-next-line:triple-equals
-         } else {
-          this.setPSKUCriteria();
-         }
-         this.isEditable = true;
-          if (this.data.criteria) { this.calculateScore(); }
-         }
-
         }
       },
-      error => {}
+      (error) => {}
     );
   }
 
-
-
-checkEvaluatedRemarks() {
-  if (this.existingRemarks.length > 0) {
-    this.existingRemarks.forEach(element1 => {
-      if (element1.id > 0) {
-        const obj = {
-          id: element1.id,
-          description: element1.description,
-          criteriaId: element1.criteriaId,
-          isChecked: element1.isChecked
-        };
-    this.remarksList.forEach(element => {
-      const i = this.remarksList.findIndex(e => e.id === element1.id);
-      if (i !== -1) {
-        this.remarksList.splice(i, 1, obj);
-       }
-
-    });
+  checkEvaluatedRemarks() {
+    if (this.existingRemarks.length > 0) {
+      this.existingRemarks.forEach((element1) => {
+        if (element1.id > 0) {
+          const obj = {
+            id: element1.id,
+            description: element1.description,
+            criteriaId: element1.criteriaId,
+            isChecked: element1.isChecked,
+          };
+          this.remarksList.forEach((element) => {
+            const i = this.remarksList.findIndex((e) => e.id === element1.id);
+            if (i !== -1) {
+              this.remarksList.splice(i, 1, obj);
+            }
+          });
+        }
+      });
+    }
   }
-  });
-}
-}
   setEvaluationCriteria() {
-
     if (this.sectionList.length > 0) {
       for (const element of this.sectionList) {
         if (element.imageViewType === 7) {
-        for (const element1 of this.cloneArray) {
+          for (const element1 of this.cloneArray) {
             if (element.assetTypeId === element1.assetTypeId) {
               const obj = {
                 id: element1.id,
@@ -249,9 +242,12 @@ checkEvaluatedRemarks() {
                 score: element1.score,
                 criteriaMapId: element1.criteriaMapId,
                 assetTypeId: element1.assetTypeId,
-                achievedScore: this.getFacingScore(element.skuTable, element1.score),
+                achievedScore: this.getFacingScore(
+                  element.skuTable,
+                  element1.score
+                ),
                 isEditable: element1.isEditable,
-                isChecked: 0
+                isChecked: 0,
               };
               this.cloneArray.splice(this.m, 1, obj);
             } else {
@@ -261,26 +257,23 @@ checkEvaluatedRemarks() {
           this.m = 0;
         }
       }
-
     }
 
     this.totalAchieveScore = this.getTotalAchieveScore();
   }
 
-
   setPSKUCriteria() {
-
     if (this.sectionList.length > 0) {
       for (const element of this.sectionList) {
         if (element.imageViewType === 7) {
-          element.skuTable.forEach(p => {
+          element.skuTable.forEach((p) => {
             // tslint:disable-next-line:triple-equals
-            if (p.is_competition == 1 && p.nestle_brand_id==2) {
-           this.totalSkus++;
-           if (p.available_sku >= 1 ) {
-             this.achievedSkus++;
-           }
-           }
+            if (p.is_competition == 1 && p.nestle_brand_id == 2) {
+              this.totalSkus++;
+              if (p.available_sku >= 1) {
+                this.achievedSkus++;
+              }
+            }
           });
         }
       }
@@ -297,9 +290,9 @@ checkEvaluatedRemarks() {
       score = 25;
     } else if (score >= 71 && score <= 80) {
       score = 20;
-     } else if (score >= 61 && score <= 70) {
-       score = 15;
-     } else if (score >= 56 && score <= 60) {
+    } else if (score >= 61 && score <= 70) {
+      score = 15;
+    } else if (score >= 56 && score <= 60) {
       score = 10;
     } else if (score >= 51 && score <= 55) {
       score = 5;
@@ -317,7 +310,7 @@ checkEvaluatedRemarks() {
           parentId: element1.parentId,
           achievedScore: score,
           isEditable: element1.isEditable,
-          isChecked: 0
+          isChecked: 0,
         };
         this.cloneArray.splice(this.m, 1, obj);
       } else {
@@ -325,7 +318,6 @@ checkEvaluatedRemarks() {
       }
     }
     this.m = 0;
-
   }
 
   setRemarksForReEvaluation() {
@@ -334,75 +326,73 @@ checkEvaluatedRemarks() {
         for (const element of this.cloneArray) {
           if (element1.criteriaId === element.id) {
             if (this.cloneArray[this.i].remarkId) {
-            this.cloneArray[this.i].remarkId.push(element1.id);
-            this.i++;
+              this.cloneArray[this.i].remarkId.push(element1.id);
+              this.i++;
             } else {
               this.cloneArray[this.i].remarkId = [];
               this.cloneArray[this.i].remarkId.push(element1.id);
               this.i++;
             }
-        } else {
-        this.i++;
+          } else {
+            this.i++;
+          }
         }
+        this.i = 0;
       }
-      this.i = 0;
     }
-  }
   }
 
   calculateMSLAgain(products) {
     this.msl = this.data.msl;
-    localStorage.setItem('productList', JSON.stringify(products));
-    this.productList = localStorage.getItem('productList');
+    localStorage.setItem("productList", JSON.stringify(products));
+    this.productList = localStorage.getItem("productList");
 
     this.availabilityCount = Math.round(this.getMSLNAvailbilityCount(products)); // Math.round(this.getAvailabilityCount(products));
   }
 
-
   calculateFacing(assetTypeId) {
-
-    localStorage.setItem('assetTypeId', JSON.stringify(assetTypeId));
+    localStorage.setItem("assetTypeId", JSON.stringify(assetTypeId));
     // tslint:disable-next-line:radix
-    this.assetTypeId = parseInt(localStorage.getItem('assetTypeId'));
+    this.assetTypeId = parseInt(localStorage.getItem("assetTypeId"));
     for (const element1 of this.cloneArray) {
       // tslint:disable-next-line:triple-equals
       if (element1.assetTypeId == this.assetTypeId) {
-      const obj = {
-        remarkId: this.getRemarkId(element1.remarkId, element1.id),
-        id: element1.id,
-        title: element1.title,
-        score: element1.score,
-        assetTypeId: element1.assetTypeId,
-        criteriaMapId: element1.criteriaMapId,
-         achievedScore: 0,
-        isEditable: element1.isEditable,
-        isChecked: 1
-      };
+        const obj = {
+          remarkId: this.getRemarkId(element1.remarkId, element1.id),
+          id: element1.id,
+          title: element1.title,
+          score: element1.score,
+          assetTypeId: element1.assetTypeId,
+          criteriaMapId: element1.criteriaMapId,
+          achievedScore: 0,
+          isEditable: element1.isEditable,
+          isChecked: 1,
+        };
         this.cloneArray.splice(this.m, 1, obj);
         break;
-    } else {
-      this.m++;
+      } else {
+        this.m++;
+      }
     }
+    this.totalAchieveScore = this.getTotalAchieveScore();
+    this.m = 0;
+    this.remarkId = [];
   }
-  this.totalAchieveScore = this.getTotalAchieveScore();
-  this.m = 0;
-  this.remarkId = [];
-     }
 
   getMSLNAvailbilityCount(products) {
     const pro = [];
     const msl = [];
-    products.forEach(p => {
+    products.forEach((p) => {
       let obj = {};
-      if (p.MSL === 'Yes' && p.available_sku === 1) {
+      if (p.MSL === "Yes" && p.available_sku === 1) {
         obj = {
           available_sku: p.available_sku,
-          MSL: p.MSL
+          MSL: p.MSL,
         };
         pro.push(obj);
       }
 
-      if (p.MSL === 'Yes') {
+      if (p.MSL === "Yes") {
         msl.push(p);
       }
     });
@@ -413,25 +403,28 @@ checkEvaluatedRemarks() {
   }
   getAvailabilityCount(products) {
     if (!products) {
-      products = localStorage.getItem('productList');
+      products = localStorage.getItem("productList");
     }
-    const pro = products.map(p => p.available_sku);
+    const pro = products.map((p) => p.available_sku);
     const sum = pro.reduce((a, v) => a + v);
     return (sum / pro.length) * this.msl;
   }
 
   getRemarkId(remarkId, criteriaId) {
-    console.log('remark criteriaId', criteriaId);
+    console.log("remark criteriaId", criteriaId);
     for (const element of this.remarksList) {
       // tslint:disable-next-line:triple-equals
-      if (element.criteriaId == criteriaId && element.description === 'Data Inaccuracy') {
+      if (
+        element.criteriaId == criteriaId &&
+        element.description === "Data Inaccuracy"
+      ) {
         if (remarkId) {
-         for (let i = 0; i < remarkId.length; i++) {
-           // tslint:disable-next-line:triple-equals
-           if (remarkId[i] == element.id) {
-            return remarkId;
-           }
-         }
+          for (let i = 0; i < remarkId.length; i++) {
+            // tslint:disable-next-line:triple-equals
+            if (remarkId[i] == element.id) {
+              return remarkId;
+            }
+          }
           remarkId.push(element.id);
           return remarkId;
         } else {
@@ -443,20 +436,19 @@ checkEvaluatedRemarks() {
   }
 
   getFacingScore(list, score) {
-this.products = list;
-let totalFacing = 0;
-let totalDesiredFacing = 0;
-let total = 0;
-this.products.forEach(element => {
-    totalFacing = totalFacing + element.face_unit;
-    totalDesiredFacing = totalDesiredFacing + element.desired_facing;
-});
-if (totalFacing > totalDesiredFacing) {
-  totalFacing = totalDesiredFacing;
-}
-total = parseFloat(((totalFacing / totalDesiredFacing) * score).toFixed(2));
-return total;
-
+    this.products = list;
+    let totalFacing = 0;
+    let totalDesiredFacing = 0;
+    let total = 0;
+    this.products.forEach((element) => {
+      totalFacing = totalFacing + element.face_unit;
+      totalDesiredFacing = totalDesiredFacing + element.desired_facing;
+    });
+    if (totalFacing > totalDesiredFacing) {
+      totalFacing = totalDesiredFacing;
+    }
+    total = parseFloat(((totalFacing / totalDesiredFacing) * score).toFixed(2));
+    return total;
   }
 
   getCriteriaWithRemarks(remarks, criteria) {
@@ -470,24 +462,24 @@ return total;
       parentId: criteria.parentId,
       achievedScore: criteria.isEditable ? this.criteriaDesireScore : 0,
       isEditable: criteria.isEditable,
-      isChecked: 1
+      isChecked: 1,
     };
-    this.cloneArray.forEach(element => {
-      const i = this.cloneArray.findIndex(e => e.id === criteria.id);
+    this.cloneArray.forEach((element) => {
+      const i = this.cloneArray.findIndex((e) => e.id === criteria.id);
       this.cloneArray.splice(i, 1, obj);
     });
     // this.subtractScore(this.selectedCriteria);
     // this.evaluationArray.push(obj);
-    console.log('evaluation array clone', this.cloneArray);
+    console.log("evaluation array clone", this.cloneArray);
     // this.updateAchieveScore(criteria.id);
     this.hideRemarksModal();
-    this.selectedRemarks = '';
+    this.selectedRemarks = "";
     this.selectedRemarksList = [];
     this.criteriaDesireScore = 0;
   }
 
   checkboxChange(event, id) {
-    console.log('checkbox event', !event.checked, id);
+    console.log("checkbox event", !event.checked, id);
 
     if (!event.checked) {
       this.selectedRemarksList.push(id);
@@ -500,7 +492,7 @@ return total;
     }
     // this.selectedRemarksList.pop(id)
 
-    console.log('remarks list', this.selectedRemarksList);
+    console.log("remarks list", this.selectedRemarksList);
   }
 
   updateAchieveScore(id) {
@@ -509,7 +501,8 @@ return total;
       const aScore = element.achievedScore;
 
       if (element.id === id) {
-        this.cloneArray[index].achievedScore = this.criteriaDesireScore > 0 ? this.criteriaDesireScore : aScore;
+        this.cloneArray[index].achievedScore =
+          this.criteriaDesireScore > 0 ? this.criteriaDesireScore : aScore;
       }
     }
     this.totalAchieveScore = this.getTotalAchieveScore();
@@ -517,7 +510,7 @@ return total;
 
   getTotalAchieveScore() {
     let score = 0;
-    this.cloneArray.forEach(element => {
+    this.cloneArray.forEach((element) => {
       if (element.achievedScore >= 0) {
         score = score + element.achievedScore;
       }
@@ -528,13 +521,14 @@ return total;
   subtractScore(criteria) {
     this.totalAchieveScore =
       this.criteriaDesireScore > 0
-        ? this.totalAchieveScore - Math.abs(criteria.score - this.criteriaDesireScore)
+        ? this.totalAchieveScore -
+          Math.abs(criteria.score - this.criteriaDesireScore)
         : this.totalAchieveScore - Math.abs(criteria.achievedScore);
   }
 
   isAnyCriteriaCheck() {
     let result = false;
-    this.cloneArray.forEach(element => {
+    this.cloneArray.forEach((element) => {
       if (element.isChecked) {
         result = true;
       }
@@ -544,7 +538,6 @@ return total;
   }
 
   counter(event, criteria, index) {
-
     this.selectedIndex = index;
     // console.dir(event.checked)
     if (event.checked) {
@@ -564,7 +557,8 @@ return total;
       }
       this.showRemarksModal();
     } else {
-      this.totalAchieveScore = this.totalAchieveScore + Math.abs(criteria.score);
+      this.totalAchieveScore =
+        this.totalAchieveScore + Math.abs(criteria.score);
 
       const i = this.indexList.indexOf(index);
       this.indexList.splice(i, 1);
@@ -577,13 +571,16 @@ return total;
           score: criteria.score,
           criteriaMapId: criteria.criteriaMapId,
           parentId: criteria.parentId,
-          achievedScore: criteria.score > criteria.achievedScore || criteria.score < 0 ? criteria.score : criteria.achievedScore,
+          achievedScore:
+            criteria.score > criteria.achievedScore || criteria.score < 0
+              ? criteria.score
+              : criteria.achievedScore,
           isEditable: criteria.isEditable,
-          isChecked: 0
+          isChecked: 0,
         };
-        const e = this.evaluationArray.findIndex(i => i.id === criteria.id);
+        const e = this.evaluationArray.findIndex((i) => i.id === criteria.id);
         this.cloneArray.splice(e, 1, obj);
-        console.log('unchecked evaluation array', this.cloneArray);
+        console.log("unchecked evaluation array", this.cloneArray);
         this.selectedRemarksList = [];
         this.updateAchieveScore(criteria.id);
         this.checkForCritical(criteria);
@@ -592,7 +589,7 @@ return total;
   }
 
   cancelCriteriaSelection() {
-    const inputs: any = document.querySelectorAll('.checkbox');
+    const inputs: any = document.querySelectorAll(".checkbox");
     for (let j = 0; j < inputs.length; j++) {
       if (this.selectedCriteria.id === inputs[j].id) {
         inputs[j].checked = false;
@@ -610,14 +607,20 @@ return total;
         title: criteria.title,
         score: criteria.score,
         criteriaMapId: criteria.criteriaMapId,
-        achievedScore: criteria.score > criteria.achievedScore ? criteria.score : criteria.achievedScore,
+        achievedScore:
+          criteria.score > criteria.achievedScore
+            ? criteria.score
+            : criteria.achievedScore,
         parentId: criteria.parentId,
         isEditable: criteria.isEditable,
-        isChecked: 0
+        isChecked: 0,
       };
-      const e = this.evaluationArray.findIndex(i => i.id === criteria.id);
+      const e = this.evaluationArray.findIndex((i) => i.id === criteria.id);
       this.cloneArray.splice(e, 1, obj);
-      console.log('unchecked evaluation array,using cancel button', this.cloneArray);
+      console.log(
+        "unchecked evaluation array,using cancel button",
+        this.cloneArray
+      );
     }
 
     this.checkForCritical(criteria);
@@ -638,14 +641,14 @@ return total;
   }
   calculateScore() {
     this.score;
-    this.data.criteria.map(c => {
+    this.data.criteria.map((c) => {
       if (c.score > 0) {
         this.score += c.score;
       }
     });
     // this.score=this.score-(this.msl);
 
-    console.log('total score is', this.score);
+    console.log("total score is", this.score);
   }
 
   // makeScoreZero(){
@@ -657,19 +660,17 @@ return total;
   //   });
   // }
   evaluateShop() {
-    const user_id = localStorage.getItem('user_id');
+    const user_id = localStorage.getItem("user_id");
     this.loading = true;
     const req = true;
 
     if (req) {
-
-
       for (const element of this.data.shopDetails.tagsList) {
         // tslint:disable-next-line:triple-equals
-        if (element.heading == 'surveyorId') {
+        if (element.heading == "surveyorId") {
           this.surveyorId = element.value;
-        // tslint:disable-next-line:triple-equals
-        } else if (element.heading == 'Visit Date') {
+          // tslint:disable-next-line:triple-equals
+        } else if (element.heading == "Visit Date") {
           this.visitDay = element.value;
         }
       }
@@ -683,7 +684,7 @@ return total;
           surveyorId: this.surveyorId,
           visitDate: this.visitDay,
           evaluationRemark: this.selectedEvaluationRemark,
-          status: this.checkForSlectedRemarks(this.cloneArray)
+          status: this.checkForSlectedRemarks(this.cloneArray),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -692,9 +693,9 @@ return total;
             this.loading = false;
 
             // tslint:disable-next-line:triple-equals
-            if (data.success == 'true') {
+            if (data.success == "true") {
               this.hideRemarksModalWithNoChange();
-              this.toastr.success('shop evaluated successfully ');
+              this.toastr.success("shop evaluated successfully ");
               this.evaluationArray = [];
               this.cloneArray = [];
               this.indexList = [];
@@ -702,14 +703,14 @@ return total;
                 window.close();
               }, 2000);
             } else {
-              this.toastr.error(data.errorMessage, 'error');
+              this.toastr.error(data.errorMessage, "error");
             }
           },
-          error => {
+          (error) => {
             // console.log('evaluated shop error',error)
             // window.close()
             this.loading = false;
-            this.toastr.error(error.message, 'Error');
+            this.toastr.error(error.message, "Error");
           }
         );
       } else {
@@ -719,7 +720,7 @@ return total;
           evaluatorId: user_id,
           visitDate: this.visitDay,
           surveyorId: this.surveyorId,
-          status: this.checkForSlectedRemarks(this.cloneArray)
+          status: this.checkForSlectedRemarks(this.cloneArray),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -728,8 +729,8 @@ return total;
             this.loading = false;
 
             // tslint:disable-next-line:triple-equals
-            if (data.success == 'true') {
-              this.toastr.success('shop evaluated successfully ');
+            if (data.success == "true") {
+              this.toastr.success("shop evaluated successfully ");
               this.evaluationArray = [];
               this.cloneArray = [];
               this.indexList = [];
@@ -737,63 +738,55 @@ return total;
                 window.close();
               }, 2000);
             } else {
-              this.toastr.error(data.errorMessage, 'error');
+              this.toastr.error(data.errorMessage, "error");
             }
           },
-          error => {
+          (error) => {
             // console.log('evaluated shop error',error)
             // window.close()
             this.loading = false;
-            this.toastr.error(error.message, 'Error');
+            this.toastr.error(error.message, "Error");
           }
         );
-
       }
-
+    }
   }
-}
-
-
 
   checkForSlectedRemarks(list) {
     let result = 1;
-    list.forEach(element => {
+    list.forEach((element) => {
       if (element.remarkId && element.remarkId.length > 0) {
-      result = 2;
+        result = 2;
       }
-
     });
 
-
     return result;
-
   }
   updateSoS() {
-
     if (this.selectedSoS.total_com_height <= 0) {
-    this.toastr.warning('Height must be greater than zero.');
+      this.toastr.warning("Height must be greater than zero.");
     } else {
-    this.hideSoSModal();
+      this.hideSoSModal();
     }
-
 
     const obj = {
-      userId: parseInt(localStorage.getItem('user_id')),
+      userId: parseInt(localStorage.getItem("user_id")),
       width: parseInt(this.selectedSoS.total_width),
       com_width: parseInt(this.selectedSoS.total_com_width),
-      merchandiserId: parseInt(this.selectedSoS.merchandiser_survey_id)
+      merchandiserId: parseInt(this.selectedSoS.merchandiser_survey_id),
     };
 
-    console.log('final SoS object', obj  );
-    this.httpService.updateSOS(obj).subscribe((data: any) => {
-      if (data.success) {
-        this.toastr.info('SOS width is updated');
-
+    console.log("final SoS object", obj);
+    this.httpService.updateSOS(obj).subscribe(
+      (data: any) => {
+        if (data.success) {
+          this.toastr.info("SOS width is updated");
+        }
+        // alert(data)
+      },
+      (error) => {
+        // alert(error)
       }
-// alert(data)
-    }, error => {
-      // alert(error)
-    }
     );
   }
 
@@ -808,8 +801,8 @@ return total;
   }
 
   showSoSModal(item): void {
-  console.log('output item', item);
-  this.selectedSoS = item;
+    console.log("output item", item);
+    this.selectedSoS = item;
     this.sosModal.show();
   }
 
@@ -820,11 +813,11 @@ return total;
   showRemarksModal() {
     this.criteriaDesireScore = 0; // this.selectedCriteria.achievedScore;
     if (this.existingRemarks.length > 0) {
-      this.existingRemarks.forEach(element => {
-              if (element.criteriaId === this.selectedCriteria.id) {
-                this.selectedRemarksList.push(element.id);
-              }
-            });
+      this.existingRemarks.forEach((element) => {
+        if (element.criteriaId === this.selectedCriteria.id) {
+          this.selectedRemarksList.push(element.id);
+        }
+      });
     }
 
     this.remarksModal.show();
@@ -851,12 +844,9 @@ return total;
     // }
   }
 
-
   showEvaluationRemarksModal() {
-
     this.evaluationRemarksModal.show();
   }
-
 
   singleCheckboxChange(id) {
     this.selectedEvaluationRemark = id;
@@ -867,14 +857,11 @@ return total;
   }
 
   expand(id) {
-    this.remarksList.forEach(element => {
+    this.remarksList.forEach((element) => {
       // tslint:disable-next-line:triple-equals
       if (element.criteriaId == id && element.isChecked == 1) {
         this.childArray.push(element.description);
       }
     });
-
+  }
 }
-
-}
-
