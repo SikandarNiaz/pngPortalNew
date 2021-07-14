@@ -48,8 +48,8 @@ export class RawDataComponent implements OnInit {
     this.clusterId = localStorage.getItem("clusterId") || -1;
     this.projectType = localStorage.getItem("projectType");
 
-    this.zonePlaceholder = "City";
-    this.regionPlaceholder = "District";
+    this.zonePlaceholder = "District";
+    this.regionPlaceholder = "City";
   }
 
   ngOnInit() {
