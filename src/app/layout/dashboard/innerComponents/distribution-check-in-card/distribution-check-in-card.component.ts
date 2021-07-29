@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
 import { ModalDirective } from "ngx-bootstrap";
-import { config } from "src/assets/config";
+import { Config } from "src/assets/config";
 import { NgModel } from "@angular/forms";
 
 @Component({
@@ -15,9 +15,8 @@ import { NgModel } from "@angular/forms";
 })
 export class DistributionCheckInCardComponent implements OnInit {
   // ip = environment.ip;
-  configFile = config;
 
-  ip: any = this.configFile.ip;
+  ip: any = Config.BASE_URI;
   tableData: any = [];
   zones: any = [];
   regions: any = [];

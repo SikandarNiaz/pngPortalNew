@@ -23,7 +23,15 @@
 
             <label class="title" for="title">{{ selectedImage?.title }}</label>
             <img
+              *ngIf="!selectedImage?.isExternalUrl"
               src="{{ ip }}{{ selectedImage?.url }}"
+              class="img-thumbnail"
+              style="height: 410px; width: 100%"
+              (click)="showChildModal(selectedImage)"
+            />
+            <img
+              *ngIf="selectedImage?.isExternalUrl"
+              src="{{ selectedImage?.url }}"
               class="img-thumbnail"
               style="height: 410px; width: 100%"
               (click)="showChildModal(selectedImage)"
@@ -46,26 +54,20 @@
                   [ngClass]="{ bgColor: img?.url == selectedImage.url }"
                 >
                   <img
+                    *ngIf="!img?.isExternalUrl"
                     src="{{ ip }}{{ img?.url }} "
                     width="100"
                     class="img-thumbnail side-image"
                     style="height: 80px !important; width: 120px !important"
                   />
-                  <!-- <div class="row justify-content-center" style="word-break: break-word !important">
-                                    <div for="date"><strong>Date:</strong>{{img?.visitDate}}</div>
-                                    <br/>
-    
-                                    <div for="time"><strong>Time Spent:</strong>{{img?.time}}</div>
-                                    <br/>
-                                    <div for="shop" style="word-break: break-word"><strong>Remarks:</strong> {{img?.shopRemarks}}</div>
-    
-    
-                                </div> -->
-                  <!--  -->
+                  <img
+                    *ngIf="img?.isExternalUrl"
+                    src="{{ img?.url }} "
+                    width="100"
+                    class="img-thumbnail side-image"
+                    style="height: 80px !important; width: 120px !important"
+                  />
                 </div>
-                <!-- <div class="col-md-3" style="font-size:15px !important" (click)="setSelectedImage(img)"> -->
-
-                <!-- </div> -->
               </ng-container>
             </div>
             <!-- this.table is moved to home page -->
@@ -230,7 +232,15 @@
           <div class="col-12" style="max-height: 500px !important">
             <label class="title" for="title">{{ selectedImage?.title }}</label>
             <img
+              *ngIf="!selectedImage?.isExternalUrl"
               src="{{ ip }}{{ selectedImage?.url }}"
+              class="img-thumbnail"
+              style="height: 450px; width: 100%"
+              (click)="showChildModal(selectedImage)"
+            />
+            <img
+              *ngIf="selectedImage?.isExternalUrl"
+              src="{{ selectedImage?.url }}"
               class="img-thumbnail"
               style="height: 450px; width: 100%"
               (click)="showChildModal(selectedImage)"
@@ -253,7 +263,15 @@
                   [ngClass]="{ bgColor: img?.url == selectedImage.url }"
                 >
                   <img
+                    *ngIf="!img?.isExternalUrl"
                     src="{{ ip }}{{ img?.url }} "
+                    width="100"
+                    class="img-thumbnail side-image"
+                    style="height: 80px !important; width: 120px !important"
+                  />
+                  <img
+                    *ngIf="img?.isExternalUrl"
+                    src="{{ img?.url }} "
                     width="100"
                     class="img-thumbnail side-image"
                     style="height: 80px !important; width: 120px !important"

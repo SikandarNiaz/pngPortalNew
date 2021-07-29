@@ -66,7 +66,7 @@
           <ng-container *ngFor="let surveyor of surveyors">
             <mat-option
               [value]="surveyor"
-              *ngIf="surveyor.type == 1 && surveyor.active == 'Y'"
+              *ngIf="surveyor.type != 2 && surveyor.active == 'Y'"
               >{{ surveyor.m_code }} - {{ surveyor.fullName }}</mat-option
             >
           </ng-container>
@@ -160,6 +160,14 @@
               <tr>
                 <th>Remarks</th>
                 <td>{{ item?.remarks }}</td>
+              </tr>
+              <tr>
+                <th>Latitude</th>
+                <td>{{ item?.latitude }}</td>
+              </tr>
+              <tr>
+                <th>Longitude</th>
+                <td>{{ item?.longitude }}</td>
               </tr>
             </table>
           </mat-card-content>

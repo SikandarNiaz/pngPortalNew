@@ -6,12 +6,20 @@
   </div>
 
   <div class="row animated slideInLeft" *ngIf="data?.section">
-    <div id="style-2" class="col" [ngClass]="{ 'col-12': this.isDragging }" style="
+    <div
+      id="style-2"
+      class="col"
+      [ngClass]="{ 'col-12': this.isDragging }"
+      style="
         overflow-y: scroll !important;
         overflow-x: hidden !important;
         height: 90vh;
         width: 100% !important;
-      " mwlResizable [enableGhostResize]="true" [resizeEdges]="{ bottom: true, right: true, top: true, left: true }">
+      "
+      mwlResizable
+      [enableGhostResize]="true"
+      [resizeEdges]="{ bottom: true, right: true, top: true, left: true }"
+    >
       <!-- <div class="row">
                 <div class="col-11"></div>
                 <div class="col-1" style="text-align: end;">
@@ -27,7 +35,11 @@
                 </div>
             </div> -->
       <div class="icon-bar">
-        <button type="button" class="btn btn-primary" (click)="this.isDragging = !this.isDragging">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="this.isDragging = !this.isDragging"
+        >
           <span *ngIf="!this.isDragging" title="expand view">
             <i class="fa fa-arrow-right"></i>
           </span>
@@ -137,7 +149,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="!p.isEditable">
+    <ng-container *ngIf="isEditable">
       <div class="col-md-3" *ngIf="data?.criteria && isFromShop && !isDragging">
         <div class="card">
           <div class="row">
@@ -354,7 +366,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="p.isEditable">
+    <ng-container *ngIf="!isEditable">
       <div class="col-md-3" *ngIf="data?.criteria && isFromShop && !isDragging">
         <div class="card">
           <div class="row justify-content-center">
@@ -416,6 +428,7 @@
       <div class="modal-body" style="padding: 10px">
         <!--  -->
         <ngx-image-zoom
+          *ngIf="!selectedShop?.isExternalUrl"
           [zoomMode]="'hover'"
           [magnification]="2"
           [lensWidth]="250"
@@ -424,6 +437,18 @@
           [circularLens]="true"
           [thumbImage]="ip + selectedShop?.url"
           [fullImage]="ip + selectedShop?.url"
+        >
+        </ngx-image-zoom>
+        <ngx-image-zoom
+          *ngIf="selectedShop?.isExternalUrl"
+          [zoomMode]="'hover'"
+          [magnification]="2"
+          [lensWidth]="250"
+          [lensHeight]="250"
+          [enableLens]="true"
+          [circularLens]="true"
+          [thumbImage]="selectedShop?.url"
+          [fullImage]="selectedShop?.url"
         >
         </ngx-image-zoom>
 

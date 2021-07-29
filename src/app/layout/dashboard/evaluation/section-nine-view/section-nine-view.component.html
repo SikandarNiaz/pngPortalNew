@@ -1,95 +1,117 @@
 <div class="container-fluid">
-  <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div>
+  <div
+    class="row"
+    style="border-bottom: 2px solid black; width: 100%; margin: 5px 0"
+  ></div>
 
   <div class="row">
+    <div class="col-md-12 text-center">
+      <h4>
+        <u>{{ data?.sectionTitle }}</u>
+      </h4>
+    </div>
 
-      <div class="col-md-12 text-center">
-          <h4><u>{{data?.sectionTitle}}</u></h4>
-      </div>
+    <div class="col-5">
+      <div class="row">
+        <div class="col-12" style="max-height: 500px !important">
+          <label class="title" for="title">{{ selectedImage?.title }}</label>
+          <img
+            *ngIf="!selectedImage?.isExternalUrl"
+            src="{{ ip }}{{ selectedImage?.url }}"
+            class="img-thumbnail"
+            style="height: 500px; width: 100%"
+            (click)="showChildModal(selectedImage)"
+          />
+          <img
+            *ngIf="selectedImage?.isExternalUrl"
+            src="{{ selectedImage?.url }}"
+            class="img-thumbnail"
+            style="height: 500px; width: 100%"
+            (click)="showChildModal(selectedImage)"
+          />
+          <div
+            class="row justify-content-center"
+            style="word-break: break-word !important"
+          ></div>
+        </div>
 
-
-      <div class="col-5">
-
-
-
+        <div class="col-12 ml-3 mt-2">
           <div class="row">
-
-              <div class="col-12" style="
-              max-height: 500px !important;
-          ">
-                 
-
-                  <label class="title" for="title">{{selectedImage?.title}}</label>
-                  <img src="{{ip}}{{selectedImage?.url}}" class="img-thumbnail" style="        height: 500px;  width: 100%;  " (click)="showChildModal(selectedImage)">
-                  <div class="row justify-content-center" style="word-break: break-word !important">
-                  
+            <ng-container *ngFor="let img of data?.imageList; let i = index">
+              <div
+                class="col-2 mb-1 card mt-5 mr-2"
+                (click)="setSelectedImage(img)"
+                style="padding: 0% !important; cursor: pointer"
+                [ngClass]="{ bgColor: img?.url == selectedImage.url }"
+              >
+                <img
+                  *ngIf="!img.isExternalUrl"
+                  src="{{ ip }}{{ img?.url }} "
+                  width="100"
+                  class="img-thumbnail side-image"
+                  style="height: 80px !important; width: 120px !important"
+                />
+                <img
+                  *ngIf="img.isExternalUrl"
+                  src="{{ img?.url }} "
+                  width="100"
+                  class="img-thumbnail side-image"
+                  style="height: 80px !important; width: 120px !important"
+                />
               </div>
-              </div>
-
-              <div class="col-12 ml-3 mt-2">
-                  <div class="row">
-  
-                      <ng-container *ngFor="let img of data?.imageList ;let i=index ">
-                          <div class="col-2 mb-1 card  mt-5 mr-2" (click)="setSelectedImage(img)" style="padding: 0% !important;cursor:pointer" [ngClass]="{'bgColor': img?.url==selectedImage.url}">
-                              <img src="{{ip}}{{img?.url}} " width="100" class="img-thumbnail side-image" style="height: 80px !important;width: 120px !important;">
-                           
-                          </div>
-                   
-  
-  
-                      </ng-container>
-                  </div>
-           
-              </div>
-  
-  
+            </ng-container>
           </div>
+        </div>
       </div>
-  
-      <div class="col-7 tableFixHead" *ngIf="visibilityData.length>0">
-         
-        <table class="table table-bordered table-hover w-100" >
-            <thead style="background:lightgray">
-                <tr>
-                    <!-- <th>Brand Title</th> -->
-                    <th>Product Title</th>
-                    <th>D.Facing</th>
-                    <th>A.Facing</th>
-                   
+    </div>
 
-                </tr>
-            </thead>
+    <div class="col-7 tableFixHead" *ngIf="visibilityData.length > 0">
+      <table class="table table-bordered table-hover w-100">
+        <thead style="background: lightgray">
+          <tr>
+            <!-- <th>Brand Title</th> -->
+            <th>Product Title</th>
+            <th>D.Facing</th>
+            <th>A.Facing</th>
+          </tr>
+        </thead>
 
-            <tbody>
-                <tr *ngFor="let data of visibilityData;let j= index">
-                    
-                    <ng-container *ngIf="isEditable==false">
-                    <td style="width:700px !important">{{data?.product_title}}</td>
-                    
-                    
-                    <td style="width:100px !important">{{data?.desired_facing}}</td>
-                    <td style="width:100px !important">{{data?.face_unit}}</td>
-                    </ng-container>
-                    <ng-container *ngIf="isEditable==true">
-                        <td style="width:700px !important">{{data?.product_title}}</td>
-                            <td style="width:100px !important">    
-                                <input type="number" [(ngModel)]="data.desired_facing"  style="width: 4em" readonly/></td>
-                                <td style="width:100px !important" [ngStyle]="{'background-color':data.color}">    
-                                    <input type="number" [(ngModel)]="data.face_unit" maxlength="3"  style="width: 4em" (change)="changeFacing(data)"/></td>
-                        </ng-container>
-                  
-              
+        <tbody>
+          <tr *ngFor="let data of visibilityData; let j = index">
+            <ng-container *ngIf="isEditable == false">
+              <td style="width: 700px !important">{{ data?.product_title }}</td>
 
-
-                </tr>
-
-            </tbody>
-      
-        </table>
-
-        
-
-
+              <td style="width: 100px !important">
+                {{ data?.desired_facing }}
+              </td>
+              <td style="width: 100px !important">{{ data?.face_unit }}</td>
+            </ng-container>
+            <ng-container *ngIf="isEditable == true">
+              <td style="width: 700px !important">{{ data?.product_title }}</td>
+              <td style="width: 100px !important">
+                <input
+                  type="number"
+                  [(ngModel)]="data.desired_facing"
+                  style="width: 4em"
+                  readonly
+                />
+              </td>
+              <td
+                style="width: 100px !important"
+                [ngStyle]="{ 'background-color': data.color }"
+              >
+                <input
+                  type="number"
+                  [(ngModel)]="data.face_unit"
+                  maxlength="3"
+                  style="width: 4em"
+                  (change)="changeFacing(data)"
+                />
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

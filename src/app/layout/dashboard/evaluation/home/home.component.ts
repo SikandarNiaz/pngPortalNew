@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
 import { ModalDirective } from "ngx-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { ResizeEvent } from "angular-resizable-element";
-import { config } from "src/assets/config";
+import { Config } from "src/assets/config";
 import { MatAccordion } from "@angular/material/expansion";
 
 @Component({
@@ -17,9 +17,8 @@ import { MatAccordion } from "@angular/material/expansion";
 export class HomeComponent implements OnInit {
   data: any = [];
   // ip = environment.ip;
-  configFile = config;
 
-  ip: any = this.configFile.ip;
+  ip: any = Config.BASE_URI;
   loading = false;
   selectedShop: any = {};
 
@@ -72,6 +71,7 @@ export class HomeComponent implements OnInit {
   isDragging = false;
   selectedSoS: any = {};
   evaluatorRole: any;
+  surveyDetails: any;
   j = -1;
   i = 0;
   m = 0;
@@ -154,6 +154,8 @@ export class HomeComponent implements OnInit {
       (data) => {
         if (data) {
           this.data = data;
+          this.setImageUrl();
+          this.surveyDetails = this.data.shopDetails.sectionMap;
           if (this.p.isEditable) {
             this.isEditable = false;
             document.title = this.data.section[0].sectionTitle;
@@ -195,11 +197,15 @@ export class HomeComponent implements OnInit {
             if (this.userType == this.reevaluatorRole) {
               this.checkEvaluatedRemarks();
               this.setRemarksForReEvaluation();
+              this.isEditable = true;
               // tslint:disable-next-line:triple-equals
-            } else {
+            } else if (
+              this.userType == this.evaluatorRole &&
+              this.surveyDetails.evaluationStatus == -1
+            ) {
               this.setPSKUCriteria();
+              this.isEditable = true;
             }
-            this.isEditable = true;
             if (this.data.criteria) {
               this.calculateScore();
             }
@@ -863,5 +869,18 @@ export class HomeComponent implements OnInit {
         this.childArray.push(element.description);
       }
     });
+  }
+
+  setImageUrl() {
+    for (const data of this.data.section) {
+      for (const image of data.imageList) {
+        if (image.url != null) {
+          if (image.url.indexOf("amazonaws.com") >= 0) {
+            const i = data.imageList.findIndex((e) => e.url == image.url);
+            data.imageList[i].isExternalUrl = true;
+          }
+        }
+      }
+    }
   }
 }

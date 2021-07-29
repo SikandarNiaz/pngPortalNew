@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   // ip: 'http://cbl.rtdtradetracker.com/',
-  hash: '/pngdist/#/'
+  hash: "/pngdist/#/",
+  // hash: "/pghanger/#/",
 };

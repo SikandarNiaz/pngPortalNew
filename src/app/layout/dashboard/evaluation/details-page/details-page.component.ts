@@ -6,7 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
 import { ModalDirective } from "ngx-bootstrap";
 import { Alert } from "selenium-webdriver";
-import { config } from "src/assets/config";
+import { Config } from "src/assets/config";
 import { MatPaginator } from "@angular/material";
 
 @Component({
@@ -16,9 +16,8 @@ import { MatPaginator } from "@angular/material";
 })
 export class DetailsPageComponent implements OnInit {
   // ip = environment.ip;
-  configFile = config;
 
-  ip: any = this.configFile.ip;
+  ip: any = Config.BASE_URI;
   tableData: any = [];
   headingsList: any = [];
   loading = true;
@@ -34,12 +33,26 @@ export class DetailsPageComponent implements OnInit {
   p = 0;
   tableTitle = "";
   params: any = {};
+  isExternalUrl: boolean;
+  isQCRequest: boolean;
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private httpService: EvaluationService,
     private activeRoute: ActivatedRoute
   ) {
+    this.reevaluatorRole = localStorage.getItem("Reevaluator");
+    this.evaluatorRole = localStorage.getItem("Evaluator");
+    this.userType = localStorage.getItem("user_type");
+    this.userId = localStorage.getItem("user_id");
+
+    if (
+      this.userType != null &&
+      (this.userType == this.evaluatorRole ||
+        this.userType == this.reevaluatorRole)
+    ) {
+      this.isQCRequest = true;
+    }
     this.activeRoute.queryParams.subscribe((p) => {
       console.log("active params", p);
       this.params = p;
@@ -76,77 +89,33 @@ export class DetailsPageComponent implements OnInit {
   }
 
   getData(obj) {
-    if (obj.surveyorId) {
-      this.httpService.getData(obj).subscribe(
-        (data) => {
-          // console.log(data);
-          this.tableData = data;
-          if (this.tableData.length === 0) {
-            this.loading = false;
-            this.toastr.info("No record found.");
-            setTimeout(() => {
-              this.router.navigate(["/dashboard/merchandiser_List"]);
-            }, 3000);
-          }
-          this.headingsList = Object.keys(data);
+    const obj1 = {
+      surveyorId: obj.surveyorId || -1,
+      startDate: obj.startDate || null,
+      endDate: obj.endDate || null,
+      userType: this.userType || -1,
+      evaluatorId: this.userId ? (this.isQCRequest ? this.userId : -1) : -1,
+      areaId: obj.areaId || -1,
+    };
+    this.httpService.getData(obj1).subscribe(
+      (data) => {
+        // console.log(data);
+        this.tableData = data;
+        if (this.tableData.length === 0) {
           this.loading = false;
-        },
-        (error) => {}
-      );
-    } else {
-      console.log("date ", this.startDate);
-      const obj = {
-        startDate: moment(this.startDate).format("YYYY-MM-DD"),
-        endDate: moment(this.startDate).format("YYYY-MM-DD"),
-        userType: this.userType,
-        evaluatorId: localStorage.getItem("user_id"),
-      };
-      this.httpService.getData(obj).subscribe(
-        (data) => {
-          // console.log(data);
-          this.tableData = data;
-          if (this.tableData.length === 0) {
-            this.loading = false;
-            this.toastr.info("No record found.");
-            setTimeout(() => {
-              this.router.navigate(["/dashboard/merchandiser_List"]);
-            }, 3000);
-          }
-          this.headingsList = Object.keys(data);
-          this.loading = false;
-        },
-        (error) => {}
-      );
-    }
+          this.toastr.info("No record found.");
+          setTimeout(() => {
+            this.router.navigate(["/dashboard/merchandiser_List"]);
+          }, 3000);
+        } else {
+          this.setImageUrl();
+        }
+        this.headingsList = Object.keys(data);
+        this.loading = false;
+      },
+      (error) => {}
+    );
   }
-
-  // getEvaluatorShops() {
-
-  //   const obj = {
-  //     startDate:  moment(this.startDate).format('YYYY-MM-DD'),
-  //     endDate:  moment(this.startDate).format('YYYY-MM-DD'),
-  //     userType: this.userType,
-  //     evaluatorId: this.userId
-
-  //   };
-  //   this.httpService.getData(obj).subscribe(data => {
-  //     // console.log(data);
-  //     this.tableData = data;
-  //     this.tableData.paginator = this.paginator;
-  //     if (this.tableData.length === 0) {
-  //       this.loading = false;
-  //       this.toastr.info('No record found.');
-  //       setTimeout(() => {
-  //       this.router.navigate(['/dashboard/merchandiser_List']);
-
-  //       }, 3000);
-  //     }
-  //   this.headingsList = Object.keys(data);
-  //   this.loading = false;
-
-  //   }, error => {});
-
-  // }
 
   gotoNewPage(item) {
     if (this.userType == this.reevaluatorRole) {
@@ -164,6 +133,15 @@ export class DetailsPageComponent implements OnInit {
         `${environment.hash}dashboard/evaluation/list/details/${item.survey_id}/${item.shop_id}`,
         "_blank"
       );
+    }
+  }
+  setImageUrl() {
+    for (const element of this.tableData) {
+      if (element.shop_image_url != null) {
+        if (element.shop_image_url.indexOf("amazonaws.com") >= 0) {
+          this.isExternalUrl = true;
+        }
+      }
     }
   }
 }

@@ -1,31 +1,55 @@
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-child-name">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 id="dialog-child-name" class="modal-title pull-left">{{selectedItem.shop_title}}</h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+<div
+  bsModal
+  #childModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          {{ selectedItem.shop_title }}
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideChildModal()"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
-            </div>
+      </div>
 
-            <div class="modal-body text-center">
-                <img src="{{ip}}{{selectedItem.shop_image_url}}" alt="" style=" width: 100%; height: 500px; ">
-            </div>
-        </div>
+      <div class="modal-body text-center">
+        <img
+          src="{{ ip }}{{ selectedItem.shop_image_url }}"
+          alt=""
+          style="width: 100%; height: 500px"
+          *ngIf="!isExternalUrl"
+        />
+        <img
+          src="{{ selectedItem.shop_image_url }}"
+          alt=""
+          style="width: 100%; height: 500px"
+          *ngIf="isExternalUrl"
+        />
+      </div>
     </div>
+  </div>
 </div>
 
 <mat-card class="mb-20">
+  <mat-card-content>
+    <mat-card-title>
+      {{ tableTitle | uppercase }} {{ title | uppercase }}
+      <i [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i>
+      <p *ngIf="!loading && tableData == 0">No data available</p>
+      <!-- <button type="button" class="btn btn-primary" >Open child modal</button> -->
+    </mat-card-title>
 
-    <mat-card-content>
-        <mat-card-title>
-            {{tableTitle | uppercase}} {{title| uppercase}} <i [ngClass]="{'fa fa-cog fa-spin':loading}"></i>
-            <p *ngIf="!loading && tableData==0">No data available</p>
-            <!-- <button type="button" class="btn btn-primary" >Open child modal</button> -->
-
-        </mat-card-title>
-
-        <!-- <section class="example-section">
+    <!-- <section class="example-section">
             <table class="table animated slideInLeft" *ngIf="tableData.length>0 ">
                 <thead>
                     <tr>
@@ -66,79 +90,89 @@
             </table>
 
         </section> -->
-    </mat-card-content>
+  </mat-card-content>
 </mat-card>
 
-<div class="container-fluid" *ngIf="tableData.length>0">
-    <div class="row">
-
-    </div>
-    <div class="row js">
-        <ng-container *ngFor="let item of tableData;let i=index">
-            <mat-card class=" col-md-3 example-card card2 ml-3 mt-3">
-                <!-- <mat-card-header>
+<div class="container-fluid" *ngIf="tableData.length > 0">
+  <div class="row"></div>
+  <div class="row js">
+    <ng-container *ngFor="let item of tableData; let i = index">
+      <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
+        <!-- <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
                     <mat-card-title></mat-card-title>
 
                 </mat-card-header> -->
-                <!-- {{tableData.itemList |json}} -->
-                <!-- <img mat-card-image src="assets/images/LU-logo.png" height="300" alt=""  style="cursor:pointer"> -->
-                
-                <div class="ribbon">
-                        <img mat-card-image class="small" src="{{ip}}{{item.shop_image_url}}" width="250" height="300" alt="" (click)="setSelectedItem(item);showChildModal()">
-                        <!-- <span *ngIf="item.evaluationStatus == 1"  class="ribbon-{{item.score>70?'green':'red'}}">
+        <!-- {{tableData.itemList |json}} -->
+        <!-- <img mat-card-image src="assets/images/LU-logo.png" height="300" alt=""  style="cursor:pointer"> -->
+
+        <div class="ribbon">
+          <img
+            mat-card-image
+            class="small"
+            src="{{ ip }}{{ item.shop_image_url }}"
+            width="250"
+            height="300"
+            alt=""
+            (click)="setSelectedItem(item); showChildModal()"
+            *ngIf="!isExternalUrl"
+          />
+          <img
+            mat-card-image
+            class="small"
+            src="{{ item.shop_image_url }}"
+            width="250"
+            height="300"
+            alt=""
+            (click)="setSelectedItem(item); showChildModal()"
+            *ngIf="isExternalUrl"
+          />
+
+          <!-- <span *ngIf="item.evaluationStatus == 1"  class="ribbon-{{item.score>70?'green':'red'}}">
                             <span>{{item.score}}</span>
                         </span> -->
-                </div>
+        </div>
 
-
-
-                <!-- <div class="img-container">
+        <!-- <div class="img-container">
                     <img mat-card-image class="small" src="{{ip}}{{item.shopFullImg}}" width="250" height="300" alt="" (click)="setSelectedItem(item);showChildModal()">
                     <div class="top-right-{{item.score>70?'green':'red'}}">Score: {{item?.score}}</div>
                     
                 </div> -->
-                
-                
-                
-                <mat-card-content  (click)="gotoNewPage(item)">
-                    <!-- <table class="table" (click)="getPdf(item);" style="cursor:pointer"> -->
-                    <table class="table" style="cursor:pointer" >
 
-                        <tr>
-                            <!-- test -->
-                            <th>Shop Code</th>
-                            <td>{{item?.shop_code}}</td>
-                        </tr>
-                        <tr>
-                            <th>Shop Name</th>
-                            <td>{{item?.shop_title}}</td>
-                        </tr>
-                        <tr>
-                            <th>Channel Name</th>
-                            <td>{{item?.channel_title}}</td>
-                        </tr>
-                        <tr>
-                            <th>Remarks</th>
-                            <td>{{item?.remarks}}</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>{{item?.evaluation_status}}</td>
-                        </tr>
-                        <tr>
-                            <th>Hotspot Allocated</th>
-                            <td>{{item?.chiller_allocated}}</td>
-                        </tr>
-                      
-                        <!-- <hr> -->
-                    </table>
-                   
-                </mat-card-content>
-                
-            </mat-card>
-        </ng-container>
-        <!-- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator> -->
+        <mat-card-content (click)="gotoNewPage(item)">
+          <!-- <table class="table" (click)="getPdf(item);" style="cursor:pointer"> -->
+          <table class="table" style="cursor: pointer">
+            <tr>
+              <!-- test -->
+              <th>Shop Code</th>
+              <td>{{ item?.shop_code }}</td>
+            </tr>
+            <tr>
+              <th>Shop Name</th>
+              <td>{{ item?.shop_title }}</td>
+            </tr>
+            <tr>
+              <th>Channel Name</th>
+              <td>{{ item?.channel_title }}</td>
+            </tr>
+            <tr>
+              <th>Remarks</th>
+              <td>{{ item?.remarks }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>{{ item?.evaluation_status }}</td>
+            </tr>
+            <tr>
+              <th>Hotspot Allocated</th>
+              <td>{{ item?.chiller_allocated }}</td>
+            </tr>
 
-    </div>
+            <!-- <hr> -->
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    <!-- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator> -->
+  </div>
 </div>

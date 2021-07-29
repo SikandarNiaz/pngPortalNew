@@ -41,6 +41,7 @@ import { PngOosReportComponent } from "./innerComponents/png-oos-report/png-oos-
 import { SurveyShopsSurveyorComponent } from "./innerComponents/survey-shops-surveyor/survey-shops-surveyor.component";
 import { SurveyShopListComponent } from "./innerComponents/survey-shop-list/survey-shop-list.component";
 import { DistributionCheckInCardComponent } from "./innerComponents/distribution-check-in-card/distribution-check-in-card.component";
+import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
 
 const routes: Routes = [
   {
@@ -56,6 +57,7 @@ const routes: Routes = [
       { path: "summary_report", component: SummaryComponent },
       { path: "productivity_report", component: ProductivityComponent },
       { path: "msl_dashboard", component: MslDashboardComponent },
+      { path: "image-view", component: ImageViewComponent },
       {
         path: "distribution-check-in",
         component: DistributionCheckInCardComponent,
