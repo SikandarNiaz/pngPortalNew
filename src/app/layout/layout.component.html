@@ -1,14 +1,13 @@
-
 <app-topnav (hideSideBar)="hideBarStatus()"></app-topnav>
-<ng-container >
-    <app-sidebar *ngIf="!hideSideBar"></app-sidebar>
-    <div class="main-container"  [ngClass]="{'main-container': !hideSideBar, 'container-fluid mt-12':hideSideBar}">
-
-        <router-outlet></router-outlet>
-    </div>
+<ng-container>
+  <app-sidebar *ngIf="!hideSideBar"></app-sidebar>
+  <div
+    class="main-container"
+    [ngClass]="{
+      'main-container': !hideSideBar,
+      'container-fluid mt-12': hideSideBar
+    }"
+  >
+    <router-outlet></router-outlet>
+  </div>
 </ng-container>
-
-
-
-
-
