@@ -16,7 +16,6 @@ import { ProductivityDashboardComponent } from "./innerComponents/productivity-d
 import { TposmDeploymentReportComponent } from "./innerComponents/tposm-deployment-report/tposm-deployment-report.component";
 import { UpdatePasswordComponent } from "./user/update-password/update-password.component";
 import { RawDataComponent } from "./raw-data/raw-data.component";
-import { DataAvailabilityComponent } from "./data-availability/data-availability.component";
 import { MerchandiserListComponent } from "./innerComponents/merchandiser-list/merchandiser-list.component";
 import { AbnormalityComponent } from "./innerComponents/abnormality/abnormality.component";
 import { TimeAnalysisReportComponent } from "./innerComponents/time-analysis-report/time-analysis-report.component";
@@ -75,7 +74,6 @@ const routes: Routes = [
       },
       { path: "update_password", component: UpdatePasswordComponent },
       { path: "raw_data", component: RawDataComponent },
-      { path: "brand_sku_oos", component: DataAvailabilityComponent },
       {
         path: "supervisor_wwwr_summary",
         component: SupervisorWwwrSummaryComponent,
@@ -134,6 +132,10 @@ const routes: Routes = [
   {
     path: "evaluation",
     loadChildren: "./evaluation/evaluation.module#EvaluationModule",
+  },
+  {
+    path: "posm-tracking",
+    loadChildren: "./posm-tracking/posm-tracking.module#PosmTrackingModule",
   },
 ];
 
