@@ -1,0 +1,51 @@
+<div
+  bsModal
+  #childModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">Image</h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideChildModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          src="{{ ip }}{{ selectedItem.url }}"
+          alt=""
+          style="width: 100%; height: 500px"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div style="position: relative">
+        <img
+          (click)="setSelectedItem(params); showChildModal()"
+          src="{{ ip }}{{ params.url }}"
+          class="img-fluid"
+          style="height: 450px; width: 100%"
+        />
+        <div class="imageDetails">
+          <p>Visit Date: {{ params?.visitDate }}</p>
+          <p>Longitude: {{ params?.longitude }}</p>
+          <p>Latitude: {{ params?.latitude }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
