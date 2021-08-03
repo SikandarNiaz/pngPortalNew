@@ -29,7 +29,7 @@ export class SectionOneViewComponent implements OnInit, OnChanges {
   @Input("isEditable") isEditable: any;
   selectedShop: any = {};
   // ip=environment.ip;
-  configFile = Config.BASE_URI;
+  ip = Config.BASE_URI;
   products: any = [];
   surveyId = 0;
   updatingMSL = false;

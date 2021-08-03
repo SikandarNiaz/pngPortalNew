@@ -13,6 +13,7 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { EvaluationService } from "../evaluation.service";
 import { ModalDirective } from "ngx-bootstrap";
+import { KeyValuePipe } from "@angular/common";
 
 @Component({
   selector: "section-nine-view",
@@ -21,13 +22,14 @@ import { ModalDirective } from "ngx-bootstrap";
 })
 export class SectionNineViewComponent implements OnInit {
   @Input("data") data;
+  @Input("evaluatorId") taggedEvaluatorId;
+  // @ViewChild('childModal') childModal: ModalDirective;
   @ViewChild("childModal") childModal: ModalDirective;
   @Output("showModal") showModal: any = new EventEmitter<any>();
   @Input("isEditable") isEditable: any;
-  @Output("productList") productForEmit: any = new EventEmitter<any>();
+  @Output("assetTypeId") assetTypeForEmit: any = new EventEmitter<any>();
   selectedShop: any = {};
   selectedImage: any = {};
-  // ip=environment.ip;
   ip: any = Config.BASE_URI;
   hover = "hover";
   zoomOptions = {
@@ -35,130 +37,152 @@ export class SectionNineViewComponent implements OnInit {
   };
   zoomedImage =
     "https://image.shutterstock.com/image-photo/micro-peacock-feather-hd-imagebest-260nw-1127238569.jpg";
-  visibilityData: any;
+  formData: any;
   availability: any;
   changeColor: boolean;
   updatingMSL: boolean;
+  selectedProduct: any = {};
   colorUpdateList: any = [];
+  selectedSku: any;
   surveyId: any;
-  flag = 0;
   evaluatorId: any;
   MSLCount = 0;
-  MSLNAvailabilityCount: number;
-  facing: any;
-  availableDepth: any;
-  desiredDepth: any;
-  stock: any;
-  total: any;
-
-  selectedProduct: any = {};
-  selectedFacing: any;
-  selectedSku: any;
   loadingData: boolean;
   loading = false;
+  MSLNAvailabilityCount: number;
+  facing: any;
+  totalDesiredFacing: any;
+
+  statusArray: any = [
+    { title: "Yes", value: "1" },
+    { title: "No", value: "0" },
+  ];
 
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private httpService: EvaluationService
-  ) {}
-
-  ngOnInit() {
-    const arr = this.router.url.split("/");
-    this.surveyId = +arr[arr.length - 1];
+    private httpService: EvaluationService,
+    private keyValuePipe: KeyValuePipe
+  ) {
     this.evaluatorId = localStorage.getItem("user_id");
   }
+
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data.currentValue) {
       this.data = changes.data.currentValue;
+      this.formData = this.keyValuePipe.transform(this.data.formData) || [];
       this.selectedImage = this.data.imageList[0];
-      this.visibilityData = this.data.genericTable || [];
     }
   }
+
+  unsorted() {}
 
   setSelectedImage(img) {
     this.selectedImage = img;
   }
-  getFacingCount(products) {
-    let sum = 0;
-    products.forEach((el) => {
-      sum = +el.face_unit + sum;
-    });
-    return sum;
-  }
-
-  getAvailDepthCount(products) {
-    let sum = 0;
-    products.forEach((el) => {
-      sum = +el.unit_available + sum;
-    });
-    return sum;
-  }
-
-  getDesDepthCount(products) {
-    let sum = 0;
-    products.forEach((el) => {
-      sum = sum + el.desiredDepth;
-    });
-    return sum;
-  }
-
-  getStockCount(products) {
-    let sum = 0;
-    products.forEach((el) => {
-      sum = sum + el.stock;
-    });
-    return sum;
-  }
-
-  getTotalCount(availableDepth, desiredDepth) {
-    const percentage = ((availableDepth / desiredDepth) * 100).toFixed(1);
-    return percentage;
-  }
 
   showChildModal(shop): void {
     this.selectedShop = shop;
-    this.selectedFacing = this.selectedShop.face_unit;
     this.showModal.emit(this.selectedShop);
     // this.childModal.show();
-  }
-
-  showChillerChildModal(product, value) {
-    if (value === 1) {
-      this.flag = 1;
-    } else {
-      this.flag = 2;
-    }
-    this.selectedProduct = product;
-    this.childModal.show();
   }
 
   hideChildModal() {
     this.childModal.hide();
   }
 
-  changeFacing(product) {
+  updateMultiOptionData(value, data) {
     this.loading = true;
-    if (this.isEditable) {
-      this.changeColor = true;
-      this.colorUpdateList.push(product.id);
-      const obj = {
-        msdId: product.detailId,
-        newValue: product.face_unit,
-        evaluatorId: this.evaluatorId,
-        title: product.product_title,
-        categoryTitle: this.data.sectionTitle,
-        type: 7,
-      };
-      this.httpService.updateData(obj).subscribe((data: any) => {
-        if (data.success) {
-          this.loading = false;
-          this.toastr.success("Data Updated Successfully");
-        } else {
-          this.toastr.error(data.message, "Update Data");
-        }
-      });
+    let selectedOption;
+    for (const option of data.optionList) {
+      if (value == option.id) {
+        selectedOption = option;
+        break;
+      }
+    }
+    if (value != null) {
+      if (this.isEditable) {
+        const obj = {
+          msdId: data.id,
+          title: data.question,
+          categoryTitle: this.data.sectionTitle,
+          newValueId: selectedOption.id,
+          newValue: selectedOption.title,
+          type: 4,
+          evaluatorId: this.evaluatorId,
+        };
+
+        this.httpService.updateData(obj).subscribe((data: any) => {
+          if (data.success) {
+            this.loading = false;
+            this.toastr.success("Data Updated Successfully");
+            // const key = data.msdId;
+            // this.formData.forEach((e) => {
+            //   // for (const key of this.colorUpdateList) {
+            //   if (key == e.value.id) {
+            //     const i = this.formData.findIndex((p) => p.value.id == key);
+            //     const obj = {
+            //       id: e.value.id,
+            //       question: e.value.question,
+            //       answer: e.value.answer,
+            //       fieldType: e.value.fieldType,
+            //       color: "red",
+            //     };
+
+            //     this.formData.splice(i, 1, obj);
+            //   }
+
+            //   // }
+            // });
+          } else {
+            this.toastr.error(data.message, "Update Data");
+          }
+        });
+      } else {
+        this.toastr.error(
+          "Operation not allowed. Please login  with the relevent Id",
+          "Error"
+        );
+      }
+    } else {
+      this.toastr.error("Value is Incorrect");
+      this.loading = false;
+    }
+  }
+
+  updateTextData(value) {
+    this.loading = true;
+    if (value.answer != null && value.answer >= 0) {
+      if (this.isEditable) {
+        const obj = {
+          msdId: value.id,
+          newValue: value.answer,
+          newValueId: -1,
+          title: value.question,
+          categoryTitle: this.data.sectionTitle,
+          type: 8,
+          evaluatorId: this.evaluatorId,
+        };
+
+        this.httpService.updateData(obj).subscribe((data: any) => {
+          if (data.success) {
+            this.loading = false;
+            this.toastr.success("Data Updated Successfully");
+          } else {
+            this.toastr.error(data.message, "Update Data");
+          }
+        });
+      } else {
+        this.toastr.error(
+          "Operation not allowed. Please login  with the relevent Id",
+          "Error"
+        );
+      }
+    } else {
+      this.toastr.error("Value is Incorrect");
+      this.loading = false;
     }
   }
 }

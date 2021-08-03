@@ -4,36 +4,35 @@
     style="border-bottom: 2px solid black; width: 100%; margin: 5px 0"
   ></div>
 
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-md-12 text-center">
       <h4>
-        <u>{{ data?.sectionTitle }}</u>
+        <u>{{ data?.sectionTitle }} </u
+        ><i color="warn" [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i>
       </h4>
     </div>
-
-    <div class="col-5">
-      <div class="row">
-        <div class="col-12" style="max-height: 500px !important">
-          <label class="title" for="title">{{ selectedImage?.title }}</label>
-          <img
-            *ngIf="!selectedImage?.isExternalUrl"
-            src="{{ ip }}{{ selectedImage?.url }}"
-            class="img-thumbnail"
-            style="height: 500px; width: 100%"
-            (click)="showChildModal(selectedImage)"
-          />
-          <img
-            *ngIf="selectedImage?.isExternalUrl"
-            src="{{ selectedImage?.url }}"
-            class="img-thumbnail"
-            style="height: 500px; width: 100%"
-            (click)="showChildModal(selectedImage)"
-          />
-          <div
-            class="row justify-content-center"
-            style="word-break: break-word !important"
-          ></div>
-        </div>
+    <ng-container *ngIf="data?.imageList.length > 0">
+      <div
+        [ngClass]="{
+          'col-md-5': formData != null,
+          'col-md-4': formData == null
+        }"
+      >
+        <label class="title" for="title">{{ selectedImage?.title }}</label>
+        <img
+          *ngIf="!selectedImage?.isExternalUrl"
+          src="{{ ip }}{{ selectedImage?.url }}"
+          class="img-thumbnail"
+          style="height: 450px; width: 100%"
+          (click)="showChildModal(selectedImage)"
+        />
+        <img
+          *ngIf="selectedImage?.isExternalUrl"
+          src="{{ selectedImage?.url }}"
+          class="img-thumbnail"
+          style="height: 450px; width: 100%"
+          (click)="showChildModal(selectedImage)"
+        />
 
         <div class="col-12 ml-3 mt-2">
           <div class="row">
@@ -45,14 +44,14 @@
                 [ngClass]="{ bgColor: img?.url == selectedImage.url }"
               >
                 <img
-                  *ngIf="!img.isExternalUrl"
+                  *ngIf="!img?.isExternalUrl"
                   src="{{ ip }}{{ img?.url }} "
                   width="100"
                   class="img-thumbnail side-image"
                   style="height: 80px !important; width: 120px !important"
                 />
                 <img
-                  *ngIf="img.isExternalUrl"
+                  *ngIf="img?.isExternalUrl"
                   src="{{ img?.url }} "
                   width="100"
                   class="img-thumbnail side-image"
@@ -63,55 +62,90 @@
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
 
-    <div class="col-7 tableFixHead" *ngIf="visibilityData.length > 0">
-      <table class="table table-bordered table-hover w-100">
-        <thead style="background: lightgray">
-          <tr>
-            <!-- <th>Brand Title</th> -->
-            <th>Product Title</th>
-            <th>D.Facing</th>
-            <th>A.Facing</th>
-          </tr>
-        </thead>
+    <ng-container *ngIf="formData != null">
+      <div
+        class="tableFixHead"
+        [ngClass]="{
+          'col-md-7': data?.imageList?.length > 0,
+          'col-md-10': data?.imageList?.length == 0
+        }"
+      >
+        <table class="table table-bordered table-hover w-100">
+          <thead style="background: lightgray">
+            <tr>
+              <!-- <th>Brand Title</th> -->
+              <th>Question</th>
+              <th>Answer</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr *ngFor="let data of visibilityData; let j = index">
-            <ng-container *ngIf="isEditable == false">
-              <td style="width: 700px !important">{{ data?.product_title }}</td>
-
-              <td style="width: 100px !important">
-                {{ data?.desired_facing }}
-              </td>
-              <td style="width: 100px !important">{{ data?.face_unit }}</td>
-            </ng-container>
-            <ng-container *ngIf="isEditable == true">
-              <td style="width: 700px !important">{{ data?.product_title }}</td>
-              <td style="width: 100px !important">
-                <input
-                  type="number"
-                  [(ngModel)]="data.desired_facing"
-                  style="width: 4em"
-                  readonly
-                />
-              </td>
-              <td
-                style="width: 100px !important"
-                [ngStyle]="{ 'background-color': data.color }"
+          <tbody>
+            <tr *ngFor="let data of formData">
+              <ng-container
+                *ngIf="
+                  data.value.fieldType != 'image' &&
+                  data.value.fieldType != 'Image'
+                "
               >
-                <input
-                  type="number"
-                  [(ngModel)]="data.face_unit"
-                  maxlength="3"
-                  style="width: 4em"
-                  (change)="changeFacing(data)"
-                />
-              </td>
-            </ng-container>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                <td style="width: 600px !important; word-wrap: break-word">
+                  {{ data.value.question }}
+                </td>
+
+                <ng-container *ngIf="isEditable == false">
+                  <td style="width: 300px !important">
+                    {{ data.value.answer }}
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="isEditable == true">
+                  <ng-container
+                    *ngIf="data.value.fieldType == 'text_field'; else options"
+                  >
+                    <td style="width: 300px">
+                      <input
+                        type="number"
+                        [(ngModel)]="data.value.answer"
+                        maxlength="10"
+                        style="width: 3em"
+                        (change)="updateTextData(data.value)"
+                      />
+                    </td>
+                  </ng-container>
+                  <ng-template #options>
+                    <td>
+                      <select
+                        #newValue
+                        (change)="
+                          updateMultiOptionData(newValue.value, data.value)
+                        "
+                      >
+                        <ng-container
+                          *ngFor="let options of data.value.optionList"
+                        >
+                          <option
+                            *ngIf="data.value.answer == options.title"
+                            [value]="options.id"
+                            selected="selected"
+                          >
+                            {{ options?.title }}
+                          </option>
+                          <option
+                            *ngIf="data.value.answer != options.title"
+                            [value]="options.id"
+                          >
+                            {{ options?.title }}
+                          </option>
+                        </ng-container>
+                      </select>
+                    </td>
+                  </ng-template>
+                </ng-container>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
   </div>
 </div>
