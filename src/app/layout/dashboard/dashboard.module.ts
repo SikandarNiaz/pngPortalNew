@@ -83,6 +83,7 @@ import { CalendarModule, DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { CalendarHeaderComponent } from "./innerComponents/calender/calendar-header/calendar-header.component";
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
+import { UniqueBasedProductivityReportComponent } from './innerComponents/unique-based-productivity-report/unique-based-productivity-report.component';
 
 @NgModule({
   imports: [
@@ -170,6 +171,7 @@ import { ImageViewComponent } from "./innerComponents/image-view/image-view.comp
     CalenderDemoComponent,
     CalendarHeaderComponent,
     ImageViewComponent,
+    UniqueBasedProductivityReportComponent,
   ],
 })
 export class DashboardModule {}

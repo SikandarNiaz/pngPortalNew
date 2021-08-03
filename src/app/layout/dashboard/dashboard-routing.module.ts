@@ -42,6 +42,7 @@ import { SurveyShopsSurveyorComponent } from "./innerComponents/survey-shops-sur
 import { SurveyShopListComponent } from "./innerComponents/survey-shop-list/survey-shop-list.component";
 import { DistributionCheckInCardComponent } from "./innerComponents/distribution-check-in-card/distribution-check-in-card.component";
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
+import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique-based-productivity-report/unique-based-productivity-report.component";
 
 const routes: Routes = [
   {
@@ -138,6 +139,10 @@ const routes: Routes = [
   {
     path: "posm-tracking",
     loadChildren: "./posm-tracking/posm-tracking.module#PosmTrackingModule",
+  },
+  {
+    path: "capturedAbnormalUnvisited",
+    component: UniqueBasedProductivityReportComponent,
   },
 ];
 
