@@ -162,7 +162,7 @@
     <div class="row js">
       <ng-container *ngFor="let item of tableData; let i = index">
         <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
-          <div class="ribbon">
+          <div class="ribbon" style="position: relative" *ngIf="item.image_url">
             <img
               mat-card-image
               class="small"
@@ -172,6 +172,16 @@
               alt=""
               (click)="setSelectedItem(item); showChildModal()"
             />
+            <div style="position: absolute; top: 0; right: 0">
+              <button
+                mat-mini-fab
+                color="warn"
+                aria-label="Example"
+                (click)="downloadImage(item.image_url)"
+              >
+                <mat-icon>download</mat-icon>
+              </button>
+            </div>
           </div>
 
           <mat-card-content>
@@ -186,16 +196,25 @@
                 <td>{{ item?.full_name }}</td>
               </tr>
               <tr>
-                <th>Date</th>
-                <td>{{ item?.visit_date }}</td>
+                <th>Shop Name</th>
+                <td>{{ item?.remarks }}</td>
+              </tr>
+              <tr>
+                <th>Asset Type</th>
+                <td>{{ item?.asset_type }}</td>
+              </tr>
+              <tr></tr>
+              <tr>
+                <th>Category</th>
+                <td>{{ item?.category }}</td>
               </tr>
               <tr>
                 <th>Address</th>
                 <td>{{ item?.address }}</td>
               </tr>
               <tr>
-                <th>Remarks</th>
-                <td>{{ item?.remarks }}</td>
+                <th>Date</th>
+                <td>{{ item?.visit_date }}</td>
               </tr>
             </table>
           </mat-card-content>

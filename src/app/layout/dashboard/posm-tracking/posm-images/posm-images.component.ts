@@ -174,4 +174,14 @@ export class PosmImagesComponent implements OnInit {
         }
       );
   }
+
+  downloadImage(url) {
+    const a: any = document.createElement("a");
+    a.href = url;
+    a.download = "Image";
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.click();
+    a.remove();
+  }
 }

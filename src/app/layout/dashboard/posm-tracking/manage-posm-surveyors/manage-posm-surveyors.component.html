@@ -68,19 +68,19 @@
             <thead>
               <tr>
                 <th (click)="sortIt('m_code')" style="cursor: pointer">
-                  Merchandiser Code
+                  Surveyor Code
                   <i class="material-icons arrow material-icons-arrow">
                     {{ getArrowType("m_code") }}
                   </i>
                 </th>
                 <th (click)="sortIt('fullName')" style="cursor: pointer">
-                  Merchandiser Name
+                  Surveyor Name
                   <i class="material-icons arrow material-icons-arrow">
                     {{ getArrowType("fullName") }}
                   </i>
                 </th>
                 <th (click)="sortIt('supervisorName')" style="cursor: pointer">
-                  Supervisor Name
+                  Company/Distributor Name
                   <i class="material-icons arrow material-icons-arrow">
                     {{ getArrowType("supervisorName") }}
                   </i>
@@ -264,7 +264,7 @@
             class="form-group"
             *ngIf="!isUpdateRequest || selectedSurveyor.type == 1"
           >
-            <label for="supervisor">Supervisor</label>
+            <label for="supervisor">Company/Distributor</label>
 
             <select
               formControlName="supervisorId"
