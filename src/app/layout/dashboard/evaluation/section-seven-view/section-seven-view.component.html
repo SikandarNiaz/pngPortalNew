@@ -70,37 +70,12 @@
                 </div>
               </ng-container>
             </div>
-            <!-- this.table is moved to home page -->
-            <!-- <div class="row justify-content-center">
-                    <ng-container class="mt-5 justify-content-center " *ngIf="data?.tagsList ">
-                        <div class="col-md-11 mt-5 ">
-                            <table class="table table-bordered ">
-                                <tr *ngFor="let tab of data.tagsList;let j=index ">
-                                    <th style="width:50%;background: lightgray; ">{{tab.heading}}</th>
-                                    <td style="width:50%;word-break: break-word ">{{tab.value}}</td>
-                                </tr>
-        
-                            </table>
-        
-                        </div>
-                    </ng-container>
-                </div> -->
           </div>
         </div>
       </div>
 
       <div class="col-7 tableFixHead" *ngIf="products.length > 0">
-        <!-- <table class="table">
-                <thead style="background:lightgray">
-                    <tr>
-                        <th>Brand Title</th>
-                        <th>Product Title</th>
-                        <th>Availability</th>
-                        <th>MSL</th>
-
-                    </tr>
-                </thead>
-            </table> -->
+       
         <table class="table table-bordered table-hover w-100">
           <thead style="background: lightgray">
             <tr>
@@ -117,11 +92,6 @@
               <td style="width: 800px !important">
                 {{ product?.product_title }}
               </td>
-
-              <!-- <td style="width:250px !important" style="cursor:pointer" [ngStyle]="{'background-color':product.color}" (click)="toggleValue(product)">
-                            {{updateString(product?.available_sku)}}
-                        </td> -->
-
               <td
                 style="width: 200px !important"
                 [ngClass]="{

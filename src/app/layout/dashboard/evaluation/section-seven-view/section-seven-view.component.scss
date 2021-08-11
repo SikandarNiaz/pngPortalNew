@@ -1,25 +1,23 @@
 div.ngxImageZoomContainer {
-    height: 500px !important;
+  height: 500px !important;
 }
 
 .tableFixHead {
-    // overflow-y: auto;
-    // height: 100px;
-    height: 645px;
-    overflow: scroll;
+  // overflow-y: auto;
+  // height: 100px;
+  height: 630px;
+  overflow: scroll;
 }
 
 .tableHead {
-    // overflow-y: auto;
-    // height: 100px;
-    height: auto;
-    overflow: scroll;
-    max-height:200px;
+  height: auto;
+  overflow: scroll;
+  max-height: 200px;
 }
 
-.max-width-150>td {
-    width: 75px !important;
-    word-break: break-all;
+.max-width-150 > td {
+  width: 75px !important;
+  word-break: break-all;
 }
 // .modal-dialog{
 //     margin-right: 50%;
@@ -41,30 +39,29 @@ div.ngxImageZoomContainer {
 //     background: #eee;
 // }
 .title {
-    background: lightgreen;
-    color: black;
-    margin-bottom: 0;
-    width: 100%;
-    text-align: center;
+  background: lightgreen;
+  color: black;
+  margin-bottom: 0;
+  width: 100%;
+  text-align: center;
 }
 
-
 input {
-    outline: none !important;
-    outline-style: none !important;
-    box-shadow: none !important;
-    border-color: transparent !important;
-  }
+  outline: none !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
 
 .cat {
-    background: lightcyan;
+  background: lightcyan;
 }
 
 table {
-    font-size: 12px !important;
-    line-height: 0px !important
+  font-size: 12px !important;
+  line-height: 0px !important;
 }
 
 .background-color {
-    background-color:  #00A647 !important
+  background-color: #00a647 !important;
 }
