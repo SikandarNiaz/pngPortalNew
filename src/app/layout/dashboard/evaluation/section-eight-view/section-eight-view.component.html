@@ -14,7 +14,7 @@
 
     <div class="col-5">
       <div class="row">
-        <div class="col-12" style="max-height: 500px !important">
+        <div class="col-12" style="max-height: 500px !important; position: relative;">
           <!--  -->
           <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="4" [lensWidth]="300" [lensHeight]="300" [enableLens]="true" [circularLens]="true" [thumbImage]="ip+selectedImage?.url" [fullImage]="ip+selectedImage?.url"></ngx-image-zoom> -->
           <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="2" [lensWidth]="250" [lensHeight]="250" [enableLens]="true" [circularLens]="true" [thumbImage]=ip+selectedImage?.url [fullImage]=ip+selectedImage?.url>
@@ -35,6 +35,9 @@
             style="height: 500px; width: 100%"
             (click)="showChildModal(selectedImage)"
           />
+          <div class="imageDetails">
+            <p *ngIf="selectedImage?.visitDateTime">Time Stamp: {{ selectedImage?.visitDateTime }}</p>
+          </div>
           <div
             class="row justify-content-center"
             style="word-break: break-word !important"

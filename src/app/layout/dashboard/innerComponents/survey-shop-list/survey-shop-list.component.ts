@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { DashboardService } from '../../dashboard.service';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Config } from 'src/assets/config';
+import { ModalDirective } from 'ngx-bootstrap';
+import {MatPaginator} from '@angular/material';
 
 @Component({
   selector: 'app-survey-shop-list',
@@ -12,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SurveyShopListComponent implements OnInit {
 
+  ip: any = Config.BASE_URI;
   title = 'Shop Wise Score';
   minDate = new Date(2000, 0, 1);
   maxDate: any = new Date();
@@ -34,6 +38,9 @@ export class SurveyShopListComponent implements OnInit {
   p = 1;
   sortOrder = true;
   sortBy: 'merchandiser_code';
+  selectedItem: any = {};
+  @ViewChild('childModal') childModal: ModalDirective;
+  @ViewChild (MatPaginator) paginator: MatPaginator;
   constructor(private httpService: DashboardService, private toastr: ToastrService, private router: Router, public activatedRoute: ActivatedRoute) {
     this.maxDate.setDate(this.maxDate.getDate() - 1);
     this.zones = JSON.parse(localStorage.getItem('zoneList'));
@@ -72,6 +79,16 @@ export class SurveyShopListComponent implements OnInit {
 
   modifyDate(date) {
     return moment(date).format('YYYY-MM-DD');
+  }
+  showChildModal(): void {
+    this.childModal.show();
+  }
+  hideChildModal(): void {
+    this.childModal.hide();
+  }
+  setSelectedItem(item) {
+    this.selectedItem = item;
+
   }
 
   gotoNewPage(item) {

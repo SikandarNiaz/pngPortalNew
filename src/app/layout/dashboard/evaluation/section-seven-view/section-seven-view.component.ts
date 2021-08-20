@@ -13,6 +13,7 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { EvaluationService } from "../evaluation.service";
 import { ModalDirective } from "ngx-bootstrap";
+import { KeyValuePipe } from "@angular/common";
 
 @Component({
   selector: "section-seven-view",
@@ -28,6 +29,7 @@ export class SectionSevenViewComponent implements OnInit {
   @Output("psku") pskuForEmit: any = new EventEmitter<any>();
   selectedShop: any = {};
   selectedImage: any = {};
+  formData:any=[];
   // ip=environment.ip;
 
   ip: any = Config.BASE_URI;
@@ -65,7 +67,8 @@ export class SectionSevenViewComponent implements OnInit {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private httpService: EvaluationService
+    private httpService: EvaluationService,
+    private keyValuePipe: KeyValuePipe
   ) {}
 
   ngOnInit() {
@@ -82,6 +85,7 @@ export class SectionSevenViewComponent implements OnInit {
       this.visibilityData = this.data.genericTable || [];
       this.secondaryData = this.data.secondaryData || [];
       this.kbdData = this.data.kbdList || [];
+      this.formData = this.keyValuePipe.transform(this.data.formData) || [];
       if (this.products.length > 0) {
         this.availability = this.getAvailabilityCount(this.products);
         this.facing = this.getFacingCount(this.products);
@@ -350,56 +354,80 @@ export class SectionSevenViewComponent implements OnInit {
   hideChildModal() {
     this.childModal.hide();
   }
-  changeKbd(newVal, value) {
+
+  
+  updateMultiOptionData(value, data) {
     this.loading = true;
     let selectedOption;
-    for (const option of value.optionList) {
-      if (newVal == option.id) {
+    for (const option of data.optionList) {
+      if (value == option.id) {
         selectedOption = option;
         break;
       }
     }
-    if (this.isEditable) {
-      const obj = {
-        msdId: value.merchQuestId,
-        title: value.question,
-        categoryTitle: this.data.sectionTitle,
-        newValueId: selectedOption.id,
-        newValue: selectedOption.title,
-        type: 4,
-        evaluatorId: this.evaluatorId,
-      };
+    if (value != null) {
+      if (this.isEditable) {
+        const obj = {
+          msdId: data.id,
+          title: data.question,
+          categoryTitle: this.data.sectionTitle,
+          newValueId: selectedOption.id,
+          newValue: selectedOption.title,
+          type: 4,
+          evaluatorId: this.evaluatorId,
+        };
 
-      this.httpService.updateData(obj).subscribe((data: any) => {
-        if (data.success) {
-          this.loading = false;
-          this.toastr.success("Data Updated Successfully");
-          const key = data.msdId;
-          this.kbdData.forEach((e) => {
-            // for (const key of this.colorUpdateList) {
-            if (key === e.merchQuestId) {
-              const i = this.kbdData.findIndex((p) => p.id === key);
-              // const obj = {
-              //   merchQuestId: e.merchQuestId,
-              //   optionId: e.optionId,
-              //   MSL: e.MSL,
-              //   product_title: e.product_title,
-              //   face_unit: e.face_unit,
-              //   desired_facing: e.desired_facing,
-              //   category_title: e.category_title,
-              // };
+        this.httpService.updateData(obj).subscribe((data: any) => {
+          if (data.success) {
+            this.loading = false;
+            this.toastr.success("Data Updated Successfully");
+          } else {
+            this.toastr.error(data.message, "Update Data");
+          }
+        });
+      } else {
+        this.toastr.error(
+          "Operation not allowed. Please login  with the relevent Id",
+          "Error"
+        );
+      }
+    } else {
+      this.toastr.error("Value is Incorrect");
+      this.loading = false;
+    }
+  }
 
-              // this.kbdData.splice(i, 1, obj);
+  updateTextData(value) {
+    this.loading = true;
+    if (value.answer != null && value.answer >= 0) {
+      if (this.isEditable) {
+        const obj = {
+          msdId: value.id,
+          newValue: value.answer,
+          newValueId: -1,
+          title: value.question,
+          categoryTitle: this.data.sectionTitle,
+          type: 8,
+          evaluatorId: this.evaluatorId,
+        };
 
-              // console.log(this.products[i])
-            }
-
-            // }
-          });
-        } else {
-          this.toastr.error(data.message, "Update Data");
-        }
-      });
+        this.httpService.updateData(obj).subscribe((data: any) => {
+          if (data.success) {
+            this.loading = false;
+            this.toastr.success("Data Updated Successfully");
+          } else {
+            this.toastr.error(data.message, "Update Data");
+          }
+        });
+      } else {
+        this.toastr.error(
+          "Operation not allowed. Please login  with the relevent Id",
+          "Error"
+        );
+      }
+    } else {
+      this.toastr.error("Value is Incorrect");
+      this.loading = false;
     }
   }
 }

@@ -14,9 +14,7 @@
 
 <div class="row">
   <div class="col-md-6">
-    <!--  -->
-    <!-- <ngx-image-zoom [zoomMode]="'hover'" [magnification]="4" [lensWidth]="300" [lensHeight]="300" [enableLens]="true" [circularLens]="true" [thumbImage]="ip+selectedImage?.url" [fullImage]="ip+selectedImage?.url"></ngx-image-zoom> -->
-
+    <div style="position: relative;">
     <img
       *ngIf="!selectedImage.isExternalUrl"
       src="{{ ip }}{{ selectedImage?.url }}"
@@ -33,6 +31,10 @@
       (click)="showChildModal(selectedImage)"
       class="img-thumbnail img-item"
     />
+    <div class="imageDetails">
+      <p *ngIf="selectedImage?.visitDateTime">Time Stamp: {{ selectedImage?.visitDateTime }}</p>
+    </div>
+  </div>
   </div>
 
   <div class="col-md-6">
@@ -77,43 +79,12 @@
           </div>
           <!--  -->
         </div>
-        <!-- <div class="col-md-3" style="font-size:15px !important" (click)="setSelectedImage(img)"> -->
-
-        <!-- </div> -->
       </ng-container>
     </div>
-    <!-- this.table is moved to home page -->
-    <!-- <div class="row justify-content-center">
-            <ng-container class="mt-5 justify-content-center " *ngIf="data?.tagsList ">
-                <div class="col-md-11 mt-5 ">
-                    <table class="table table-bordered ">
-                        <tr *ngFor="let tab of data.tagsList;let j=index ">
-                            <th style="width:50%;background: lightgray; ">{{tab.heading}}</th>
-                            <td style="width:50%;word-break: break-word ">{{tab.value}}</td>
-                        </tr>
-
-                    </table>
-
-                </div>
-            </ng-container>
-        </div> -->
+ 
   </div>
 </div>
 
-<!-- <div class="row justify-content-center" *ngIf="isEditable">
-    <ng-container class="mt-5 justify-content-center " *ngIf="data?.tagsList ">
-        <div class="col-md-12 mt-5 ">
-            <table class="table table-bordered ">
-                <tr *ngFor="let tab of data.tagsList;let j=index ">
-                    <th style="width:50%;background: lightgray; ">{{tab.heading}}</th>
-                    <td style="width:50%;word-break: break-all ">{{tab.value}}</td>
-                </tr>
-
-            </table>
-
-        </div>
-    </ng-container>
-</div> -->
 
 <div
   bsModal
