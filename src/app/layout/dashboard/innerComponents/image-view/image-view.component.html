@@ -35,15 +35,23 @@
     <div class="col-md-7">
       <div style="position: relative">
         <img
+          *ngIf="!isExternalUrl"
           (click)="setSelectedItem(params); showChildModal()"
           src="{{ ip }}{{ params.url }}"
           class="img-fluid"
           style="height: 450px; width: 100%"
         />
+        <img
+          *ngIf="isExternalUrl"
+          (click)="setSelectedItem(params); showChildModal()"
+          src="{{ params.url }}"
+          class="img-fluid"
+          style="height: 450px; width: 100%"
+        />
         <div class="imageDetails">
-          <p>Visit Date: {{ params?.visitDate }}</p>
-          <p>Longitude: {{ params?.longitude }}</p>
-          <p>Latitude: {{ params?.latitude }}</p>
+          <p *ngIf="params?.visitDate">Visit Date: {{ params?.visitDate }}</p>
+          <p *ngIf="params?.longitude">Longitude: {{ params?.longitude }}</p>
+          <p *ngIf="params?.latitude">Latitude: {{ params?.latitude }}</p>
         </div>
       </div>
     </div>

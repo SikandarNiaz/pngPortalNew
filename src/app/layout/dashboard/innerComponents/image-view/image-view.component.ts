@@ -14,10 +14,14 @@ export class ImageViewComponent implements OnInit {
   imageUrl: any;
   @ViewChild("childModal") childModal: ModalDirective;
   selectedItem: any = {};
+  isExternalUrl: boolean;
 
   constructor(public activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParams.subscribe((p: any) => {
       this.params = p;
+      if (this.params.url) {
+        this.setImageUrl(this.params.url);
+      }
     });
   }
 
@@ -31,5 +35,10 @@ export class ImageViewComponent implements OnInit {
   }
   setSelectedItem(item) {
     this.selectedItem = item;
+  }
+  setImageUrl(url) {
+    if (url.indexOf("amazonaws.com") >= 0) {
+      this.isExternalUrl = true;
+    }
   }
 }
