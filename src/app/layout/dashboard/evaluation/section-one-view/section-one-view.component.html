@@ -15,7 +15,7 @@
 <!-- <div class="row" style="border-bottom:2px solid black;width: 100%;margin: 5px 0"></div> -->
 <div class="row justify-content-center">
   <ng-container *ngFor="let img of data?.imageList; let i = index">
-    <div class="col-md-4 mb-2 text-center" style="position: relative;">
+    <div class="col-md-4 mb-2 text-center" style="position: relative">
       <label class="title" for="title">{{ img.title }}</label>
       <img
         *ngIf="!img.isExternalUrl"
@@ -33,8 +33,8 @@
         (click)="showChildModal(img)"
         class="img-thumbnail img-item"
       />
-      <div class="imageDetails">
-        <p *ngIf="img?.visitDateTime">Time Stamp: {{ img?.visitDateTime }}</p>
+      <div class="imageDetails" ngIf="img?.visitDateTime">
+        <p>Time Stamp: {{ img?.visitDateTime }}</p>
       </div>
     </div>
   </ng-container>

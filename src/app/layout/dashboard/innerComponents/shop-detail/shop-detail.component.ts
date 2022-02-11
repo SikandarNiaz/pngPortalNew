@@ -23,6 +23,7 @@ export class ShopDetailComponent implements OnInit {
   selectedItem: any = {};
   tableTitle = "";
   isExternalUrl: boolean;
+  viewType: any;
 
   constructor(
     private router: Router,
@@ -34,7 +35,7 @@ export class ShopDetailComponent implements OnInit {
   }
   goToEvaluation(id) {
     window.open(
-      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop`,
+      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}`,
       "_blank"
     );
   }
@@ -47,22 +48,32 @@ export class ShopDetailComponent implements OnInit {
   }
   ngOnInit() {
     let id = 0;
+    let obj;
     const o: any = JSON.parse(localStorage.getItem("obj"));
     console.log(o);
     this.activatedRoute.queryParams.subscribe((p) => {
-      this.remarksId = p.remark_id;
       id = p.id;
-      const obj = {
-        zoneId: o.zoneId,
-        regionId: o.regionId,
-        startDate: o.startDate,
-        endDate: o.endDate,
-        merchandiserId: id,
-        remarksId: this.remarksId,
-        // cityId: o.cityId || -1,
-        // distributionId:o.selectedDitribution.id ||-1,
-        // storeType:o.selectedStoreType || null,
-      };
+      this.remarksId = p.remark_id;
+      if (p.viewType == "oos") {
+        this.viewType = 2;
+        obj = {
+          startDate: p.startDate,
+          endDate: p.endDate,
+          merchandiserId: id,
+          viewType: this.viewType,
+        };
+      } else {
+        this.viewType = 1;
+        obj = {
+          zoneId: o.zoneId,
+          regionId: o.regionId,
+          startDate: o.startDate,
+          endDate: o.endDate,
+          merchandiserId: id,
+          remarksId: this.remarksId,
+          viewType: this.viewType,
+        };
+      }
 
       this.getTableData(obj);
     });

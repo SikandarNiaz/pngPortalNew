@@ -1187,7 +1187,7 @@ export class FilterBarComponent implements OnInit {
     );
   }
   getTableData(obj) {
-    this.httpService.merchandiserShopListCBL(obj).subscribe(
+    this.httpService.merchandiserShopList(obj).subscribe(
       (data) => {
         console.log(data, "table data");
         const res: any = data;

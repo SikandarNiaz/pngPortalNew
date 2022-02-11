@@ -7,7 +7,7 @@ import { ModalDirective } from "ngx-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { ResizeEvent } from "angular-resizable-element";
 import { Config } from "src/assets/config";
-import { MatAccordion } from "@angular/material/expansion";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-home",
@@ -17,12 +17,14 @@ import { MatAccordion } from "@angular/material/expansion";
 export class HomeComponent implements OnInit {
   data: any = [];
   // ip = environment.ip;
-
   ip: any = Config.BASE_URI;
   loading = false;
   selectedShop: any = {};
-
+  comments: any = [];
+  count: number;
+  @ViewChild("scrollMe") private myScrollContainer: ElementRef;
   @ViewChild("childModal") childModal: ModalDirective;
+  @ViewChild("commentModal") commentModal: ModalDirective;
   @ViewChild("remarksModal") remarksModal: ModalDirective;
   @ViewChild("evaluationRemarksModal") evaluationRemarksModal: ModalDirective;
   @ViewChild("sosModal") sosModal: ModalDirective;
@@ -72,22 +74,28 @@ export class HomeComponent implements OnInit {
   selectedSoS: any = {};
   evaluatorRole: any;
   surveyDetails: any;
+  oosComments: any = [];
   j = -1;
   i = 0;
   m = 0;
+  viewType = 1;
+  showCriteria = false;
+  selectedProduct: any = {};
+
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private activatedRoutes: ActivatedRoute,
     private httpService: EvaluationService,
     private evaluationService: EvaluationService,
-    private readonly location: Location
+    private readonly location: Location,
+    private formBuilder: FormBuilder
   ) {
     this.surveyId;
 
     this.activatedRoutes.queryParams.subscribe((q) => {
-      if (q.location) {
-        this.isFromShop = false;
+      if (q.viewType) {
+        this.viewType = q.viewType;
       }
     });
     this.activatedRoutes.params.subscribe((params) => {
@@ -97,7 +105,7 @@ export class HomeComponent implements OnInit {
       const obj = {
         surveyId: this.surveyId,
         userTypeId: localStorage.getItem("user_type"),
-        // userId:localStorage.getItem('user_id')
+        viewType: this.viewType,
       };
 
       this.getData(obj);
@@ -119,7 +127,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.location.replaceState("/details/");
     this.availabilityCount = 0;
     this.reevaluatorRole = localStorage.getItem("Reevaluator");
     this.evaluatorRole = localStorage.getItem("Evaluator");
@@ -154,67 +161,69 @@ export class HomeComponent implements OnInit {
       (data) => {
         if (data) {
           this.data = data;
-          this.setImageUrl();
           this.surveyDetails = this.data.shopDetails.sectionMap;
-          if (this.p.isEditable) {
-            this.isEditable = false;
-            document.title = this.data.section[0].sectionTitle;
-            if (this.data.criteria) {
-              this.evaluationArray = this.data.criteria;
-              this.cloneArray = this.evaluationArray.slice();
-              this.totalAchieveScore = this.getTotalAchieveScore();
-            }
-
-            // console.log(this.data)
-            this.remarksList = this.data.remarks;
-            this.productList = this.data.productList;
-            this.sectionList = this.data.section;
-
-            this.existingRemarks = this.data.ExistingRemarks || [];
-            this.setRemarksForReEvaluation();
-            this.checkEvaluatedRemarks();
-
-            if (this.data.criteria) {
-              this.calculateScore();
-            }
-          } else {
-            document.title = this.data.section[0].sectionTitle;
-            if (this.data.criteria) {
-              this.evaluationArray = this.data.criteria;
-              this.cloneArray = this.evaluationArray.slice();
-              this.totalAchieveScore = this.getTotalAchieveScore();
-            }
-
-            // console.log(this.data)
-            this.remarksList = this.data.remarks;
-            this.productList = this.data.productList;
-            this.sectionList = this.data.section;
-
+          document.title =
+            this.surveyDetails.surveyorName +
+            " - " +
+            this.surveyDetails.shopTitle;
+          this.setImageUrl();
+          if (this.data.criteria) {
+            this.evaluationArray = this.data.criteria;
+            this.cloneArray = this.evaluationArray.slice();
             this.existingRemarks = this.data.ExistingRemarks || [];
             this.evaluationRemarks = this.data.EvaluationRemarks || [];
-
-            // tslint:disable-next-line:triple-equals
-            if (this.userType == this.reevaluatorRole) {
-              this.checkEvaluatedRemarks();
-              this.setRemarksForReEvaluation();
-              this.isEditable = true;
-              // tslint:disable-next-line:triple-equals
-            } else if (
-              this.userType == this.evaluatorRole &&
-              this.surveyDetails.evaluationStatus == -1
-            ) {
-              this.setPSKUCriteria();
-              this.isEditable = true;
-            }
-            if (this.data.criteria) {
-              this.calculateScore();
-            }
+            this.calculateScore();
           }
+
+          // console.log(this.data)
+          this.remarksList = this.data.remarks;
+          this.productList = this.data.productList;
+          this.sectionList = this.data.section;
+          if (this.userType) {
+            if (this.userType == this.evaluatorRole) {
+              this.setViewForEvaluation();
+            } else if (this.userType == this.reevaluatorRole) {
+              this.setViewForReeevaluation();
+            }
+            // else {
+            //   this.setDefaultView();
+            // }
+          }
+          this.oosComments = this.data.comments || [];
+          // else {
+          //   this.setDefaultView();
+          // }
+          this.totalAchieveScore = this.getTotalAchieveScore();
         }
       },
       (error) => {}
     );
   }
+
+  setViewForEvaluation() {
+    if (this.surveyDetails.evaluationStatus == -1) {
+      this.setPSKUCriteria();
+      this.isEditable = true;
+      this.showCriteria = true;
+    }
+  }
+
+  setViewForReeevaluation() {
+    if (this.surveyDetails.evaluationStatus != -1) {
+      this.showCriteria = true;
+      this.isEditable = true;
+      this.checkEvaluatedRemarks();
+      this.setRemarksForReEvaluation();
+    }
+  }
+
+  // setDefaultView() {
+  //   if (this.surveyDetails.evaluationStatus != -1) {
+  //     this.checkEvaluatedRemarks();
+  //     this.setRemarksForReEvaluation();
+  //     this.showCriteria = true;
+  //   }
+  // }
 
   checkEvaluatedRemarks() {
     if (this.existingRemarks.length > 0) {
@@ -882,5 +891,62 @@ export class HomeComponent implements OnInit {
         }
       }
     }
+  }
+  showCommentModal(product) {
+    this.selectedProduct = product;
+    this.setComments();
+    this.commentModal.show();
+  }
+  hideCommentModal() {
+    this.comments = [];
+    this.commentModal.hide();
+  }
+  setComments() {
+    for (const element of this.oosComments) {
+      if (element.merchandiserSurveyDetailId == this.selectedProduct.id) {
+        this.comments.push(element);
+      }
+    }
+  }
+
+  receiveComment(comment) {
+    this.loading = true;
+    this.evaluationService.insertOOSComment(comment).subscribe(
+      (data: any) => {
+        this.loading = false;
+
+        // tslint:disable-next-line:triple-equals
+        if (data.success) {
+          this.oosComments.push(comment);
+          this.comments.push(comment);
+          this.count = this.comments.length;
+          this.toastr.success("Comment added Successfully");
+        } else {
+          this.toastr.error(
+            "Something went wrong please try again later",
+            "error"
+          );
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.toastr.error(error.message, "Error");
+      }
+    );
+  }
+
+  recieveCount($event) {
+    this.comments = $event;
+    this.count = this.comments.length;
+  }
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop =
+        this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
   }
 }

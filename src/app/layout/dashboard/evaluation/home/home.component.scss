@@ -249,3 +249,12 @@ mwlResizable {
 .example-radio-button {
   margin: 5px;
 }
+
+/* Important part */
+.modal-dialog {
+  overflow-y: initial !important;
+}
+.modal-body {
+  height: 80vh;
+  overflow-y: auto;
+}

@@ -15,28 +15,31 @@
 
       <div class="col-5">
         <div class="row">
-          <div class="col-12" style="max-height: 500px !important;">
-         <div style="position: relative;">
-
-            <label class="title" for="title">{{ selectedImage?.title }}</label>
-            <img
-              *ngIf="!selectedImage?.isExternalUrl"
-              src="{{ ip }}{{ selectedImage?.url }}"
-              class="img-thumbnail"
-              style="height: 410px; width: 100%"
-              (click)="showChildModal(selectedImage)"
-            />
-            <img
-              *ngIf="selectedImage?.isExternalUrl"
-              src="{{ selectedImage?.url }}"
-              class="img-thumbnail"
-              style="height: 410px; width: 100%"
-              (click)="showChildModal(selectedImage)"
-            />
-            <div class="imageDetails">
-              <p *ngIf="selectedImage?.visitDateTime">Time Stamp: {{ selectedImage?.visitDateTime }}</p>
+          <div class="col-12" style="max-height: 500px !important">
+            <div style="position: relative">
+              <label class="title" for="title">{{
+                selectedImage?.title
+              }}</label>
+              <img
+                *ngIf="!selectedImage?.isExternalUrl"
+                src="{{ ip }}{{ selectedImage?.url }}"
+                class="img-thumbnail"
+                style="height: 410px; width: 100%"
+                (click)="showChildModal(selectedImage)"
+              />
+              <img
+                *ngIf="selectedImage?.isExternalUrl"
+                src="{{ selectedImage?.url }}"
+                class="img-thumbnail"
+                style="height: 410px; width: 100%"
+                (click)="showChildModal(selectedImage)"
+              />
+              <div class="imageDetails">
+                <p *ngIf="selectedImage?.visitDateTime">
+                  Time Stamp: {{ selectedImage?.visitDateTime }}
+                </p>
+              </div>
             </div>
-          </div>
           </div>
 
           <div class="col-12 ml-3 mt-2">
@@ -45,7 +48,7 @@
                 <div
                   class="col-2 mb-1 card mt-5 mr-2"
                   (click)="setSelectedImage(img)"
-                  style="padding: 0% !important; cursor: pointer;"
+                  style="padding: 0% !important; cursor: pointer"
                   [ngClass]="{ bgColor: img?.url == selectedImage.url }"
                 >
                   <img
@@ -70,7 +73,6 @@
       </div>
 
       <div class="col-7 tableFixHead" *ngIf="products.length > 0">
-       
         <table class="table table-bordered table-hover w-100">
           <thead style="background: lightgray">
             <tr>
@@ -88,7 +90,8 @@
                 {{ product?.product_title }}
               </td>
               <td
-                style="width: 200px !important"
+                style="width: 200px !important ; cursor: pointer"
+                (click)="emitCommentModal(product)"
                 [ngClass]="{
                   'background-color':
                     product?.is_competition == 1 &&
@@ -154,43 +157,40 @@
       </div>
     </div>
 
-   
-  <ng-container *ngIf="formData.length > 0">
-    <div class="row justify-content-center">
-      <div class="col-md-7 mt-4 tableHead">
-        <table class="table table-bordered table-hover w-100">
-          <thead style="background: #00a647">
-            <tr>
-              <!-- <th>Brand Title</th> -->
-              <th>Question</th>
-              <th>Answer</th>
-            </tr>
-          </thead>
+    <ng-container *ngIf="formData.length > 0">
+      <div class="row justify-content-center">
+        <div class="col-md-7 mt-4 tableHead">
+          <table class="table table-bordered table-hover w-100">
+            <thead style="background: #00a647">
+              <tr>
+                <!-- <th>Brand Title</th> -->
+                <th>Question</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr *ngFor="let data of formData">
-              <ng-container
-                *ngIf="
-                  data.value.fieldType != 'image' &&
-                  data.value.fieldType != 'Image'
-                "
-              >
-                <td style="width: 600px !important; word-wrap: break-word">
-                  {{ data.value.question }}
-                </td>
+            <tbody>
+              <tr *ngFor="let data of formData">
+                <ng-container
+                  *ngIf="
+                    data.value.fieldType != 'image' &&
+                    data.value.fieldType != 'Image'
+                  "
+                >
+                  <td style="width: 600px !important; word-wrap: break-word">
+                    {{ data.value.question }}
+                  </td>
 
-               
                   <td style="width: 300px !important">
                     {{ data.value.answer }}
                   </td>
-               
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="isEditable == true">
@@ -371,7 +371,7 @@
                 <th>Answer</th>
               </tr>
             </thead>
-  
+
             <tbody>
               <tr *ngFor="let data of formData">
                 <ng-container
@@ -383,47 +383,47 @@
                   <td style="width: 600px !important; word-wrap: break-word">
                     {{ data.value.question }}
                   </td>
-                    <ng-container
-                      *ngIf="data.value.fieldType == 'text_field'; else options"
-                    >
-                      <td style="width: 300px">
-                        <input
-                          type="number"
-                          [(ngModel)]="data.value.answer"
-                          maxlength="10"
-                          style="width: 3em"
-                          (change)="updateTextData(data.value)"
-                        />
-                      </td>
-                    </ng-container>
-                    <ng-template #options>
-                      <td>
-                        <select
-                          #newValue
-                          (change)="
-                            updateMultiOptionData(newValue.value, data.value)
-                          "
+                  <ng-container
+                    *ngIf="data.value.fieldType == 'text_field'; else options"
+                  >
+                    <td style="width: 300px">
+                      <input
+                        type="number"
+                        [(ngModel)]="data.value.answer"
+                        maxlength="10"
+                        style="width: 3em"
+                        (change)="updateTextData(data.value)"
+                      />
+                    </td>
+                  </ng-container>
+                  <ng-template #options>
+                    <td>
+                      <select
+                        #newValue
+                        (change)="
+                          updateMultiOptionData(newValue.value, data.value)
+                        "
+                      >
+                        <ng-container
+                          *ngFor="let options of data.value.optionList"
                         >
-                          <ng-container
-                            *ngFor="let options of data.value.optionList"
+                          <option
+                            *ngIf="data.value.answer == options.title"
+                            [value]="options.id"
+                            selected="selected"
                           >
-                            <option
-                              *ngIf="data.value.answer == options.title"
-                              [value]="options.id"
-                              selected="selected"
-                            >
-                              {{ options?.title }}
-                            </option>
-                            <option
-                              *ngIf="data.value.answer != options.title"
-                              [value]="options.id"
-                            >
-                              {{ options?.title }}
-                            </option>
-                          </ng-container>
-                        </select>
-                      </td>
-                    </ng-template>
+                            {{ options?.title }}
+                          </option>
+                          <option
+                            *ngIf="data.value.answer != options.title"
+                            [value]="options.id"
+                          >
+                            {{ options?.title }}
+                          </option>
+                        </ng-container>
+                      </select>
+                    </td>
+                  </ng-template>
                 </ng-container>
               </tr>
             </tbody>

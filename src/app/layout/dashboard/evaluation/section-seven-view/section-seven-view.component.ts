@@ -25,13 +25,14 @@ export class SectionSevenViewComponent implements OnInit {
   // @ViewChild('childModal') childModal: ModalDirective;
   @ViewChild("childModal") childModal: ModalDirective;
   @Output("showModal") showModal: any = new EventEmitter<any>();
+  @Output("showCommentModal") commentModal: any = new EventEmitter<any>();
   @Input("isEditable") isEditable: any;
+  @Input("viewType") viewType: any;
   @Output("psku") pskuForEmit: any = new EventEmitter<any>();
   selectedShop: any = {};
   selectedImage: any = {};
-  formData:any=[];
+  formData: any = [];
   // ip=environment.ip;
-
   ip: any = Config.BASE_URI;
   hover = "hover";
   zoomOptions = {
@@ -355,7 +356,6 @@ export class SectionSevenViewComponent implements OnInit {
     this.childModal.hide();
   }
 
-  
   updateMultiOptionData(value, data) {
     this.loading = true;
     let selectedOption;
@@ -428,6 +428,11 @@ export class SectionSevenViewComponent implements OnInit {
     } else {
       this.toastr.error("Value is Incorrect");
       this.loading = false;
+    }
+  }
+  emitCommentModal(product) {
+    if (this.viewType == 2) {
+      this.commentModal.emit(product);
     }
   }
 }

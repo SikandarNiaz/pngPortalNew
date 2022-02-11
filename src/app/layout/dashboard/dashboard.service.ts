@@ -80,7 +80,7 @@ export class DashboardService {
       body = this.UrlEncodeMaker(obj);
       // `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}`;
     }
-    const url = this.ip + "dashboardDataCBL";
+    const url = this.ip + "dashboardDataSummary";
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -116,7 +116,7 @@ export class DashboardService {
   getTableList(obj) {
     const body = this.UrlEncodeMaker(obj);
     // `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&merchandiserId=${obj.merchandiserId}`;
-    const url = this.ip + "completedShopListCBL";
+    const url = this.ip + "completedShopList";
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -132,15 +132,21 @@ export class DashboardService {
     const url = this.ip + "merchandiserList";
     return this.http.post(url, urlEncode, this.httpOptions);
   }
+
+  getOOSProductivity(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "oosProductivityList";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
   getMerchandiserScore(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
     const url = this.ip + "merchandiserScore";
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
-  merchandiserShopListCBL(obj) {
+  merchandiserShopList(obj) {
     const body = `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}`;
-    const url = this.ip + "merchandiserShopListCBL";
+    const url = this.ip + "merchandiserShopList";
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),

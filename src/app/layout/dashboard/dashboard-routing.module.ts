@@ -43,6 +43,7 @@ import { SurveyShopListComponent } from "./innerComponents/survey-shop-list/surv
 import { DistributionCheckInCardComponent } from "./innerComponents/distribution-check-in-card/distribution-check-in-card.component";
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
 import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique-based-productivity-report/unique-based-productivity-report.component";
+import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 
 const routes: Routes = [
   {
@@ -122,6 +123,10 @@ const routes: Routes = [
       { path: "oos-detail-report", component: PngOosReportComponent },
       { path: "survey_shop_view", component: SurveyShopsSurveyorComponent },
       { path: "survey_shop_list", component: SurveyShopListComponent },
+      {
+        path: "oos-productivity-list",
+        component: OosProductivityListComponent,
+      },
       {
         path: "survey_shop_list/:surveyorId/:startDate/:endDate",
         component: SurveyShopListComponent,

@@ -1,0 +1,15 @@
+<div class="comments" *ngIf="postComment !== undefined">
+  <h6 *ngIf="postComment?.length < 1">No Comments found</h6>
+  <ul *ngIf="postComment?.length > 0">
+    <li *ngFor="let post of postComment; let i = index">
+      <div class="col-12 col-sm-12 comment-container">
+        <p>{{ post.comment }}</p>
+        <div class="actions">
+          <span>{{ post.date }}</span>
+          <span class="divider"></span>
+          <span>{{ post.username }}</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import * as moment from 'moment';
-import { Router } from '@angular/router';
-import { DashboardService } from '../../dashboard.service';
-import { ToastrService } from 'ngx-toastr';
-import { ExcelService } from '../../excel.service';
-import { ngxCsv } from 'ngx-csv/ngx-csv';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ModalDirective } from "ngx-bootstrap";
+import * as moment from "moment";
+import { Router } from "@angular/router";
+import { DashboardService } from "../../dashboard.service";
+import { ToastrService } from "ngx-toastr";
+import { ExcelService } from "../../excel.service";
+import { ngxCsv } from "ngx-csv/ngx-csv";
 
 @Component({
-  selector: 'app-merchandiser-attendance',
-  templateUrl: './merchandiser-attendance.component.html',
-  styleUrls: ['./merchandiser-attendance.component.scss']
+  selector: "app-merchandiser-attendance",
+  templateUrl: "./merchandiser-attendance.component.html",
+  styleUrls: ["./merchandiser-attendance.component.scss"],
 })
 export class MerchandiserAttendanceComponent implements OnInit {
-  title = 'Merchandiser Attendance';
+  title = "Merchandiser Attendance";
 
-  @ViewChild('remarksModal') remarksModal: ModalDirective;
+  @ViewChild("remarksModal") remarksModal: ModalDirective;
   loadingData: boolean;
   minDate = new Date(2000, 0, 1);
   maxDate = new Date();
@@ -35,25 +35,33 @@ export class MerchandiserAttendanceComponent implements OnInit {
   distributionList: any = [];
   selectedDistribution: any = {};
   tabsData: any = [];
-  storeType: any = ['Elite', 'Platinum', 'Gold', 'Silver', 'Others'];
+  storeType: any = ["Elite", "Platinum", "Gold", "Silver", "Others"];
   selectedStoreType = null;
   tableData: any = [];
   // areas: any = [];
   // selectedArea: any = {};
   sortOrder = true;
-  sortBy: 'completed';
+  sortBy: "completed";
   remarksList = [];
   selectedRemark = {};
   selectedUser: any = 0;
-  downloadList = [{ key: 'csv', title: 'CSV', icon: 'fa fa-file-text-o' }, { key: 'xlsx', title: 'Excel', icon: 'fa fa-file-excel-o' }];
+  downloadList = [
+    { key: "csv", title: "CSV", icon: "fa fa-file-text-o" },
+    { key: "xlsx", title: "Excel", icon: "fa fa-file-excel-o" },
+  ];
   selectedFileType: {};
-  constructor(private excelService: ExcelService, private router: Router, private httpService: DashboardService, private toastr: ToastrService) {
-    this.zones = JSON.parse(localStorage.getItem('zoneList'));
+  constructor(
+    private excelService: ExcelService,
+    private router: Router,
+    private httpService: DashboardService,
+    private toastr: ToastrService
+  ) {
+    this.zones = JSON.parse(localStorage.getItem("zoneList"));
   }
 
   ngOnInit() {
-    this.userTypeId = localStorage.getItem('user_type');
-    this.sortIt('completed');
+    this.userTypeId = localStorage.getItem("user_type");
+    this.sortIt("completed");
     this.getTabsData();
     this.getRemarks();
   }
@@ -62,14 +70,13 @@ export class MerchandiserAttendanceComponent implements OnInit {
     console.log(file, dataTable);
     const type = file.key;
     const data: any = dataTable;
-    const fileTitle = 'Merchandiser Attendance';
+    const fileTitle = "Merchandiser Attendance";
 
-
-    if (type === 'csv') {
-    new ngxCsv(data, fileTitle);
-    } else if (type === 'xlsx') {
-    this.excelService.exportAsExcelFile(data, fileTitle);
-         }
+    if (type === "csv") {
+      new ngxCsv(data, fileTitle);
+    } else if (type === "xlsx") {
+      this.excelService.exportAsExcelFile(data, fileTitle);
+    }
 
     this.selectedFileType = {};
     setTimeout(() => {
@@ -77,7 +84,7 @@ export class MerchandiserAttendanceComponent implements OnInit {
     }, 1000);
   }
   getPercentage(n) {
-    return Math.round(n) + ' %';
+    return Math.round(n) + " %";
   }
   sortIt(key) {
     this.sortBy = key;
@@ -86,19 +93,25 @@ export class MerchandiserAttendanceComponent implements OnInit {
 
   getArrowType(key) {
     if (key === this.sortBy) {
-      return this.sortOrder ? 'arrow_upward' : 'arrow_downward';
+      return this.sortOrder ? "arrow_upward" : "arrow_downward";
     } else {
-      return '';
+      return "";
     }
   }
   getTabsData(data?: any, dateType?: string) {
     this.loadingData = true;
-    let startDate = dateType === 'start' ? moment(data).format('YYYY-MM-DD') : moment(this.startDate).format('YYYY-MM-DD');
-    let endDate = dateType === 'end' ? moment(data).format('YYYY-MM-DD') : moment(this.endDate).format('YYYY-MM-DD');
+    let startDate =
+      dateType === "start"
+        ? moment(data).format("YYYY-MM-DD")
+        : moment(this.startDate).format("YYYY-MM-DD");
+    let endDate =
+      dateType === "end"
+        ? moment(data).format("YYYY-MM-DD")
+        : moment(this.endDate).format("YYYY-MM-DD");
     // for merchandiser attendance only
-    if (this.router.url === '/dashboard/merchandiser_attendance') {
-      startDate = moment(this.startDate).format('YYYY-MM-DD');
-      endDate = moment(this.startDate).format('YYYY-MM-DD');
+    if (this.router.url === "/dashboard/merchandiser_attendance") {
+      startDate = moment(this.startDate).format("YYYY-MM-DD");
+      endDate = moment(this.startDate).format("YYYY-MM-DD");
     }
 
     this.loading = true;
@@ -110,13 +123,13 @@ export class MerchandiserAttendanceComponent implements OnInit {
       cityId: this.selectedCity.id || -1,
       distributionId: this.selectedDistribution.id || -1,
       storeType: this.selectedStoreType || null,
-      channelId: -1
+      channelId: -1,
     };
-    localStorage.setItem('obj', JSON.stringify(obj));
+    localStorage.setItem("obj", JSON.stringify(obj));
     this.getTableData(obj);
 
     this.httpService.getDashboardData(obj).subscribe(
-      data => {
+      (data) => {
         // console.log(data, 'home data');
         this.loadingData = false;
         const res: any = data;
@@ -127,18 +140,18 @@ export class MerchandiserAttendanceComponent implements OnInit {
         // if (res.planned == 0)
         //   this.toastr.info('No data available for current selection', 'Summary')
       },
-      error => {
+      (error) => {
         // this.clearLoading();
 
-        console.log(error, 'home error');
+        console.log(error, "home error");
       }
     );
   }
 
   getTableData(obj) {
-    this.httpService.merchandiserShopListCBL(obj).subscribe(
-      data => {
-        console.log(data, 'table data');
+    this.httpService.merchandiserShopList(obj).subscribe(
+      (data) => {
+        console.log(data, "table data");
         const res: any = data;
 
         if (res) {
@@ -148,10 +161,10 @@ export class MerchandiserAttendanceComponent implements OnInit {
         // if (res.planned == 0)
         //   this.toastr.info('No data available for current selection', 'Summary')
       },
-      error => {
+      (error) => {
         // this.clearLoading();
 
-        console.log(error, 'home error');
+        console.log(error, "home error");
       }
     );
   }
@@ -160,26 +173,32 @@ export class MerchandiserAttendanceComponent implements OnInit {
     this.loadingData = true;
     // this.regions = [];
     // this.channels = [];
-    if (this.router.url === '/dashboard/productivity_report' || this.router.url === '/dashboard/merchandiser_attendance') {
+    if (
+      this.router.url === "/dashboard/productivity_report" ||
+      this.router.url === "/dashboard/merchandiser_attendance"
+    ) {
       this.getTabsData();
     }
 
     this.httpService.getRegion(this.selectedZone.id).subscribe(
-      data => {
+      (data) => {
         const res: any = data;
         if (res) {
           this.regions = res;
         } else {
           // this.clearLoading();
 
-          this.toastr.info('Something went wrong,Please retry', 'Connectivity Message');
+          this.toastr.info(
+            "Something went wrong,Please retry",
+            "Connectivity Message"
+          );
         }
 
         setTimeout(() => {
           this.loadingData = false;
         }, 500);
       },
-      error => {
+      (error) => {
         // this.clearLoading();
       }
     );
@@ -195,7 +214,9 @@ export class MerchandiserAttendanceComponent implements OnInit {
 
   getRemarks() {
     this.httpService.getRemarksList().subscribe((data: any) => {
-      if (data) { this.remarksList = data; }
+      if (data) {
+        this.remarksList = data;
+      }
     });
   }
 
@@ -207,15 +228,15 @@ export class MerchandiserAttendanceComponent implements OnInit {
     if (isSelected > 0) {
       debugger;
       const obj: any = {
-        userId: JSON.parse(localStorage.getItem('user_id')),
-        startDate: moment(this.startDate).format('YYYY-MM-DD'),
+        userId: JSON.parse(localStorage.getItem("user_id")),
+        startDate: moment(this.startDate).format("YYYY-MM-DD"),
         surveyorId: item,
-        remarkId: value
+        remarkId: value,
       };
 
       this.httpService.removePlanedCall(obj).subscribe(
         (data: any) => {
-          console.log('remove palnned call', data);
+          console.log("remove palnned call", data);
           if (data.success) {
             // this.tableData=_.remove(this.tableData,(e)=>{e.merchandiser_id==data.surveyorId})
 
@@ -232,7 +253,7 @@ export class MerchandiserAttendanceComponent implements OnInit {
             this.getTabsData();
           }
         },
-        error => { }
+        (error) => {}
       );
     }
   }
@@ -243,6 +264,8 @@ export class MerchandiserAttendanceComponent implements OnInit {
   }
   hideRemarksModal() {
     this.remarksModal.hide();
-    if (this.selectedUser !== 0) { this.removePlanedCall(this.selectedUser); }
+    if (this.selectedUser !== 0) {
+      this.removePlanedCall(this.selectedUser);
+    }
   }
 }
