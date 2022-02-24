@@ -420,4 +420,27 @@ export class DashboardService {
     const url = this.ip + "loadFilters";
     return this.http.post(url, filter);
   }
+
+  getZoneByCluster(clusterId) {
+    this.user_id = localStorage.getItem("user_id");
+    const filter = JSON.stringify({
+      act: 18,
+      userId: this.user_id,
+      clusterId: clusterId,
+    });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
+
+  getAreaByRegion(regionId) {
+    this.user_id = localStorage.getItem("user_id");
+
+    const filter = JSON.stringify({
+      act: 27,
+      regionId: regionId,
+      userId: this.user_id,
+    });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
 }
