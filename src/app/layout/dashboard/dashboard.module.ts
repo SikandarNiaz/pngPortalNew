@@ -85,6 +85,7 @@ import { CalendarHeaderComponent } from "./innerComponents/calender/calendar-hea
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
 import { UniqueBasedProductivityReportComponent } from './innerComponents/unique-based-productivity-report/unique-based-productivity-report.component';
 import { OosProductivityListComponent } from './innerComponents/oos-productivity-list/oos-productivity-list.component';
+import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 
 @NgModule({
   imports: [
@@ -124,6 +125,7 @@ import { OosProductivityListComponent } from './innerComponents/oos-productivity
     }),
   ],
   declarations: [
+    SOSandSODComponent,
     DashboardComponent,
     HomeComponent,
     ShopListComponent,

@@ -60,6 +60,16 @@ export class FilterBarComponent implements OnInit {
     { id: 1, title: "Visits Base" },
     { id: 2, title: "Unique" },
   ];
+  actionTypeLists=[
+    {id: 0, name:'National'},
+    {id: 1, name:'Zonal'},
+    {id: 2, name:'Regional'},
+  ];
+
+  criteriaTypeList=[
+    {id: 1, name:'Visits Base'},
+    {id: 2, name:'Unique'},
+    ];
   selectedCriteria: any = {};
   selectedZone: any = {};
   selectedRegion: any = {};
@@ -107,6 +117,8 @@ export class FilterBarComponent implements OnInit {
   sortBy: "completed";
   selectedRemark = 0;
   remarksList = [];
+  selectedactionsType: any = {};
+  selectedCriteriaType: any = {};
 
   // @ViewChild('remarksModal') remarksModal: ModalDirective;
   // showRemarksModal(){this.remarksModal.show(); }
@@ -331,6 +343,99 @@ export class FilterBarComponent implements OnInit {
         "Date Selection"
       );
     }
+  }
+
+
+  getSOSandSOD() {
+    this.loadingData = true;
+    this.loadingReportMessage = true;
+    if (this.endDate >= this.startDate) {
+      const obj = {
+        startDate: moment(this.startDate).format("YYYY-MM-DD"),
+        endDate: moment(this.endDate).format("YYYY-MM-DD"),
+        zoneId: this.selectedZone.id
+          ? this.selectedZone.id == -1
+            ? localStorage.getItem("zoneId")
+            : this.selectedZone.id
+          : localStorage.getItem("zoneId"),
+        regionId: this.selectedRegion.id
+          ? this.selectedRegion.id == -1
+            ? localStorage.getItem("regionId")
+            : this.selectedRegion.id
+          : localStorage.getItem("regionId"),
+        channelId : this.arrayMaker(this.selectedChannel) || -1,
+        areaIds: "",
+        distributionIds: "",
+        action: this.selectedactionsType.id || -1,
+        actionType: this.setActionType(),
+        criteria: this.selectedCriteriaType.id || -1,
+        pageType: "1",
+        excelDump: 'Y',
+        isNpl: false,
+        angularRequest: 'Y',
+      };
+      const url = "shareofshelf";
+      const body = this.httpService.UrlEncodeMaker(obj);
+      //  `pageType=2&zoneId=${obj.zoneId}&regionId=${obj.regionId}&startDate=${obj.startDate}&endDate=${obj.endDate}&cityId=${obj.cityId}&areaId=${obj.areaId}&channelId=${obj.channelId}&category=${obj.category}&lastVisit=${obj.lastVisit}&productId=${obj.productId}&mustHave=${obj.mustHave}`;
+
+      this.httpService.getKeyForProductivityReport(body, url).subscribe(
+        (data) => {
+          console.log(data, "sos & sod");
+          const res: any = data;
+
+          if (res) {
+            const obj2 = {
+              key: res.key,
+              fileType: "json.fileType",
+            };
+            const url = "downloadReport";
+            this.getproductivityDownload(obj2, url);
+          } else {
+            this.clearLoading();
+
+            this.toastr.info(
+              "Something went wrong,Please retry",
+              "Connectivity Message"
+            );
+          }
+        },
+        (error) => {
+          this.clearLoading();
+        }
+      );
+    } else {
+      this.clearLoading();
+
+      this.toastr.info(
+        "End date must be greater than start date",
+        "Date Selection"
+      );
+    }
+
+    // let url = 'downloadReport';
+    // this.httpService.DownloadResource(obj, url);
+  }
+
+  setActionType(){
+    let zoneId=this.selectedZone.id
+    ? this.selectedZone.id == -1
+      ? localStorage.getItem("zoneId")
+      : this.selectedZone.id
+    : localStorage.getItem("zoneId");
+    let regionId=this.selectedRegion.id
+    ? this.selectedRegion.id == -1
+      ? localStorage.getItem("regionId")
+      : this.selectedRegion.id
+    : localStorage.getItem("regionId");
+   
+      if(regionId != -1){
+       return 2;
+      } else if(zoneId != -1){
+        return 1;
+      }
+      else{
+        return 0;
+      }
   }
 
   //#region filters logic

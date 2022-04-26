@@ -44,6 +44,7 @@ import { DistributionCheckInCardComponent } from "./innerComponents/distribution
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
 import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique-based-productivity-report/unique-based-productivity-report.component";
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
+import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 
 const routes: Routes = [
   {
@@ -76,6 +77,12 @@ const routes: Routes = [
         path: "daily_evaluation_report",
         component: DailyEvaluationReportComponent,
       },
+
+      {
+        path: "shareofshelf",
+        component: SOSandSODComponent,
+      },
+
       { path: "update_password", component: UpdatePasswordComponent },
       { path: "raw_data", component: RawDataComponent },
       {
