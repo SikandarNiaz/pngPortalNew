@@ -1,14 +1,14 @@
-import { Injectable, Output, EventEmitter } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { Subject, of, BehaviorSubject } from "rxjs";
-import { ToastrService } from "ngx-toastr";
-import { timeout, catchError } from "rxjs/operators";
-import * as moment from "moment";
-import { Router } from "@angular/router";
-import { Config } from "src/assets/config";
+import { Injectable, Output, EventEmitter } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Subject, of, BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { timeout, catchError } from 'rxjs/operators';
+import * as moment from 'moment';
+import { Router } from '@angular/router';
+import { Config } from 'src/assets/config';
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class DashboardService {
   constructor(
@@ -16,7 +16,7 @@ export class DashboardService {
     private toastr: ToastrService,
     private router: Router
   ) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
   }
 
   ip: any = Config.BASE_URI;
@@ -33,7 +33,7 @@ export class DashboardService {
 
   httpOptions = {
     headers: new HttpHeaders({
-      "Content-Type": "application/x-www-form-urlencoded",
+      'Content-Type': 'application/x-www-form-urlencoded',
     }),
     withCredentials: true,
   };
@@ -44,7 +44,7 @@ export class DashboardService {
 
   login(credentials: any) {
     // let body=JSON.stringify(credentials)
-    const url = this.ip + "pictureLogin";
+    const url = this.ip + 'pictureLogin';
     return this.http.post(url, credentials);
     // .pipe(
     //   timeout(60000),
@@ -56,18 +56,18 @@ export class DashboardService {
   }
 
   updatePassword(obj) {
-    const url = this.ip + "change-password";
+    const url = this.ip + 'change-password';
     return this.http.post(url, obj, this.httpOptions);
   }
 
   removePlanedCall(obj) {
     obj = this.UrlEncodeMaker(obj);
-    const url = this.ip + "remove-plan-call";
+    const url = this.ip + 'remove-plan-call';
     return this.http.post(url, obj, this.httpOptions);
   }
 
   UrlEncodeMaker(obj) {
-    let url = "";
+    let url = '';
     for (const key in obj) {
       url += `${key}=${obj[key]}&`;
     }
@@ -80,7 +80,7 @@ export class DashboardService {
       body = this.UrlEncodeMaker(obj);
       // `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}`;
     }
-    const url = this.ip + "dashboardDataSummary";
+    const url = this.ip + 'dashboardDataSummary';
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -102,7 +102,7 @@ export class DashboardService {
   }
 
   getLineChartData() {
-    const url = this.ip + "completionData";
+    const url = this.ip + 'completionData';
     return this.http.post(url, {}, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -116,7 +116,7 @@ export class DashboardService {
   getTableList(obj) {
     const body = this.UrlEncodeMaker(obj);
     // `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&merchandiserId=${obj.merchandiserId}`;
-    const url = this.ip + "completedShopList";
+    const url = this.ip + 'completedShopList';
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -129,24 +129,24 @@ export class DashboardService {
 
   getMerchandiserListForEvaluation(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "merchandiserList";
+    const url = this.ip + 'merchandiserList';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
   getOOSProductivity(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "oosProductivityList";
+    const url = this.ip + 'oosProductivityList';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   getMerchandiserScore(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "merchandiserScore";
+    const url = this.ip + 'merchandiserScore';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
   merchandiserShopList(obj) {
     const body = `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}`;
-    const url = this.ip + "merchandiserShopList";
+    const url = this.ip + 'merchandiserShopList';
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
     //   timeout(60000),
@@ -158,10 +158,10 @@ export class DashboardService {
   }
   //#region FILTER CALL
   getZone() {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({ act: 0, userId: this.user_id });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
     // .pipe(
     //   timeout(60000),
@@ -173,28 +173,28 @@ export class DashboardService {
   }
 
   getQueryTypeList(reportId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({ act: 12, reportId: reportId });
-    const url = this.ip + "/loadFilters";
+    const url = this.ip + '/loadFilters';
     return this.http.post(url, filter);
   }
 
   getRemarksList() {
     const filter = JSON.stringify({ act: 11 });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
 
   getRegion(zoneId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 1,
       zoneId: zoneId,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
     // .pipe(
     //   timeout(60000),
@@ -206,14 +206,14 @@ export class DashboardService {
   }
 
   getCities(regionId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 2,
       regionId: regionId,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
     // .pipe(
     //   timeout(60000),
@@ -225,14 +225,14 @@ export class DashboardService {
   }
 
   getProducts(categoryId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 5,
       category: categoryId,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
     // .pipe(
     //   timeout(60000),
@@ -244,14 +244,14 @@ export class DashboardService {
   }
 
   getAreas(channelId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 3,
       channelId: channelId,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
     // .pipe(
     //   timeout(60000),
@@ -262,7 +262,7 @@ export class DashboardService {
     // );
   }
   getMerchandiserList(obj) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 4,
@@ -271,7 +271,7 @@ export class DashboardService {
       date: obj.startDate,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
 
     // const url = this.ip + 'cbl-pdf';
     return this.http.post(url, filter);
@@ -287,11 +287,11 @@ export class DashboardService {
 
   downloadMerchandiserPDF(obj) {
     const httpParams = new FormData();
-    httpParams.append("reportType", "");
-    httpParams.append("zoneId", obj.zoneId);
-    httpParams.append("regionId", obj.regionId);
-    httpParams.append("startDate", obj.startDate);
-    httpParams.append("surveyorId", obj.surveyorId);
+    httpParams.append('reportType', '');
+    httpParams.append('zoneId', obj.zoneId);
+    httpParams.append('regionId', obj.regionId);
+    httpParams.append('startDate', obj.startDate);
+    httpParams.append('surveyorId', obj.surveyorId);
 
     const url = this.ip + `cbl-pdf`;
     const o = `surveyorId=${obj.surveyorId}&startDate=${obj.startDate}`;
@@ -321,11 +321,11 @@ export class DashboardService {
 
     path = this.ip + url;
 
-    const form = document.createElement("form");
+    const form = document.createElement('form');
 
-    form.setAttribute("action", path);
+    form.setAttribute('action', path);
 
-    form.setAttribute("method", "post");
+    form.setAttribute('method', 'post');
     // form.setAttribute('target', '_blank');
 
     document.body.appendChild(form);
@@ -338,11 +338,11 @@ export class DashboardService {
   }
   private appendInputToForm(form, obj) {
     Object.keys(obj).forEach((key) => {
-      const input = document.createElement("input");
+      const input = document.createElement('input');
 
-      input.setAttribute("value", obj[key]);
+      input.setAttribute('value', obj[key]);
 
-      input.setAttribute("name", key);
+      input.setAttribute('name', key);
 
       form.appendChild(input);
     });
@@ -350,63 +350,63 @@ export class DashboardService {
 
   updateImeiStatus(obj) {
     const body = this.UrlEncodeMaker(obj);
-    const url = this.ip + "add-imei-update-imei-status";
+    const url = this.ip + 'add-imei-update-imei-status';
     return this.http.post(url, body, this.httpOptions);
   }
   getImeis() {
-    const url = this.ip + "add-imei-update-imei-status";
+    const url = this.ip + 'add-imei-update-imei-status';
     return this.http.get(url, this.httpOptions);
   }
   uploadImei(obj) {
-    const url = this.ip + "add-imei-update-imei-status";
+    const url = this.ip + 'add-imei-update-imei-status';
     // @ts-ignore
     return this.http.post(url, obj);
   }
   getEvaluatorList() {
     const filter = JSON.stringify({ act: 15 });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
 
   getMerchandiserRoaster(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "merchandiser-roaster";
+    const url = this.ip + 'merchandiser-roaster';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
   getKey(obj) {
     const body = this.UrlEncodeMaker(obj);
-    return this.http.post(this.ip + "tableauTicket", body, this.httpOptions);
+    return this.http.post(this.ip + 'tableauTicket', body, this.httpOptions);
   }
   getMerchandiserWiseScore(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "merchandiserWiseScore";
+    const url = this.ip + 'merchandiserWiseScore';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   getEvaluationSummary(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "evaluatorSummaryData";
+    const url = this.ip + 'evaluatorSummaryData';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   getSurveySurveyorList(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "survey-shop-view";
+    const url = this.ip + 'survey-shop-view';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   getSurveyShopList(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "survey-shop-view";
+    const url = this.ip + 'survey-shop-view';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
   getRegions() {
-    const url = this.ip + "/loadFilters";
+    const url = this.ip + '/loadFilters';
     const filter = JSON.stringify({ act: 13 });
     return this.http.post(url, filter);
   }
   getDistributionCheckInList(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + "distCheckInList";
+    const url = this.ip + 'distCheckInList';
     return this.http.post(url, urlEncode, this.httpOptions);
   }
 
@@ -417,30 +417,42 @@ export class DashboardService {
       zoneId: zoneId,
       regionId: regionId,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
 
   getZoneByCluster(clusterId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
     const filter = JSON.stringify({
       act: 18,
       userId: this.user_id,
       clusterId: clusterId,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
 
   getAreaByRegion(regionId) {
-    this.user_id = localStorage.getItem("user_id");
+    this.user_id = localStorage.getItem('user_id');
 
     const filter = JSON.stringify({
       act: 27,
       regionId: regionId,
       userId: this.user_id,
     });
-    const url = this.ip + "loadFilters";
+    const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
+  }
+
+  getQueryList() {
+    this.user_id = localStorage.getItem('user_id');
+    const filter = JSON.stringify({ act: 30, userId: this.user_id });
+    const url = this.ip + 'loadFilters';
+    return this.http.post(url, filter);
+  }
+  getKeyForDashboardReport(reportUrl, obj) {
+    this.updatedDownloadStatus(true);
+    const url = this.ip + reportUrl;
+    return this.http.post(url, obj);
   }
 }
