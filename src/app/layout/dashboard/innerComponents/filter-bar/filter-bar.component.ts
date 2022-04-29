@@ -117,7 +117,7 @@ export class FilterBarComponent implements OnInit {
   sortBy: "completed";
   selectedRemark = 0;
   remarksList = [];
-  selectedactionsType: any = {};
+  selectedActionsType: any = {};
   selectedCriteriaType: any = {};
 
   // @ViewChild('remarksModal') remarksModal: ModalDirective;
@@ -366,7 +366,7 @@ export class FilterBarComponent implements OnInit {
         channelId : this.arrayMaker(this.selectedChannel) || -1,
         areaIds: "",
         distributionIds: "",
-        action: this.selectedactionsType.id || -1,
+        action: this.selectedActionsType.id || -1,
         actionType: this.setActionType(),
         criteria: this.selectedCriteriaType.id || -1,
         pageType: "1",
