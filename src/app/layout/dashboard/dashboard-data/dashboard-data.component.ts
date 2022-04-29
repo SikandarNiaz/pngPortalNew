@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DashboardService } from '../dashboard.service';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+import { NgModel } from '@angular/forms';
 @Component({
   selector: 'app-dashboard-data',
   templateUrl: './dashboard-data.component.html',
@@ -35,8 +36,10 @@ export class DashboardDataComponent implements OnInit {
   selectedArea: any = {};
   isDashboardDataRequest = true;
   areas: any = [];
+  channels: any=[];
   selectedFold: any = {};
   selectedChannel: any = {};
+  selectedChannelMulti: any = [];
   reportData: any = {};
 
   constructor(
@@ -77,6 +80,20 @@ export class DashboardDataComponent implements OnInit {
           : this.toastr.error(error.description, 'Error');
       }
     );
+  }
+
+  selectAll(select: NgModel, values) {
+    select.update.emit(values);
+  }
+
+  deselectAll(select: NgModel) {
+    select.update.emit([]);
+  }
+
+  equals(objOne, objTwo) {
+    if (typeof objOne !== "undefined" && typeof objTwo !== "undefined") {
+      return objOne.id === objTwo.id;
+    }
   }
 
   getDashboardData() {
@@ -162,8 +179,11 @@ export class DashboardDataComponent implements OnInit {
         obj.date = moment(this.singleDate).format('YYYY-MM-DD');
       } else if (param.populatedFrom == 'Fold') {
         obj.Fold = this.selectedFold.id || -1;
-      } else if (param.populatedFrom == 'Channel') {
+      } else if (param.populatedFrom == 'Channel' && param.type == 'Single_Select') {
         obj.Channel = this.selectedChannel.id || -1;
+      }
+      else if (param.populatedFrom == 'Channel' && param.type == 'Multi_Select') {
+        obj.Channel = this.arrayAndStringMaker(this.selectedChannelMulti) || -1;
       }
     }
     return obj;
@@ -203,6 +223,7 @@ export class DashboardDataComponent implements OnInit {
     this.zones = this.reportData.zoneList;
     this.regions = this.reportData.regionList;
     this.areas = this.reportData.areaList;
+    this.channels = this.reportData.channelList.length>0? this.reportData.channelList: [];
     this.setparamsVisibility(-1);
   }
 
@@ -238,5 +259,26 @@ export class DashboardDataComponent implements OnInit {
           ? this.areas
           : this.areas.filter((a) => a.regionId === this.selectedRegion.id);
     }
+  }
+
+  arrayAndStringMaker(selectedChannelMulti){
+    console.log("(selectedChannelMulti)", selectedChannelMulti);
+    console.log("this.arrayMaker(this.selectedChannel)", this.arrayMaker(selectedChannelMulti));
+    let arr= this.arrayMaker(selectedChannelMulti)
+    let str = arr.toString(); 
+    console.log("arr: ", arr, "Returned string is : " + str );
+    return str;
+  }
+
+  arrayMaker(arr) {
+    const all = arr.filter((a) => a === "all");
+    const result: any = [];
+    if (all[0] === "all") {
+      arr = this.channels;
+    }
+    arr.forEach((e) => {
+      result.push(e.id);
+    });
+    return result;
   }
 }
