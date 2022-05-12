@@ -88,6 +88,7 @@ import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
+import { CurrentRoutesReportComponent } from "./innerComponents/operations/current-routes-report/current-routes-report.component";
 @NgModule({
   imports: [
     FormsModule,
@@ -127,6 +128,7 @@ import { DashboardDataComponent } from "./dashboard-data/dashboard-data.componen
   ],
   declarations: [
     SOSandSODComponent,
+    CurrentRoutesReportComponent,
     DashboardComponent,
     HomeComponent,
     ShopListComponent,

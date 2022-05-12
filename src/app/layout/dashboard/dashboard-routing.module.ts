@@ -46,6 +46,7 @@ import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
+import { CurrentRoutesReportComponent } from "./innerComponents/operations/current-routes-report/current-routes-report.component";
 const routes: Routes = [
   {
     path: "",
@@ -61,6 +62,7 @@ const routes: Routes = [
       { path: "productivity_report", component: ProductivityComponent },
       { path: "msl_dashboard", component: MslDashboardComponent },
       { path: "image-view", component: ImageViewComponent },
+      { path: "current-routes", component: CurrentRoutesReportComponent },
       {
         path: "distribution-check-in",
         component: DistributionCheckInCardComponent,
