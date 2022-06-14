@@ -46,6 +46,9 @@ import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
+import { SkuReportComponent } from "./innerComponents/sku-report/sku-report.component";
+import { SupervisorProductivityComponent } from "./innerComponents/supervisor-productivity/supervisor-productivity.component";
+import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/merchandiser-attendance-map-view/merchandiser-attendance-map-view.component";
 const routes: Routes = [
   {
     path: "",
@@ -79,8 +82,22 @@ const routes: Routes = [
       },
 
       {
+        path: "sku-report",
+        component: SkuReportComponent,
+      },
+
+      {
         path: "shareofshelf",
         component: SOSandSODComponent,
+      },
+      {
+        path: "supervisor-productivity",
+        component: SupervisorProductivityComponent,
+      },
+
+      {
+        path: "merchandiser-attendance-map-view",
+        component: MerchandiserAttendanceMapViewComponent,
       },
 
       { path: "update_password", component: UpdatePasswordComponent },

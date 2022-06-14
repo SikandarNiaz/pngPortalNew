@@ -1,0 +1,50 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      {{ title }}
+      <i color="warn" [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i>
+    </mat-card-title>
+  </mat-card-content>
+</mat-card>
+  <mat-card *ngIf="skuList.length > 0">
+    <mat-card-content>
+        <div class="col-md-12" style="text-align: center;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>
+                        Month
+                      </th>
+                      <th>
+                        Year
+                      </th>
+                      <th>
+                        Week
+                      </th>
+                      <th>
+                        Download 
+                      </th>
+                    </tr>
+                  </thead>
+  
+                  <tbody *ngIf="skuList.length > 0">
+                    <tr *ngFor=" let item of skuList">
+  
+                      <td>{{ item?.month_no }}</td>
+                      <td>{{ item?.year_no }}</td>
+                      <td>{{ item?.week_no }}</td>
+                      <td>
+                           <button style=" margin-top: 4px;"
+                            mat-raised-button
+                            color="warn"
+                           ><a [href]="ip+item?.file_path" >  Download </a>
+    
+                           </button>
+                          </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    </mat-card-content>
+  </mat-card>
+  

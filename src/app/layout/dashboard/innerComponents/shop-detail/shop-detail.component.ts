@@ -50,7 +50,7 @@ export class ShopDetailComponent implements OnInit {
     let id = 0;
     let obj;
     const o: any = JSON.parse(localStorage.getItem("obj"));
-    console.log(o);
+    console.log("obj",o);
     this.activatedRoute.queryParams.subscribe((p) => {
       id = p.id;
       this.remarksId = p.remark_id;
@@ -72,6 +72,7 @@ export class ShopDetailComponent implements OnInit {
           merchandiserId: id,
           remarksId: this.remarksId,
           viewType: this.viewType,
+          type:o.type,
         };
       }
 

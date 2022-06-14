@@ -1540,6 +1540,438 @@
 
 <!-- / raw data -->
 
+<div *ngIf="isSupervisorDataRequest">
+  <mat-card class="mb-20">
+    <mat-card-content>
+      <mat-card-title>
+        {{ title | uppercase }}
+        <i [ngClass]="{ 'fa fa-cog fa-spin': loadingData }"></i>
+      </mat-card-title>
+    </mat-card-content>
+  </mat-card>
+  <mat-tab-group
+    mat-stretch-tabs
+    class="example-stretched-tabs mat-elevation-z4"
+  >
+    <mat-tab label="Visit Productivity">
+      <mat-card class="mb-20">
+        <mat-card-content>
+          <section class="example-section">
+            <!-- <ng-container *ngIf="clusterList?.length > 0">
+              <mat-form-field class="example-margin mr-10-IMP">
+                <mat-select
+                  placeholder="cluster"
+                  name="cluster"
+                  [(ngModel)]="selectedCluster"
+                  (ngModelChange)="getZoneByCluster()"
+                >
+                  <mat-option
+                    [value]="cluster"
+                    *ngFor="let cluster of clusterList"
+                    >{{ cluster.title }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </ng-container> -->
+            <ng-container *ngIf="zones?.length > 0">
+              <mat-form-field class="example-margin mr-10-IMP">
+                <mat-select
+                  placeholder="{{ zonePlaceholder }}"
+                  name="zone"
+                  [(ngModel)]="selectedZone"
+                  (ngModelChange)="zoneChange()"
+                >
+                  <mat-option [value]="zone" *ngFor="let zone of zones">{{
+                    zone.title
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+            <mat-form-field
+              *ngIf="regions.length > 0"
+              class="example-margin mr-10-IMP"
+            >
+              <mat-select
+                placeholder="{{ regionPlaceholder }}"
+                name="region"
+                [(ngModel)]="selectedRegion"
+                (ngModelChange)="regionChange()"
+              >
+                <mat-option [value]="region" *ngFor="let region of regions">{{
+                  region.title
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- <mat-form-field
+              *ngIf="areas.length > 0"
+              class="example-margin mr-10-IMP"
+            >
+              <mat-select
+                placeholder="areas"
+                name="areas"
+                [(ngModel)]="selectedArea"
+                (ngModelChange)="getTabsData()"
+              >
+                <mat-option [value]="area" *ngFor="let area of areas">{{
+                  area.title
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+
+            <mat-form-field class="example-full-width mr-10-IMP">
+              <input
+                matInput
+                [min]="minDate"
+                [max]="maxDate"
+                [matDatepicker]="picker0"
+                [(ngModel)]="startDate"
+                (ngModelChange)="getTabsData($event, 'start')"
+                placeholder="Choose a start date"
+                readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker0"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker0></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width mr-10-IMP">
+              <input
+                matInput
+                [min]="minDate"
+                [max]="maxDate"
+                [matDatepicker]="picker1"
+                [(ngModel)]="endDate"
+                (ngModelChange)="getTabsData($event, 'end')"
+                placeholder="Choose a end date"
+                readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </section>
+        </mat-card-content>
+      </mat-card>
+
+      <ng-container #webView *ngIf="tableData.length > 0">
+        <mat-card class="isWebView">
+          <mat-card-content>
+            <div>
+             <app-search-box [list]="tableData" (notify)="onNotifyClicked($event)">
+              </app-search-box> 
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table animated slideInLeft">
+                    <thead>
+                      <tr>
+                        <th scope="col" (click)="sortIt('merchandiser_code')">
+                          {{ surveyorType }} Code
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("merchandiser_code") }}
+                          </i>
+                        </th>
+                        <th scope="col" (click)="sortIt('merchandiser_name')">
+                          {{ surveyorType }} Name
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("merchandiser_name") }}
+                          </i>
+                        </th>
+                        <th scope="col" (click)="sortIt('completed')">
+                          Productive
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("completed") }}
+                          </i>
+                        </th>
+                        <th scope="col" (click)="sortIt('successfull')">
+                          Successful
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("successfull") }}
+                          </i>
+                        </th>
+                        <th scope="col" (click)="sortIt('unsuccessful')">
+                          Un-Successful
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("unsuccessful") }}
+                          </i>
+                        </th>
+                        <th scope="col" (click)="sortIt('successful_percent')">
+                          Successful <strong>%</strong>
+                          <br />
+                          <i class="material-icons arrow">
+                            {{ getArrowType("successful_percent") }}
+                          </i>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      
+                      
+                      <ng-container
+                      *ngFor="
+                        let item of filteredList
+                          | orderBy: sortBy:sortOrder
+                      "
+                    >
+                      
+                        <tr>
+                          <td scope="row">{{ item.merchandiser_code }}</td>
+                          <td class="a-namelink" title="Merchandiser Name">
+                            <a
+                              class="a-namelink"
+                              target="_blank"
+                              title="view shop details"
+                              [routerLink]="['/dashboard/shop_detail', item.id]"
+                              [queryParams]="{ id: item.id, remark_id: -1 }"
+                              queryParamsHandling="merge"
+                              >{{ item.merchandiser_name }}</a
+                            >
+                          </td>
+                          <td
+                            class="a-link"
+                            *ngIf="item.completed != 0"
+                            title="Completed"
+                          >
+                            <a
+                              class="a-link"
+                              target="_blank"
+                              title="view shop details"
+                              [routerLink]="['/dashboard/shop_detail', item.id]"
+                              [queryParams]="{ id: item.id, remark_id: -1 }"
+                              queryParamsHandling="merge"
+                              >{{ item.completed }}</a
+                            >
+                          </td>
+                          <td *ngIf="item.completed == 0">
+                            {{ item.completed }}
+                          </td>
+                          <td
+                            class="a-link"
+                            *ngIf="item.successfull != 0"
+                            title="Successful"
+                          >
+                            <a
+                              class="a-link"
+                              target="_blank"
+                              title="view shop details"
+                              [routerLink]="['/dashboard/shop_detail', item.id]"
+                              [queryParams]="{ id: item.id, remark_id: 1 }"
+                              queryParamsHandling="merge"
+                            >
+                              {{ item.successfull }}</a
+                            >
+                          </td>
+                          <td *ngIf="item.successfull == 0">
+                            {{ item.successfull }}
+                          </td>
+
+                          <td
+                            class="a-link"
+                            *ngIf="item.unsuccessful != 0"
+                            title="Un-Successful"
+                          >
+                            <a
+                              class="a-link"
+                              target="_blank"
+                              title="view shop details"
+                              [routerLink]="['/dashboard/shop_detail', item.id]"
+                              [queryParams]="{ id: item.id, remark_id: 0 }"
+                              queryParamsHandling="merge"
+                            >
+                              {{ item.unsuccessful }}</a
+                            >
+                          </td>
+                          <td *ngIf="item.unsuccessful == 0">
+                            {{ item.unsuccessful }}
+                          </td>
+                          <td>
+                            {{ getPercentage(item.successful_percent) }}
+                          </td>
+                        </tr>
+                      </ng-container>
+                      
+                    </tbody>
+                   
+                  </table>
+                 
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+      <ng-container *ngIf="tableData.length > 0" #mobileView>
+        <div class="isMobileView">
+          <div>
+            <app-search-box [list]="tableData" (notify)="onNotifyClicked($event)">
+            </app-search-box> 
+          </div>
+          <div class="row">
+            <table class="table animated slideInLeft">
+              <thead>
+                <tr>
+                  <th scope="col" (click)="sortIt('merchandiser_code')">
+                    {{ labels?.surveyorLabel }} Code
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("merchandiser_code") }}
+                    </i>
+                  </th>
+                  <th scope="col" (click)="sortIt('merchandiser_name')">
+                    {{ labels?.surveyorLabel }} Name
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("merchandiser_name") }}
+                    </i>
+                  </th>
+                  <th scope="col" (click)="sortIt('completed')">
+                    Productive
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("completed") }}
+                    </i>
+                  </th>
+                  <th scope="col" (click)="sortIt('successfull')">
+                    Successful
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("successfull") }}
+                    </i>
+                  </th>
+                  <th scope="col" (click)="sortIt('unsuccessful')">
+                    Un-Successful
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("unsuccessful") }}
+                    </i>
+                  </th>
+                  <th scope="col" (click)="sortIt('successful_percent')">
+                    Successful <strong>%</strong>
+                    <br />
+                    <i class="material-icons arrow">
+                      {{ getArrowType("successful_percent") }}
+                    </i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngFor="
+                    let item of filteredList
+                      | orderBy: sortBy:sortOrder
+                  "
+                >
+                  <tr>
+                    <td scope="row">{{ item.merchandiser_code }}</td>
+                    <td>
+                      {{ item.merchandiser_name }}
+                    </td>
+                    <td
+                      class="a-link"
+                      *ngIf="item.completed != 0"
+                      title="Completed"
+                    >
+                      <a
+                        class="a-link"
+                        target="_blank"
+                        title="view shop details"
+                        [routerLink]="['/dashboard/shop_detail', item.id]"
+                        [queryParams]="{ id: item.id, remark_id: -1 }"
+                        queryParamsHandling="merge"
+                        >{{ item.completed }}</a
+                      >
+                    </td>
+                    <td *ngIf="item.completed == 0">
+                      {{ item.completed }}
+                    </td>
+                    <td
+                      class="a-link"
+                      *ngIf="item.successfull != 0"
+                      title="Successful"
+                    >
+                      <a
+                        class="a-link"
+                        target="_blank"
+                        title="view shop details"
+                        [routerLink]="['/dashboard/shop_detail', item.id]"
+                        [queryParams]="{ id: item.id, remark_id: 1 }"
+                        queryParamsHandling="merge"
+                      >
+                        {{ item.successfull }}</a
+                      >
+                    </td>
+                    <td *ngIf="item.successfull == 0">
+                      {{ item.successfull }}
+                    </td>
+
+                    <td
+                      class="a-link"
+                      *ngIf="item.unsuccessful != 0"
+                      title="Un-Successful"
+                    >
+                      <a
+                        class="a-link"
+                        target="_blank"
+                        title="view shop details"
+                        [routerLink]="['/dashboard/shop_detail', item.id]"
+                        [queryParams]="{ id: item.id, remark_id: 0 }"
+                        queryParamsHandling="merge"
+                      >
+                        {{ item.unsuccessful }}</a
+                      >
+                    </td>
+                    <td *ngIf="item.unsuccessful == 0">
+                      {{ item.unsuccessful }}
+                    </td>
+                    <td>{{ getPercentage(item.successful_percent) }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center">
+            <pagination-controls
+              class="my-pagination"
+              (pageChange)="currentpg = $event"
+              *ngIf="filteredList.length > 0"
+            ></pagination-controls>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="row" *ngIf="loading">
+        <div class="col-md-12 text-center">
+          <div class="img-center">
+            <img src="assets/images/basicloader.gif" alt="" srcset="" />
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!loading && filteredList.length == 0">
+        <div class="col-md-12 text-center">
+          <div class="alert alert-info">
+            <p>No Data Found</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Attendance">
+      <app-merchandiser-attendance-map-view
+      [surveyorType]="2">
+      </app-merchandiser-attendance-map-view>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
 <!-- merchandiser productivity -->
 <mat-card class="mb-20" *ngIf="router.url === '/dashboard/productivity_report'">
   <mat-card-content>
