@@ -1600,4 +1600,63 @@ export class FilterBarComponent implements OnInit {
       this.toastr.info("Plz Enter a Valid Date and Type", "Required Fields");
     }
   }
+
+  currentRoutesReport() {
+    if (this.endDate >= this.startDate) {
+      this.loadingData = true;
+      this.loadingReportMessage = true;
+      const obj = {
+        zoneId: this.selectedZone.id
+          ? this.selectedZone.id == -1
+            ? localStorage.getItem("zoneId")
+            : this.selectedZone.id
+          : localStorage.getItem("zoneId"),
+        regionId: this.selectedRegion.id
+          ? this.selectedRegion.id == -1
+            ? localStorage.getItem("regionId")
+            : this.selectedRegion.id
+          : localStorage.getItem("regionId"),
+      };
+
+      const url = "shopsList";
+      const body = this.httpService.UrlEncodeMaker(obj);
+      this.httpService.getKeyForProductivityReport(body, url).subscribe(
+        (data) => {
+          console.log(data, "Current Routes");
+          const res: any = data;
+
+          if (res.key) {
+            const obj2 = {
+              key: res.key,
+              fileType: "json.fileType",
+            };
+            const url = "downloadReport";
+            this.getproductivityDownload(obj2, url);
+          } else {
+            this.clearLoading();
+
+            this.toastr.info(
+              "There was an error downloading the report",
+              "Error Status Message"
+            );
+          }
+        },
+        (error) => {
+          this.clearLoading();
+          this.toastr.error(
+            "There was an error downloading the report",
+            "Error"
+          );
+        }
+      );
+    } else {
+      this.clearLoading();
+      this.toastr.info(
+        "End date must be greater than start date",
+        "Date Selection"
+      );
+    }
+  }
 }
+
+

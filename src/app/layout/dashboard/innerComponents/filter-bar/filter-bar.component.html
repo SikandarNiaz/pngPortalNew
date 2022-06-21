@@ -3465,3 +3465,47 @@
     </section>
   </mat-card-content>
 </mat-card>
+
+
+<!-- --------------- Current Routes --------------------- -->
+
+<mat-card class="mb-20" *ngIf="router.url==='/dashboard/current-routes'">
+
+  <mat-card-content>
+      <mat-card-title>
+          {{title| uppercase}} <i color="warn" [ngClass]="{'fa fa-cog fa-spin':loadingData}"></i>
+          <small style="color:lightseagreen !important" class="mtb-5-IMP" *ngIf="loadingReportMessage">Your file is
+              being prepared for download</small>
+      </mat-card-title>
+      <section class="example-section">
+
+
+          <mat-form-field class="example-margin mr-10-IMP">
+              <mat-select placeholder="Zone" name='zone' [(ngModel)]="selectedZone" (ngModelChange)="zoneChange()">
+                  <ng-container *ngFor="let zone of zones">
+                      <mat-option [value]="zone">{{zone.title}}</mat-option>
+                  </ng-container>
+
+              </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="regions.length>0" class="example-margin mr-10-IMP">
+              <mat-select placeholder="Region" name='region' [(ngModel)]="selectedRegion">
+                  <ng-container *ngFor="let region of regions">
+                      <mat-option [value]="region">{{region.title}}</mat-option>
+
+                  </ng-container>
+
+              </mat-select>
+          </mat-form-field>
+
+      </section>
+
+      <section class="example-section">
+          <button [disabled]="loadingData || !selectedZone.id || !selectedRegion.id
+          " mat-raised-button color="warn" (click)="currentRoutesReport()">Download</button>
+      </section>
+
+
+  </mat-card-content>
+</mat-card>
