@@ -49,7 +49,7 @@ export class EvaluationService {
   }
 
   evaluateShop(obj) {
-    const url = this.ip + "evaluateSingleShop";
+    const url = this.ip + "evaluateShopNew";
     return this.http.post(url, obj);
   }
 

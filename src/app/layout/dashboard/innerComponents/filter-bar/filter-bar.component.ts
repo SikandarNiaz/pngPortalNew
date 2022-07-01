@@ -35,11 +35,20 @@ export class FilterBarComponent implements OnInit {
     this.zones = JSON.parse(localStorage.getItem("zoneList"));
     this.categoryList = JSON.parse(localStorage.getItem("assetList"));
     this.channels = JSON.parse(localStorage.getItem("channelList"));
+    this.labels = JSON.parse(localStorage.getItem("labelProperties"));
+    this.clusterList = JSON.parse(localStorage.getItem("clusterList"));
 
     console.log(this.categoryList);
     this.sortIt("completed");
+    //this.surveyorType = this.labels.surveyorLabel;
   }
+  labels: any;
   tableData: any = [];
+  filteredList: any = [];
+  clusterList: any = [];
+  selectedCluster: any = {};
+  route: any;
+  route_Id: any;
   // ip = environment.ip;
 
   ip: any = Config.BASE_URI;
@@ -109,6 +118,9 @@ export class FilterBarComponent implements OnInit {
   selectedReportType: any = {};
   queryList: any = [];
   selectedQuery: any = {};
+  dashboardStatsObj: any = {};
+  routesList: any = [];
+  activeRoutesList: any = [];
 
   loadingReportMessage = false;
   tabsData: any = [];
@@ -119,6 +131,8 @@ export class FilterBarComponent implements OnInit {
   remarksList = [];
   selectedActionsType: any = {};
   selectedCriteriaType: any = {};
+  isSupervisorDataRequest = false;
+  surveyorType = "";
 
   // @ViewChild('remarksModal') remarksModal: ModalDirective;
   // showRemarksModal(){this.remarksModal.show(); }
@@ -169,6 +183,11 @@ export class FilterBarComponent implements OnInit {
     if (this.router.url !== "/dashboard/raw_data") {
       this.getZone();
     }
+    if (this.router.url === "/dashboard/supervisor-productivity") {
+      this.isSupervisorDataRequest = true;
+      this.surveyorType = "Supervisor";
+    }
+     this.getTabsData();
 
     if (
       this.router.url === "/dashboard/productivity_report" ||
@@ -247,7 +266,34 @@ export class FilterBarComponent implements OnInit {
       );
     }
   }
-
+  getZoneByCluster() {
+    this.loadingData = true;
+    this.selectedZone = {};
+    this.selectedRegion = {};
+    this.selectedArea = {};
+    this.selectedCity = {};
+    this.selectedDistribution = {};
+    // if (this.router.url === "/dashboard/productivity_report"
+    // ) {
+    //   this.getTabsData();
+    // }
+    this.httpService.getZoneByCluster(this.selectedCluster.id || -1).subscribe(
+      (data) => {
+        const res: any = data;
+        if (res) {
+          this.zones = res;
+        }
+        console.log("zone", this.zones);
+        this.loadingData = false;
+      },
+      (error) => {
+        error.status === 0
+          ? this.toastr.error("Please check Internet Connection", "Error")
+          : this.toastr.error(error.description, "Error");
+        this.loadingData = false;
+      }
+    );
+  }
   getBrandSKUOOS() {
     if (this.endDate >= this.startDate) {
       this.loadingData = true;
@@ -1244,6 +1290,7 @@ export class FilterBarComponent implements OnInit {
   }
   getTabsData(data?: any, dateType?: string) {
     this.loadingData = true;
+    localStorage.setItem("obj", JSON.stringify(data));
     let startDate =
       dateType === "start"
         ? moment(data).format("YYYY-MM-DD")
@@ -1260,16 +1307,26 @@ export class FilterBarComponent implements OnInit {
 
     this.loading = true;
     const obj: any = {
-      zoneId: this.selectedZone.id ? this.selectedZone.id : -1,
-      regionId: this.selectedRegion.id ? this.selectedRegion.id : -1,
+      zoneId: this.selectedZone.id
+      ? this.selectedZone.id == -1
+        ? localStorage.getItem("zoneId")
+        : this.selectedZone.id
+      : localStorage.getItem("zoneId"),
+    regionId: this.selectedRegion.id
+      ? this.selectedRegion.id == -1
+        ? localStorage.getItem("regionId")
+        : this.selectedRegion.id
+      : localStorage.getItem("regionId"),
       startDate: startDate,
       endDate: endDate,
       cityId: this.selectedCity.id || -1,
       distributionId: this.selectedDistribution.id || -1,
       storeType: this.selectedStoreType || null,
       channelId: -1,
+      type: !this.isSupervisorDataRequest ? 1 : 2,
+      routeId: this.route ? this.route.id : -1,
     };
-    localStorage.setItem("obj", JSON.stringify(obj));
+     localStorage.setItem("obj", JSON.stringify(obj));
     this.getTableData(obj);
 
     this.httpService.getDashboardData(obj).subscribe(
@@ -1292,15 +1349,20 @@ export class FilterBarComponent implements OnInit {
     );
   }
   getTableData(obj) {
+    this.filteredList = [];
+    this.tableData = [];
+    this.dashboardStatsObj = {};
     this.httpService.merchandiserShopList(obj).subscribe(
       (data) => {
         console.log(data, "table data");
         const res: any = data;
 
-        if (res) {
+        if (res.length > 0) {
           this.tableData = res;
+          this.filteredList = res;
+         this.getDashboardStats();
         }
-        this.loading = false;
+        this.clearLoading();
         // if (res.planned == 0)
         //   this.toastr.info('No data available for current selection', 'Summary')
       },
@@ -1315,6 +1377,62 @@ export class FilterBarComponent implements OnInit {
   // getMerchandiserDetailPage(id){
   //   this.router.navigate
   // }
+  onNotifyClicked(filteredlist: any) {
+    this.filteredList = filteredlist;
+   this.getDashboardStats();
+  }
+  getDashboardStats() {
+    debugger;
+    this.dashboardStatsObj.planned = this.filteredList
+      .map((a) => a.planned)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+
+    this.dashboardStatsObj.oorTotal = this.filteredList
+      .map((a) => a.oor)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+    this.dashboardStatsObj.completed = this.filteredList
+      .map((a) => a.completed)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+    this.dashboardStatsObj.unsuccessful = this.filteredList
+      .map((a) => a.unsuccessful)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+
+    this.dashboardStatsObj.unvisited = this.filteredList
+      .map((a) => a.unvisited)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+    let totalSuccessful = this.filteredList
+      .map((a) => a.successfull)
+      .reduce(function (a, b) {
+        return a + b;
+      });
+    this.dashboardStatsObj.completedPercent = (
+      (this.dashboardStatsObj.completed * 100) /
+      this.dashboardStatsObj.planned
+    ).toFixed(2);
+    this.dashboardStatsObj.successfulPercent = (
+      (totalSuccessful * 100) /
+      this.dashboardStatsObj.completed
+    ).toFixed(2);
+
+    this.dashboardStatsObj.unvisitedPercent = (
+      (this.dashboardStatsObj.unvisited * 100) /
+      this.dashboardStatsObj.planned
+    ).toFixed(2);
+
+    // if (this.projectType == "Coke_Audit") {
+    // this.setChartData();
+    // }
+  }
 
   selectAll(select: NgModel, values) {
     select.update.emit(values);

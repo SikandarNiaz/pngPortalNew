@@ -322,6 +322,7 @@ export class HomeComponent implements OnInit {
           title: element1.title,
           score: element1.score,
           criteriaMapId: element1.criteriaMapId,
+          hasChild: element1.hasChild,
           parentId: element1.parentId,
           achievedScore: score,
           isEditable: element1.isEditable,
@@ -475,6 +476,7 @@ export class HomeComponent implements OnInit {
       criteriaMapId: criteria.criteriaMapId,
       // achievedScore: (criteria.isEditable)? (this.criteriaDesireScore==criteria.score)?0:this.criteriaDesireScore : 0,
       parentId: criteria.parentId,
+      hasChild: criteria.hasChild,
       achievedScore: criteria.isEditable ? this.criteriaDesireScore : 0,
       isEditable: criteria.isEditable,
       isChecked: 1,
@@ -586,6 +588,7 @@ export class HomeComponent implements OnInit {
           score: criteria.score,
           criteriaMapId: criteria.criteriaMapId,
           parentId: criteria.parentId,
+          hasChild: criteria.hasChild,
           achievedScore:
             criteria.score > criteria.achievedScore || criteria.score < 0
               ? criteria.score
@@ -626,6 +629,7 @@ export class HomeComponent implements OnInit {
           criteria.score > criteria.achievedScore
             ? criteria.score
             : criteria.achievedScore,
+        hasChild: criteria.hasChild,
         parentId: criteria.parentId,
         isEditable: criteria.isEditable,
         isChecked: 0,

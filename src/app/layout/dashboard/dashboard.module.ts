@@ -88,7 +88,15 @@ import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
+
 import { CurrentRoutesReportComponent } from "./innerComponents/operations/current-routes-report/current-routes-report.component";
+
+import { SkuReportComponent } from "./innerComponents/sku-report/sku-report.component";
+import { SupervisorProductivityComponent } from "./innerComponents/supervisor-productivity/supervisor-productivity.component";
+import { SearchBoxComponent } from "./innerComponents/search-box/search-box.component";
+
+import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/merchandiser-attendance-map-view/merchandiser-attendance-map-view.component";
+
 @NgModule({
   imports: [
     FormsModule,
@@ -180,6 +188,10 @@ import { CurrentRoutesReportComponent } from "./innerComponents/operations/curre
     UniqueBasedProductivityReportComponent,
     OosProductivityListComponent,
     DashboardDataComponent,
+    SkuReportComponent,
+    SupervisorProductivityComponent,
+    SearchBoxComponent,
+    MerchandiserAttendanceMapViewComponent,
   ],
 })
 export class DashboardModule {}

@@ -145,7 +145,7 @@ export class DashboardService {
   }
 
   merchandiserShopList(obj) {
-    const body = `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}`;
+    const body = `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&distributionId=${obj.distributionId}&cityId=${obj.cityId}&storeType=${obj.storeType}&channelId=${obj.channelId}&type=${obj.type}&routeId=${obj.routeId} `;
     const url = this.ip + 'merchandiserShopList';
     return this.http.post(url, body, this.httpOptions);
     // .pipe(
@@ -455,4 +455,11 @@ export class DashboardService {
     const url = this.ip + reportUrl;
     return this.http.post(url, obj);
   }
+  getDistinctSkuList() {
+    const filter = JSON.stringify({ act: 31, userId: this.user_id });
+    const url = this.ip + 'loadFilters';
+    return this.http.post(url, filter);
+  }
+  
+
 }
