@@ -64,7 +64,7 @@ export class DashboardDataComponent implements OnInit {
 
   getQueryTypeList(reportId: number) {
     this.loadingData = true;
-    this.httpService.getQueryList().subscribe(
+    this.httpService.getQueryList(reportId).subscribe(
       (data: any) => {
         if (data) {
           this.reportData = data;

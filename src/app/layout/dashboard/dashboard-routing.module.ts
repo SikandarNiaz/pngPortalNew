@@ -54,6 +54,8 @@ import { CurrentRoutesReportComponent } from "./innerComponents/operations/curre
 import { SkuReportComponent } from "./innerComponents/sku-report/sku-report.component";
 import { SupervisorProductivityComponent } from "./innerComponents/supervisor-productivity/supervisor-productivity.component";
 import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/merchandiser-attendance-map-view/merchandiser-attendance-map-view.component";
+import { ManageSurveyorsComponent } from "./innerComponents/manage-surveyors/manage-surveyors.component";
+import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/upload-routes-new.component";
 
 const routes: Routes = [
   {
@@ -71,6 +73,8 @@ const routes: Routes = [
       { path: "msl_dashboard", component: MslDashboardComponent },
       { path: "image-view", component: ImageViewComponent },
       { path: "current-routes", component: CurrentRoutesReportComponent },
+      { path: "manage_surveyors", component: ManageSurveyorsComponent },
+      { path: "upload_routes_new", component: UploadRoutesNewComponent },
       {
         path: "distribution-check-in",
         component: DistributionCheckInCardComponent,

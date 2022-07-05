@@ -99,6 +99,11 @@ import { SupervisorProductivityComponent } from "./innerComponents/supervisor-pr
 import { SearchBoxComponent } from "./innerComponents/search-box/search-box.component";
 
 import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/merchandiser-attendance-map-view/merchandiser-attendance-map-view.component";
+import { ManageSurveyorsComponent } from "./innerComponents/manage-surveyors/manage-surveyors.component";
+import { ManageSuperviserComponent } from "./innerComponents/manage-surveyors/manage-superviser/manage-superviser.component";
+import { ManageManagerComponent } from "./innerComponents/manage-surveyors/manage-manager/manage-manager.component";
+import { ManageMerchandiserComponent } from "./innerComponents/manage-surveyors/manage-merchandiser/manage-merchandiser.component";
+import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/upload-routes-new.component";
 
 @NgModule({
   imports: [
@@ -138,6 +143,11 @@ import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/mercha
     }),
   ],
   declarations: [
+    ManageSurveyorsComponent,
+    ManageSuperviserComponent,
+    ManageManagerComponent,
+    ManageMerchandiserComponent,
+    UploadRoutesNewComponent,
     SOSandSODComponent,
     CurrentRoutesReportComponent,
     DashboardComponent,

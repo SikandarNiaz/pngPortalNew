@@ -316,6 +316,24 @@ export class DashboardService {
     //   })
     // );
   }
+
+  getProductSets() {
+    const filter = JSON.stringify({ act: 25 });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
+
+  getEvaluatorData() {
+    const filter = JSON.stringify({ act: 26 });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
+
+  updateSurveyorData(obj) {
+    const url = this.ip + "updateSurveyor"; // -----------> UpdateSurveyorController
+    return this.http.post(url, obj);
+  }
+
   public DownloadResource(obj, url) {
     let path;
 
@@ -421,6 +439,73 @@ export class DashboardService {
     return this.http.post(url, filter);
   }
 
+  insertSurveyor(obj) {
+    console.log("insertSurveyor: ", obj);
+    const filter = JSON.stringify({
+      obj: obj,
+    });
+    //return obj;
+    const url = this.ip + "addSurveyorController";
+    return this.http.post(url, filter);
+  }
+
+  displayRouteStatus(obj) {
+    const url = this.ip + "shopWiseRouteCount";
+    return this.http.post(url, obj);
+  }
+
+  getAllShops(zoneId, regionId) {
+    const filter = JSON.stringify({
+      act: 16,
+      zoneId: zoneId,
+      regionId: regionId,
+    });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+  }
+
+  insertShopsIds(data) {
+    const obj2 = {
+      obj: data,
+    };
+    const urlencoded = this.UrlEncodeMaker(obj2);
+    const url = this.ip + "insertShopsIds"; //surveyorroutelistcontroller
+    return this.http.post(url, obj2);
+  }
+
+  
+  updateRouteStatus(obj) {
+    const urlencoded = this.UrlEncodeMaker(obj);
+    const url = this.ip + "shopWiseRouteCount"; //surveyorroutelistcontroller
+    return this.http.post(url, obj);
+  }
+
+  
+  uploadRoutes(obj) {
+    const url = this.ip + "UploadRoutesControllerNew";
+    return this.http.post(url, obj);
+  }
+
+  downloadFile(obj, url) {
+    let path;
+
+    path = this.ip + url;
+
+    const form = document.createElement("form");
+
+    form.setAttribute("action", path);
+
+    form.setAttribute("method", "post");
+
+    document.body.appendChild(form);
+
+    this.appendInputToForm(form, obj);
+
+    form.submit();
+
+    document.body.removeChild(form);
+  }
+
   getZoneByCluster(clusterId) {
     this.user_id = localStorage.getItem('user_id');
     const filter = JSON.stringify({
@@ -444,9 +529,9 @@ export class DashboardService {
     return this.http.post(url, filter);
   }
 
-  getQueryList() {
+  getQueryList(reportId) {
     this.user_id = localStorage.getItem('user_id');
-    const filter = JSON.stringify({ act: 30, userId: this.user_id });
+    const filter = JSON.stringify({ act: 30, userId: this.user_id, reportId: reportId });
     const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
