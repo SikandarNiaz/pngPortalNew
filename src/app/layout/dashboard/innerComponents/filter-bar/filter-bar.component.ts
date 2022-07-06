@@ -32,6 +32,7 @@ export class FilterBarComponent implements OnInit {
     public router: Router,
     private dataService: DashboardDataService
   ) {
+    console.log("filter bar");
     this.zones = JSON.parse(localStorage.getItem("zoneList"));
     this.categoryList = JSON.parse(localStorage.getItem("assetList"));
     this.channels = JSON.parse(localStorage.getItem("channelList"));
@@ -47,6 +48,11 @@ export class FilterBarComponent implements OnInit {
   filteredList: any = [];
   clusterList: any = [];
   selectedCluster: any = {};
+  actionTypeLists = [
+    { id: 0, name: "National" },
+    { id: 1, name: "Zonal" },
+    { id: 2, name: "Regional" },
+  ];
   route: any;
   route_Id: any;
   // ip = environment.ip;
@@ -68,11 +74,6 @@ export class FilterBarComponent implements OnInit {
   criteriaList: any = [
     { id: 1, title: "Visits Base" },
     { id: 2, title: "Unique" },
-  ];
-  actionTypeLists=[
-    {id: 0, name:'National'},
-    {id: 1, name:'Zonal'},
-    {id: 2, name:'Regional'},
   ];
 
   criteriaTypeList=[
@@ -172,6 +173,7 @@ export class FilterBarComponent implements OnInit {
     this.endDate = new Date();
   }
   ngOnInit() {
+    console.log("filter bar");
     this.httpService.checkDate();
     this.selectedCriteria = this.criteriaList[0];
     console.log("router", this.router.url);
@@ -590,18 +592,18 @@ export class FilterBarComponent implements OnInit {
   }
 
   categoryChange() {
-    // this.loadingData = true;
-    // this.httpService.getProducts(this.selectedCategory.id).subscribe(
-    //   data => {
-    //     this.productsList = data;
-    //     setTimeout(() => {
-    //       this.loadingData = false;
-    //     }, 500);
-    //   },
-    //   error => {
-    // this.clearLoading()
-    //  }
-    // );
+    this.loadingData = true;
+    this.httpService.getProducts(this.selectedCategory.id).subscribe(
+      data => {
+        this.productsList = data;
+        setTimeout(() => {
+          this.loadingData = false;
+        }, 500);
+      },
+      error => {
+    this.clearLoading()
+     }
+    );
   }
 
   cityChange() {
@@ -1081,6 +1083,88 @@ export class FilterBarComponent implements OnInit {
 
     // let url = 'oosSummaryReport';
     // this.httpService.DownloadResource(obj, url);
+  }
+
+  supervisorChangeLogReport(){
+    console.log("hhhh");
+    if (this.endDate >= this.startDate) {
+      console.log("hhhh");
+      this.loadingData = true;
+      this.loadingReportMessage = true;
+      const obj = {
+        // zoneId: this.selectedZone.id || "",
+        // regionId: this.selectedRegion.id || "",
+        // cityId: this.selectedCity.id || "",
+        // areaId: this.selectedArea.id || "",
+        zoneId: this.selectedZone.id
+        ? this.selectedZone.id == -1
+          ? localStorage.getItem("zoneId")
+          : this.selectedZone.id
+        : localStorage.getItem("zoneId"),
+      regionId: this.selectedRegion.id
+        ? this.selectedRegion.id == -1
+          ? localStorage.getItem("regionId")
+          : this.selectedRegion.id
+        : localStorage.getItem("regionId"),
+        category:this.selectedCategory.id || -1,
+        productId:this.arrayMaker(this.selectedProduct || ""),
+        channelId: this.arrayMaker(this.selectedChannel),
+        startDate: moment(this.startDate).format("YYYY-MM-DD"),
+        endDate: moment(this.endDate).format("YYYY-MM-DD"),
+        chillerAllocated: -1,
+        yogurtAllocation: 'N',
+        pageType: 1,
+        excelDump: 'Y',
+        isNpl: false,
+        actionType:this.selectedActionsType.id,
+      };
+
+      const encodeURL: any = this.httpService.UrlEncodeMaker(obj);
+
+      const url = "/supervisorchangelog";
+      const body = encodeURL;
+      // `chillerAllocated=${obj.chillerAllocated}&type=2&pageType=1&zoneId=${obj.zoneId}&regionId=${obj.regionId}&startDate=${obj.startDate}&endDate=${obj.endDate}&mustHave=${obj.mustHave}&channelId=${obj.channelId}`;
+      // encodeURL      //
+
+      this.httpService.getKeyForProductivityReport(body, url).subscribe(
+        (data) => {
+          console.log("hhhh");
+          const res: any = data;
+          if (res) {
+            const obj2 = {
+              key: res.key,
+              fileType: "json.fileType",
+            };
+            const url = "downloadReport";
+            this.getproductivityDownload(obj2, url);
+          } else {
+            this.clearLoading();
+
+            this.toastr.info(
+              "Something went wrong,Please retry",
+              "Connectivity Message"
+            );
+          }
+          // let obj2 = {
+          //   key: res.key,
+          //   fileType: 'json.fileType'
+          // }
+          // let url = 'downloadReport'
+          // this.getproductivityDownload(obj2, url)
+        },
+        (error) => {
+          this.clearLoading();
+
+          console.log(error, "summary report");
+        }
+      );
+    } else {
+      this.clearLoading();
+      this.toastr.info(
+        "End date must be greater than start date",
+        "Date Selection"
+      );
+    }
   }
   getMSLReport() {
     if (this.endDate >= this.startDate) {

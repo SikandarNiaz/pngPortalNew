@@ -545,6 +545,80 @@ export class DashboardService {
     const url = this.ip + 'loadFilters';
     return this.http.post(url, filter);
   }
+
+  updateUserData(
+    id,
+    name,
+    password,
+    active,
+    roleId,
+    clusterIds,
+    zoneIds,
+    regionIds
+  ) {
+    const filter = JSON.stringify({
+      // act: 1,
+      id: id,
+      name: name,
+      password: password,
+      active: active,
+      roleId: roleId,
+      clusterIds: clusterIds,
+      zoneIds: zoneIds,
+      regionIds: regionIds,
+    });
+    const url = this.ip + "updateUserController";
+    return this.http.post(url, filter);
+  }
+
+  getRoles() {
+    const url = this.ip + "loadFilters";
+    const filter = JSON.stringify({ act: 28 });
+    return this.http.post(url, filter);
+  }
+
+  displayMenus(roleId) {
+    //type_description
+    const filter = JSON.stringify({ roleId: roleId });
+    const url = this.ip + "menusListController";
+    return this.http.post(url, filter);
+  }
+
+  displayUsers(roleId) {
+    const filter = JSON.stringify({ roleId: roleId });
+    const url = this.ip + "usersListController";
+    return this.http.post(url, filter);
+  }
+
+  updateMenus(roleId, menus) {
+    //const filter = JSON.stringify({ act: 30, obj: obj });
+    const obj = JSON.stringify({
+      // act: 2,
+      roleId: roleId,
+      menus: menus,
+    });
+    const url = this.ip + "updateMenu";
+    return this.http.post(url, obj);
+  }
+
+  insertRole(type_description, active) {
+    const filter = JSON.stringify({
+      // act: 1,
+      type_description: type_description,
+      active: active,
+    });
+    const url = this.ip + "createRoleController";
+    return this.http.post(url, filter);
+  }
+
+  insertUser(data) {
+    const filter = JSON.stringify({
+      // act: 1,
+      obj: data,
+    });
+    const url = this.ip + "createUserController";
+    return this.http.post(url, filter);
+  }
   
 
 }

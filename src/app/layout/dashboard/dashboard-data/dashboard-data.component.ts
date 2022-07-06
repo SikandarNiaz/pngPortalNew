@@ -223,7 +223,8 @@ export class DashboardDataComponent implements OnInit {
     this.zones = this.reportData.zoneList;
     this.regions = this.reportData.regionList;
     this.areas = this.reportData.areaList;
-    this.channels = this.reportData.channelList.length>0? this.reportData.channelList: [];
+    // this.channels = this.reportData.channelList.length>0? this.reportData.channelList: [];
+    this.channels = this.reportData.channelList;
     this.setparamsVisibility(-1);
   }
 

@@ -104,6 +104,7 @@ import { ManageSuperviserComponent } from "./innerComponents/manage-surveyors/ma
 import { ManageManagerComponent } from "./innerComponents/manage-surveyors/manage-manager/manage-manager.component";
 import { ManageMerchandiserComponent } from "./innerComponents/manage-surveyors/manage-merchandiser/manage-merchandiser.component";
 import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/upload-routes-new.component";
+import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor-change-log-report/supervisor-change-log-report.component";
 
 @NgModule({
   imports: [
@@ -148,6 +149,7 @@ import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/up
     ManageManagerComponent,
     ManageMerchandiserComponent,
     UploadRoutesNewComponent,
+    SupervisorChangeLogReportComponent,
     SOSandSODComponent,
     CurrentRoutesReportComponent,
     DashboardComponent,
