@@ -105,6 +105,8 @@ import { ManageManagerComponent } from "./innerComponents/manage-surveyors/manag
 import { ManageMerchandiserComponent } from "./innerComponents/manage-surveyors/manage-merchandiser/manage-merchandiser.component";
 import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/upload-routes-new.component";
 import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor-change-log-report/supervisor-change-log-report.component";
+import { RoleManagementComponent } from "./innerComponents/change_menu/role_management.component";
+import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop-list-report/abnormal-shop-list-report.component";
 
 @NgModule({
   imports: [
@@ -149,7 +151,9 @@ import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor
     ManageManagerComponent,
     ManageMerchandiserComponent,
     UploadRoutesNewComponent,
+    RoleManagementComponent,
     SupervisorChangeLogReportComponent,
+    AbnormalShopListReportComponent,
     SOSandSODComponent,
     CurrentRoutesReportComponent,
     DashboardComponent,

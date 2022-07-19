@@ -53,6 +53,20 @@ export class FilterBarComponent implements OnInit {
     { id: 1, name: "Zonal" },
     { id: 2, name: "Regional" },
   ];
+  visits=[
+    { id: -1, name: "All" },
+    { id: 1, name: "1" },
+    { id: 2, name: "2" },
+    { id: 3, name: "3" },
+    { id: 4, name: "4" },
+    { id: 5, name: "5" },
+    { id: 6, name: "6" },
+    { id: 7, name: "7" },
+    { id: 8, name: "8" },
+    { id: 9, name: "9" },
+    { id: 10, name: "10" },
+  ];
+  selectedVisit: any={};
   route: any;
   route_Id: any;
   // ip = environment.ip;
@@ -1166,6 +1180,83 @@ export class FilterBarComponent implements OnInit {
       );
     }
   }
+
+  getAbnormalShopListReport(){
+    console.log("getAbnormalShopListReport");
+    if (this.endDate >= this.startDate) {
+      this.loadingData = true;
+      this.loadingReportMessage = true;
+      const obj = {
+        // zoneId: this.selectedZone.id || "",
+        // regionId: this.selectedRegion.id || "",
+        // cityId: this.selectedCity.id || "",
+        // areaId: this.selectedArea.id || "",
+        zoneId: this.selectedZone.id
+        ? this.selectedZone.id == -1
+          ? localStorage.getItem("zoneId")
+          : this.selectedZone.id
+        : localStorage.getItem("zoneId"),
+      regionId: this.selectedRegion.id
+        ? this.selectedRegion.id == -1
+          ? localStorage.getItem("regionId")
+          : this.selectedRegion.id
+        : localStorage.getItem("regionId"),
+        startDate: moment(this.startDate).format("YYYY-MM-DD"),
+        endDate: moment(this.endDate).format("YYYY-MM-DD"),
+        actionType:this.selectedActionsType.id,
+        mailData: 'Y',
+        excelDump: 'Y',
+        rCount:this.selectedVisit.id,
+      };
+
+      const encodeURL: any = this.httpService.UrlEncodeMaker(obj);
+
+      const url = "/uniqueShops";
+      const body = encodeURL;
+      // `chillerAllocated=${obj.chillerAllocated}&type=2&pageType=1&zoneId=${obj.zoneId}&regionId=${obj.regionId}&startDate=${obj.startDate}&endDate=${obj.endDate}&mustHave=${obj.mustHave}&channelId=${obj.channelId}`;
+      // encodeURL      //
+
+      this.httpService.getKeyForProductivityReport(body, url).subscribe(
+        (data) => {
+          console.log("abnormal shop list Report");
+          const res: any = data;
+          if (res) {
+            const obj2 = {
+              key: res.key,
+              fileType: "json.fileType",
+            };
+            const url = "downloadReport";
+            this.getproductivityDownload(obj2, url);
+          } else {
+            this.clearLoading();
+
+            this.toastr.info(
+              "Something went wrong,Please retry",
+              "Connectivity Message"
+            );
+          }
+          // let obj2 = {
+          //   key: res.key,
+          //   fileType: 'json.fileType'
+          // }
+          // let url = 'downloadReport'
+          // this.getproductivityDownload(obj2, url)
+        },
+        (error) => {
+          this.clearLoading();
+
+          console.log(error, "abnormal shop list Report");
+        }
+      );
+    } else {
+      this.clearLoading();
+      this.toastr.info(
+        "End date must be greater than start date",
+        "Date Selection"
+      );
+    }
+  }
+
   getMSLReport() {
     if (this.endDate >= this.startDate) {
       this.loadingData = true;

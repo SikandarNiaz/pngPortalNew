@@ -57,6 +57,8 @@ import { MerchandiserAttendanceMapViewComponent } from "./innerComponents/mercha
 import { ManageSurveyorsComponent } from "./innerComponents/manage-surveyors/manage-surveyors.component";
 import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/upload-routes-new.component";
 import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor-change-log-report/supervisor-change-log-report.component";
+import { RoleManagementComponent } from "./innerComponents/change_menu/role_management.component";
+import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop-list-report/abnormal-shop-list-report.component";
 
 const routes: Routes = [
   {
@@ -76,6 +78,7 @@ const routes: Routes = [
       { path: "current-routes", component: CurrentRoutesReportComponent },
       { path: "manage_surveyors", component: ManageSurveyorsComponent },
       { path: "upload_routes_new", component: UploadRoutesNewComponent },
+      { path: "role_management", component: RoleManagementComponent },
      
       
       {
@@ -123,6 +126,7 @@ const routes: Routes = [
       { path: "data_abnormality_report", component: AbnormalityComponent },
       { path: "time-analysis-report", component: TimeAnalysisReportComponent },
       { path: "supervisor-change-log-report", component: SupervisorChangeLogReportComponent },
+      { path: "abnormal_shop_list_report", component: AbnormalShopListReportComponent },
       { path: "shop-list-report", component: ShopListReportComponent },
       { path: "merchandiser_List", component: MerchandiserListComponent },
       {
