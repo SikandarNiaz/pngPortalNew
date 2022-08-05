@@ -92,11 +92,15 @@ export class RoleManagementComponent implements OnInit {
       active: new FormControl("", [Validators.required]),
       type: new FormControl("", [Validators.required]),
       cluster:
-        this.clusterList.length > 0
-          ? new FormControl("", [Validators.required])
-          : new FormControl(""),
-      zone: new FormControl("", [Validators.required]),
-      region: new FormControl("", [Validators.required]),
+      this.clusterList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
+        zone:  this.zoneList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
+        region:  this.regionList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
     });
 
     this.labels = JSON.parse(localStorage.getItem("labelProperties"));
@@ -107,11 +111,15 @@ export class RoleManagementComponent implements OnInit {
       roleId: new FormControl(""),
       active: new FormControl("", [Validators.required]),
       cluster:
-        this.clusterList.length > 0
-          ? new FormControl("", [Validators.required])
-          : new FormControl(""),
-      zone: new FormControl("", [Validators.required]),
-      region: new FormControl("", [Validators.required]),
+      this.clusterList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
+        zone:  this.zoneList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
+        region:  this.regionList.length > 0
+        ? new FormControl("", [Validators.required])
+        : new FormControl(""),
     });
   }
 
@@ -384,8 +392,8 @@ export class RoleManagementComponent implements OnInit {
       active: data.active,
       type: data.type,
       cluster: this.clusterList.length > 0 ? data.cluster : -1,
-      zone: data.zone,
-      region: data.region,
+      zone: data.zone? data.zone: -1 ,
+      region: data.region? data.region: -1,
     };
     this.httpService.insertUser(obj).subscribe((data: any) => {
       if (data.id == 1) {

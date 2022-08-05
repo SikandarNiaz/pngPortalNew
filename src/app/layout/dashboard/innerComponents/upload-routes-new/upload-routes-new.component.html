@@ -39,7 +39,7 @@
           type="file"
         />
         <section class="example-section">
-          <button type="submit" mat-raised-button color="warn">Upload</button>
+          <button type="submit" mat-raised-button color="warn" [disabled]="loadingData">Upload</button>
         </section>
       </form>
     </section>
