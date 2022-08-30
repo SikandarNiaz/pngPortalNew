@@ -8,6 +8,7 @@ import { ToastrService } from "ngx-toastr";
 import { ResizeEvent } from "angular-resizable-element";
 import { Config } from "src/assets/config";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import * as moment from "moment";
 
 @Component({
   selector: "app-home",
@@ -81,6 +82,9 @@ export class HomeComponent implements OnInit {
   viewType = 1;
   showCriteria = false;
   selectedProduct: any = {};
+
+  evaluationStartDateTime: String;
+  @ViewChild("startEvaluationModal") startEvaluationModal: ModalDirective;
 
   constructor(
     private router: Router,
@@ -179,6 +183,7 @@ export class HomeComponent implements OnInit {
           this.remarksList = this.data.remarks;
           this.productList = this.data.productList;
           this.sectionList = this.data.section;
+          console.log("this.userType", this.userType, "this.evaluatorRole ", this.evaluatorRole);
           if (this.userType) {
             if (this.userType == this.evaluatorRole) {
               this.setViewForEvaluation();
@@ -201,11 +206,15 @@ export class HomeComponent implements OnInit {
   }
 
   setViewForEvaluation() {
+
     if (this.surveyDetails.evaluationStatus == -1) {
+
       this.setPSKUCriteria();
       this.isEditable = true;
       this.showCriteria = true;
+      this.startEvaluationModal.show();
     }
+    
   }
 
   setViewForReeevaluation() {
@@ -704,6 +713,9 @@ export class HomeComponent implements OnInit {
           visitDate: this.visitDay,
           evaluationRemark: this.selectedEvaluationRemark,
           status: this.checkForSlectedRemarks(this.cloneArray),
+
+          evaluationStartDateTime: this.evaluationStartDateTime,
+          evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -740,6 +752,9 @@ export class HomeComponent implements OnInit {
           visitDate: this.visitDay,
           surveyorId: this.surveyorId,
           status: this.checkForSlectedRemarks(this.cloneArray),
+
+          // evaluationStartDateTime: this.evaluationStartDateTime,
+          // evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -953,4 +968,12 @@ export class HomeComponent implements OnInit {
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
+  getEvaluationStartTime() {
+    this.evaluationStartDateTime = moment(new Date()).format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    this.startEvaluationModal.hide();
+  }
+  
 }

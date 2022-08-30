@@ -716,3 +716,36 @@
     </div>
   </div>
 </div>
+
+
+
+
+<div
+  bsModal
+  #startEvaluationModal="bs-modal"
+  [config]="{ backdrop: 'static', keyboard: false }"
+  class="modal fade"
+  id="exampleModalCenter"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Start Evaluation</h5>
+      </div>
+      <label style="padding-left: 20px;"> Do You want to start Evaluation Timer?</label> 
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="getEvaluationStartTime()"
+        >
+          Yes. Start the timer!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
