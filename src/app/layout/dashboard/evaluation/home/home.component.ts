@@ -753,8 +753,8 @@ export class HomeComponent implements OnInit {
           surveyorId: this.surveyorId,
           status: this.checkForSlectedRemarks(this.cloneArray),
 
-          // evaluationStartDateTime: this.evaluationStartDateTime,
-          // evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+          evaluationStartDateTime: this.evaluationStartDateTime,
+          evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -975,5 +975,5 @@ export class HomeComponent implements OnInit {
     );
     this.startEvaluationModal.hide();
   }
-  
+
 }
