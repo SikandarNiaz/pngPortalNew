@@ -129,9 +129,32 @@
               </mat-select>
             </mat-form-field>
 
+            <!-- // Criteria filter -->
             <mat-form-field
               *ngIf="
-                parameter.populatedFrom == 'Channel' && parameter.type == 'Single_Select' &&
+                parameter.populatedFrom == 'Criteria' &&
+                reportData.criteriaList?.length > 0
+              "
+              class="example-margin mr-10-IMP"
+            >
+              <mat-select
+                placeholder="{{ parameter.title }}"
+                name="criteria"
+                [(ngModel)]="selectedCriteria"
+                (ngModelChange)="setparamsVisibility(parameter.id)"
+              >
+                <mat-option
+                  [value]="criteria"
+                  *ngFor="let criteria of reportData.criteriaList"
+                  >{{ criteria.title }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field
+              *ngIf="
+                parameter.populatedFrom == 'Channel' &&
+                parameter.type == 'Single_Select' &&
                 reportData.channelList?.length > 0
               "
               class="example-margin mr-10-IMP"
@@ -151,45 +174,46 @@
             </mat-form-field>
 
             <mat-form-field
-     *ngIf="
-                parameter.populatedFrom == 'Channel' && parameter.type == 'Multi_Select' &&
+              *ngIf="
+                parameter.populatedFrom == 'Channel' &&
+                parameter.type == 'Multi_Select' &&
                 reportData.channelList?.length > 0
               "
               class="example-margin mr-10-IMP"
-  >
-    <mat-select
-      placeholder="Channel"
-      name="channel"
-      [(ngModel)]="selectedChannelMulti"
-      multiple
-      #channelSelect="ngModel"
-      [compareWith]="equals"
-    >
-      <mat-option disabled="disabled" class="filter-option">
-        <button
-          mat-raised-button
-          class="mat-primary fill text-sm"
-          (click)="selectAll(channelSelect, reportData.channelList)"
-        >
-          Select All
-        </button>
-        <button
-          mat-raised-button
-          color="warn"
-          class="ml-1 mat-accent fill text-sm"
-          (click)="deselectAll(channelSelect)"
-        >
-          Deselect All
-        </button>
-      </mat-option>
+            >
+              <mat-select
+                placeholder="Channel"
+                name="channel"
+                [(ngModel)]="selectedChannelMulti"
+                multiple
+                #channelSelect="ngModel"
+                [compareWith]="equals"
+              >
+                <mat-option disabled="disabled" class="filter-option">
+                  <button
+                    mat-raised-button
+                    class="mat-primary fill text-sm"
+                    (click)="selectAll(channelSelect, reportData.channelList)"
+                  >
+                    Select All
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    class="ml-1 mat-accent fill text-sm"
+                    (click)="deselectAll(channelSelect)"
+                  >
+                    Deselect All
+                  </button>
+                </mat-option>
 
-           <mat-option
+                <mat-option
                   [value]="channel"
                   *ngFor="let channel of reportData.channelList"
                   >{{ channel.title }}</mat-option
                 >
-    </mat-select>
-  </mat-form-field>
+              </mat-select>
+            </mat-form-field>
 
             <mat-form-field
               class="example-full-width mr-10-IMP"

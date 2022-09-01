@@ -39,6 +39,7 @@ export class DashboardDataComponent implements OnInit {
   channels: any=[];
   selectedFold: any = {};
   selectedChannel: any = {};
+  selectedCriteria: any={};
   selectedChannelMulti: any = [];
   reportData: any = {};
 
@@ -184,6 +185,11 @@ export class DashboardDataComponent implements OnInit {
       }
       else if (param.populatedFrom == 'Channel' && param.type == 'Multi_Select') {
         obj.Channel = this.arrayAndStringMaker(this.selectedChannelMulti) || -1;
+      }
+
+      // Criteria filter
+      else if (param.populatedFrom == "Criteria") {
+        obj.Criteria = this.selectedCriteria.title;
       }
     }
     return obj;
