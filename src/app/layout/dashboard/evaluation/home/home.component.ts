@@ -786,6 +786,18 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  // setImageUrl(data, imageView) {
+  //   for (const image of data.imageList) {
+  //     if (image.url != null) {
+  //       if (image.url.indexOf("http") >= 0) {
+  //         const i = data.imageList.findIndex((e) => e.url == image.url);
+  //         data.imageList[i].isExternalUrl = true;
+  //       }
+  //     }
+  //   }
+  
+  // }
+
   checkForSlectedRemarks(list) {
     let result = 1;
     list.forEach((element) => {
@@ -903,7 +915,7 @@ export class HomeComponent implements OnInit {
     for (const data of this.data.section) {
       for (const image of data.imageList) {
         if (image.url != null) {
-          if (image.url.indexOf("amazonaws.com") >= 0) {
+          if (image.url.indexOf("amazonaws.com") >= 0 || image.url.indexOf("http") >= 0) {
             const i = data.imageList.findIndex((e) => e.url == image.url);
             data.imageList[i].isExternalUrl = true;
           }

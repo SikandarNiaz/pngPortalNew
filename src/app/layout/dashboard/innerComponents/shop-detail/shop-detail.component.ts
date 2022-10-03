@@ -121,7 +121,7 @@ export class ShopDetailComponent implements OnInit {
   setImageUrl() {
     for (const element of this.tableData) {
       if (element.shopFullImg != null) {
-        if (element.shopFullImg.indexOf("amazonaws.com") >= 0) {
+        if (element.shopFullImg.indexOf("amazonaws.com") >= 0 || element.shopFullImg.indexOf("http") >= 0) {
           this.isExternalUrl = true;
         }
       }

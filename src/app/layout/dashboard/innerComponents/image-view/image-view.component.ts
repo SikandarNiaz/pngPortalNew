@@ -37,7 +37,7 @@ export class ImageViewComponent implements OnInit {
     this.selectedItem = item;
   }
   setImageUrl(url) {
-    if (url.indexOf("amazonaws.com") >= 0) {
+    if (url.indexOf("amazonaws.com") >= 0 || url.indexOf("http") >= 0) {
       this.isExternalUrl = true;
     }
   }

@@ -138,7 +138,7 @@ export class DetailsPageComponent implements OnInit {
   setImageUrl() {
     for (const element of this.tableData) {
       if (element.shop_image_url != null) {
-        if (element.shop_image_url.indexOf("amazonaws.com") >= 0) {
+        if (element.shop_image_url.indexOf("amazonaws.com") >= 0 || element.shop_image_url.indexOf("http") >= 0) {
           this.isExternalUrl = true;
         }
       }

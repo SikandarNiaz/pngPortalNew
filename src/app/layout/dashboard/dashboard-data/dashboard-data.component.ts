@@ -187,6 +187,12 @@ export class DashboardDataComponent implements OnInit {
         obj.Channel = this.arrayAndStringMaker(this.selectedChannelMulti) || -1;
       }
 
+      
+      // // brand filter
+      // else if (param.populatedFrom == "Brand") {
+      //   obj.Brand = this.selectedBrand.id || -1;
+      // }
+
       // Criteria filter
       else if (param.populatedFrom == "Criteria") {
         obj.Criteria = this.selectedCriteria.title;
