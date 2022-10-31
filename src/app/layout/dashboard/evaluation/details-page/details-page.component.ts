@@ -96,6 +96,7 @@ export class DetailsPageComponent implements OnInit {
       userType: this.userType || -1,
       evaluatorId: this.userId ? (this.isQCRequest ? this.userId : -1) : -1,
       areaId: obj.areaId || -1,
+      cityId: obj.cityId || -1
     };
     this.httpService.getData(obj1).subscribe(
       (data) => {
