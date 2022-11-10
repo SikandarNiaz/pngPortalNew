@@ -33,7 +33,7 @@
         (click)="showChildModal(img)"
         class="img-thumbnail img-item"
       />
-      <div class="imageDetails" ngIf="img?.visitDateTime">
+      <div class="imageDetails" *ngIf="img?.visitDateTime">
         <p>Time Stamp: {{ img?.visitDateTime }}</p>
       </div>
     </div>

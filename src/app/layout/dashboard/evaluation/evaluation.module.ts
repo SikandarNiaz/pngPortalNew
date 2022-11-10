@@ -43,6 +43,7 @@ import { SectionNineViewComponent } from "./section-nine-view/section-nine-view.
 import { SectionOneDetailComponent } from "./section-one-detail/section-one-detail.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { CommentboxComponent } from "./commentbox/commentbox.component";
+import { SectionTenComponent } from "./section-ten/section-ten.component";
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { CommentboxComponent } from "./commentbox/commentbox.component";
     SectionOneDetailComponent,
     CommentsComponent,
     CommentboxComponent,
+    SectionTenComponent
   ],
   imports: [
     CommonModule,

@@ -146,6 +146,17 @@
               >
               </section-eight-view>
             </ng-container>
+
+            <ng-container *ngIf="sec?.imageViewType === 10">
+              <app-section-ten
+                class="width-100"
+                [data]="sec"
+                (showModal)="showChildModal($event)"
+                [isEditable]="isEditable"
+              >
+              </app-section-ten>
+            </ng-container>
+            
           </ng-container>
         </div>
       </div>

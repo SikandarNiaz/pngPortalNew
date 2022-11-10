@@ -24,6 +24,7 @@ export class ShopDetailComponent implements OnInit {
   tableTitle = "";
   isExternalUrl: boolean;
   viewType: any;
+  shopObject: any;
 
   constructor(
     private router: Router,
@@ -35,7 +36,7 @@ export class ShopDetailComponent implements OnInit {
   }
   goToEvaluation(id) {
     window.open(
-      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}`,
+      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}&surveyorType=${this.shopObject.type}`,
       "_blank"
     );
   }
@@ -50,6 +51,7 @@ export class ShopDetailComponent implements OnInit {
     let id = 0;
     let obj;
     const o: any = JSON.parse(localStorage.getItem("obj"));
+    this.shopObject= o;
     console.log("obj",o);
     this.activatedRoute.queryParams.subscribe((p) => {
       id = p.id;

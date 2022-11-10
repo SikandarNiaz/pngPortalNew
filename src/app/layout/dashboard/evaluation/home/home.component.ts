@@ -85,6 +85,7 @@ export class HomeComponent implements OnInit {
 
   evaluationStartDateTime: String;
   @ViewChild("startEvaluationModal") startEvaluationModal: ModalDirective;
+  surveyorType: any;
 
   constructor(
     private router: Router,
@@ -100,6 +101,7 @@ export class HomeComponent implements OnInit {
     this.activatedRoutes.queryParams.subscribe((q) => {
       if (q.viewType) {
         this.viewType = q.viewType;
+        this.surveyorType=q.surveyorType || 1;
       }
     });
     this.activatedRoutes.params.subscribe((params) => {
@@ -110,6 +112,7 @@ export class HomeComponent implements OnInit {
         surveyId: this.surveyId,
         userTypeId: localStorage.getItem("user_type"),
         viewType: this.viewType,
+        surveyorType: this.surveyorType
       };
 
       this.getData(obj);
