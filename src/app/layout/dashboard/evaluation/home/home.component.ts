@@ -916,15 +916,20 @@ export class HomeComponent implements OnInit {
 
   setImageUrl() {
     for (const data of this.data.section) {
+      
       for (const image of data.imageList) {
         if (image.url != null) {
+          debugger;
           if (image.url.indexOf("amazonaws.com") >= 0 || image.url.indexOf("http") >= 0) {
-            const i = data.imageList.findIndex((e) => e.url == image.url);
+            debugger;
+            const i = data.imageList.findIndex((e) => e.url == image.url && e.title==image.title);
             data.imageList[i].isExternalUrl = true;
           }
         }
       }
+      console.log("data.imageList", data.imageList);
     }
+    
   }
   showCommentModal(product) {
     this.selectedProduct = product;
