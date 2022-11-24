@@ -919,7 +919,7 @@ export class HomeComponent implements OnInit {
       for (const image of data.imageList) {
         if (image.url != null) {
           if (image.url.indexOf("amazonaws.com") >= 0 || image.url.indexOf("http") >= 0) {
-            const i = data.imageList.findIndex((e) => e.url == image.url);
+            const i = data.imageList.findIndex((e) => e.url == image.url && e.title == image.title);
             data.imageList[i].isExternalUrl = true;
           }
         }
