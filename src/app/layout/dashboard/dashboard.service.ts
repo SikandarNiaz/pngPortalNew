@@ -450,7 +450,7 @@ export class DashboardService {
   }
 
   displayRouteStatus(obj) {
-    const url = this.ip + "shopWiseRouteCount";
+    const url = this.ip + "shopWiseRouteCount";      //SurveyorRouteListController
     return this.http.post(url, obj);
   }
 

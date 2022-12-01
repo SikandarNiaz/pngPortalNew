@@ -49,6 +49,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("Evaluator", res.Evaluator);
         localStorage.setItem("projectType", res.projectType);
 
+        localStorage.setItem("RolesIdsList", res.RolesIdsList);
+
         this.router.navigate(["/dashboard"]);
 
         setTimeout(() => {

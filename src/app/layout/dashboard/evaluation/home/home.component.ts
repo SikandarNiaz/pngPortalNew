@@ -86,6 +86,7 @@ export class HomeComponent implements OnInit {
   evaluationStartDateTime: String;
   @ViewChild("startEvaluationModal") startEvaluationModal: ModalDirective;
   surveyorType: any;
+  rolesIdsList: string;
 
   constructor(
     private router: Router,
@@ -97,11 +98,12 @@ export class HomeComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.surveyId;
+    this.rolesIdsList = localStorage.getItem("RolesIdsList");
 
     this.activatedRoutes.queryParams.subscribe((q) => {
       if (q.viewType) {
         this.viewType = q.viewType;
-        this.surveyorType=q.surveyorType || 1;
+        this.surveyorType = q.surveyorType || 1;
       }
     });
     this.activatedRoutes.params.subscribe((params) => {
@@ -112,7 +114,7 @@ export class HomeComponent implements OnInit {
         surveyId: this.surveyId,
         userTypeId: localStorage.getItem("user_type"),
         viewType: this.viewType,
-        surveyorType: this.surveyorType
+        surveyorType: this.surveyorType,
       };
 
       this.getData(obj);
@@ -186,21 +188,24 @@ export class HomeComponent implements OnInit {
           this.remarksList = this.data.remarks;
           this.productList = this.data.productList;
           this.sectionList = this.data.section;
-          console.log("this.userType", this.userType, "this.evaluatorRole ", this.evaluatorRole);
+          console.log(
+            "this.userType",
+            this.userType,
+            "this.evaluatorRole ",
+            this.evaluatorRole
+          );
           if (this.userType) {
             if (this.userType == this.evaluatorRole) {
               this.setViewForEvaluation();
             } else if (this.userType == this.reevaluatorRole) {
               this.setViewForReeevaluation();
+            } else {
+              this.setDefaultView();
             }
-            // else {
-            //   this.setDefaultView();
-            // }
+          } else {
+            this.setDefaultView();
           }
           this.oosComments = this.data.comments || [];
-          // else {
-          //   this.setDefaultView();
-          // }
           this.totalAchieveScore = this.getTotalAchieveScore();
         }
       },
@@ -209,15 +214,12 @@ export class HomeComponent implements OnInit {
   }
 
   setViewForEvaluation() {
-
     if (this.surveyDetails.evaluationStatus == -1) {
-
       this.setPSKUCriteria();
       this.isEditable = true;
       this.showCriteria = true;
       this.startEvaluationModal.show();
     }
-    
   }
 
   setViewForReeevaluation() {
@@ -229,13 +231,23 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // setDefaultView() {
-  //   if (this.surveyDetails.evaluationStatus != -1) {
-  //     this.checkEvaluatedRemarks();
-  //     this.setRemarksForReEvaluation();
-  //     this.showCriteria = true;
-  //   }
-  // }
+  setDefaultView() {
+    if (this.surveyDetails.evaluationStatus != -1) {
+      if (this.rolesIdsList) {
+        let temp: any = this.rolesIdsList.split(",");
+       
+
+        for (let roleId of temp) {
+          if (roleId == this.userType) {
+            this.checkEvaluatedRemarks();
+            this.setRemarksForReEvaluation();
+            this.showCriteria = true;
+            break;
+          }
+        }
+      }
+    }
+  }
 
   checkEvaluatedRemarks() {
     if (this.existingRemarks.length > 0) {
@@ -757,7 +769,9 @@ export class HomeComponent implements OnInit {
           status: this.checkForSlectedRemarks(this.cloneArray),
 
           evaluationStartDateTime: this.evaluationStartDateTime,
-          evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+          evaluationEndDateTime: moment(new Date()).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
         };
 
         this.evaluationService.evaluateShop(obj).subscribe(
@@ -798,7 +812,7 @@ export class HomeComponent implements OnInit {
   //       }
   //     }
   //   }
-  
+
   // }
 
   checkForSlectedRemarks(list) {
@@ -918,8 +932,13 @@ export class HomeComponent implements OnInit {
     for (const data of this.data.section) {
       for (const image of data.imageList) {
         if (image.url != null) {
-          if (image.url.indexOf("amazonaws.com") >= 0 || image.url.indexOf("http") >= 0) {
-            const i = data.imageList.findIndex((e) => e.url == image.url && e.title == image.title);
+          if (
+            image.url.indexOf("amazonaws.com") >= 0 ||
+            image.url.indexOf("http") >= 0
+          ) {
+            const i = data.imageList.findIndex(
+              (e) => e.url == image.url && e.title == image.title
+            );
             data.imageList[i].isExternalUrl = true;
           }
         }
@@ -990,5 +1009,4 @@ export class HomeComponent implements OnInit {
     );
     this.startEvaluationModal.hide();
   }
-
 }
