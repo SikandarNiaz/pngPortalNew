@@ -234,8 +234,9 @@ export class HomeComponent implements OnInit {
   setDefaultView() {
     if (this.surveyDetails.evaluationStatus != -1) {
       if (this.rolesIdsList) {
-        let temp: any = this.rolesIdsList.split(",");
-       
+        //let temp: any = this.rolesIdsList.split(",");
+        let temp: any = this.rolesIdsList.split(/[ ,]+/); // spaces trimmed, empty values skipped
+       // String[] list=str.split("\\s*,\\s*");       // in JAVA spaces trimmed,
 
         for (let roleId of temp) {
           if (roleId == this.userType) {
