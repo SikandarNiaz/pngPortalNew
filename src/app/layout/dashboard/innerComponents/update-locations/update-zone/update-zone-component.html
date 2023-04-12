@@ -1,0 +1,401 @@
+<mat-card class="mb-20">
+  <mat-card-content>
+    <!-- <mat-card-title> Update Location </mat-card-title> -->
+    <section class="example-section">
+      <!-- <ng-container
+        *ngIf="routesList?.length > 0 && projectType == 'Coke_Audit'"
+      >
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="Fold"
+            [(ngModel)]="route"
+            (ngModelChange)="prepareObject()"
+          >
+            <mat-option *ngFor="let r of routesList" [value]="r">{{
+              r.route_title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container> -->
+
+      <ng-container *ngIf="clusterList?.length > 0">
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="{{ labels.clusterLabel }}"
+            name="cluster"
+            [(ngModel)]="selectedCluster"
+            (ngModelChange)="getZoneByCluster()"
+          >
+            <mat-option [value]="cluster" *ngFor="let cluster of clusterList"
+              >{{ cluster.title }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <!-- <ng-container *ngIf="zones?.length > 0">
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="{{ labels.zoneLabel }}"
+            name="zone"
+            [(ngModel)]="selectedZone"
+            (ngModelChange)="zoneChange()"
+          >
+            <mat-option [value]="zone" *ngFor="let zone of zones">{{
+              zone.title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <mat-form-field
+        *ngIf="regions.length > 0"
+        class="example-margin mr-10-IMP"
+      >
+        <mat-select
+          placeholder="{{ labels.regionLabel }}"
+          name="region"
+          [(ngModel)]="selectedRegion"
+          (ngModelChange)="regionChange()"
+        >
+          <mat-option [value]="region" *ngFor="let region of regions">{{
+            region.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      <!-- <mat-form-field *ngIf="areas.length > 0" class="example-margin mr-10-IMP">
+        <mat-select
+          placeholder="{{ labels.areasLabel }}"
+          name="areas"
+          [(ngModel)]="selectedArea"
+          (ngModelChange)="prepareObject()"
+        >
+          <mat-option [value]="area" *ngFor="let area of areas">{{
+            area.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+      <!-- <mat-form-field class="example-full-width mr-10-IMP">
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [matDatepicker]="picker0"
+          [(ngModel)]="startDate"
+          (ngModelChange)="prepareObject()"
+          placeholder="Choose a start date"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker0"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker0></mat-datepicker>
+      </mat-form-field> -->
+    </section>
+
+    <!-- <section class="example-section">
+      <button mat-raised-button color="warn" (click)="VisitBaseReport()">
+        Submit
+      </button>
+    </section> -->
+  </mat-card-content>
+</mat-card>
+
+<!-- yahn tk  -->
+
+<div class="card">
+  <h5>Row Editing</h5>
+  <p-table
+    [value]="zones"
+    dataKey="id"
+    editMode="row"
+    #dt
+    [(selection)]="selectedZone"
+    dataKey="id"
+    [rowHover]="true"
+    [responsive]="true"
+    [resizableColumns]="false"
+    [autoLayout]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [filterDelay]="0"
+    [globalFilterFields]="[
+        'title',
+        'zoneManager',
+        'zoneEmail',
+        'active',
+        'cluster.title'
+      ]"
+  >
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        List of Customers
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Global Search"
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="title">
+          Title <p-sortIcon field="title"></p-sortIcon>
+        </th>
+        <th pSortableColumn="zoneManager">
+          Manager <p-sortIcon field="zoneManager"></p-sortIcon>
+        </th>
+        <th pSortableColumn="zoneEmail">
+          Manager Emails <p-sortIcon field="zoneEmail"></p-sortIcon>
+        </th>
+        <!-- <th >
+        </th> -->
+        <th pSortableColumn="active">
+          Active <p-sortIcon field="active"></p-sortIcon>
+        </th>
+        <th pSortableColumn="cluster">
+          Cluster <p-sortIcon field="cluster"></p-sortIcon>
+        </th>
+        <th style="width: 8rem"></th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-zone
+      let-editing="editing"
+      let-ri="rowIndex"
+    >
+      <tr [pEditableRow]="zone">
+        <!-- <td pEditableColumn> -->
+          <td>
+          <!-- <span class="p-column-title">Name</span> -->
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="zone.title" />
+            </ng-template>
+            <ng-template pTemplate="output"> {{zone.title}} </ng-template>
+          </p-cellEditor>
+        </td>
+        <!-- <td pEditableColumn> -->
+          <td >
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="zone.zoneManager"
+                required
+              />
+            </ng-template>
+            <ng-template pTemplate="output"> {{zone.zoneManager}} </ng-template>
+          </p-cellEditor>
+        </td>
+        <!-- <td pEditableColumn> -->
+          <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input" (keydown)="showInsertModal(zone)"
+            (keypress)="showInsertModal(zone)"
+            (keyup)="showInsertModal(zone)">
+              <!-- <input
+              pInputText
+              type="text"
+              [(ngModel)]="zone.zoneEmail"
+              required
+              (keydown)="showInsertModal(zone)"
+              (keypress)="showInsertModal(zone)"
+              (keyup)="showInsertModal(zone)"
+              (click)="showInsertModal(zone)"
+            /> -->
+            <textarea  [(ngModel)]="zone.zoneEmail" rows="4" cols="50">                             
+            </textarea>
+            </ng-template>
+            <ng-template pTemplate="output"> {{zone.zoneEmail}} </ng-template>
+          </p-cellEditor>
+        </td>
+        <!-- <td style="text-align: center">
+          <button
+          *ngIf="editing"
+          pButton
+          pRipple
+          type="button"
+          
+          pInitEditableRow
+          icon="pi pi-plus"
+          (click)="onRowEditSave(zone)"
+          class="p-button-rounded p-button-text p-button-success"
+        ></button>
+        <button
+          *ngIf="editing"
+          pButton
+          pRipple
+          type="button"
+          pInitEditableRow
+          icon="pi pi-ban"
+          (click)="onRowEditCancel(zone)"
+          class="p-button-rounded p-button-text p-button-danger"
+        ></button>
+        </td> -->
+        <!-- <td pEditableColumn> -->
+          <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <p-dropdown
+              [options]="statusList"
+              [(ngModel)]="zone.active"
+              [style]="{'width':'100%'}"
+              optionLabel="title"
+            ></p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="output">
+              <!-- {{product.price | currency: 'USD'}} -->
+              {{zone.activeObj?.title}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <!-- <td pEditableColumn> -->
+          <td>
+          <p-cellEditor>
+          
+            <!-- <p-dropdown [options]="clusterList" [(ngModel)]="zone.parentId" [style]="{'width':'100%'}">
+                          <ng-template let-option pTemplate="output">
+                            <span class="customer-badgestatus">{{
+                              option.label
+                            }}</span>
+                          </ng-template>
+                        </p-dropdown> -->
+                      
+
+            <ng-template pTemplate="input">
+              <p-dropdown
+                [options]="clusterList"
+                [(ngModel)]="zone.cluster"
+                [style]="{'width':'100%'}"
+                optionLabel="id"
+                optionValue="id"
+                dataKey = "id"
+              ></p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{zone.cluster?.title}}
+            </ng-template>
+
+
+            <!-- <select
+                    [(ngModel)]="zone.parentId"
+                    placeholder="Change Status"
+                    name="active"
+                  >
+                    <ng-container *ngFor="let c of clusterList">
+                      <option [value]="c.value">{{ c.label }}</option>
+                    </ng-container>
+                  </select> -->
+
+
+          </p-cellEditor>
+        </td>
+        <td style="text-align: center">
+          <button
+            *ngIf="!editing"
+            pButton
+            pRipple
+            type="button"
+            pInitEditableRow
+            icon="pi pi-pencil"
+            (click)="onRowEditInit(zone)"
+            class="p-button-rounded p-button-text"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pSaveEditableRow
+            icon="pi pi-check"
+            (click)="onRowEditSave(zone)"
+            class="p-button-rounded p-button-text p-button-success p-mr-2"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pCancelEditableRow
+            icon="pi pi-times"
+            (click)="onRowEditCancel(zone, ri)"
+            class="p-button-rounded p-button-text p-button-danger"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+
+
+
+<div
+  bsModal
+  #insertModal="bs-modal"
+  class="modal fade"
+  [config]="{ backdrop: 'static', keyboard: false}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+  data-backdrop="false"
+  #hello
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          Edit zoneEmail
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideInsertModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form [formGroup]="insertForm" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="zoneEmail">zoneEmail</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="zoneEmail"
+            />
+          </div>
+       
+
+          <div class="modal-footer">
+            <button
+              (click)="saveZoneEmail(insertForm.value)"
+              class="mr-1"
+              mat-raised-button
+              color="primary"
+            >
+              <i
+                [ngClass]="{ 'fa fa-spinner fa-spin': loadingModalButton }"
+              ></i>
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DashboardService } from "../../dashboard.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "src/environments/environment";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Config } from "src/assets/config";
 
 @Component({

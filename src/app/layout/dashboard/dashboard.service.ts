@@ -619,6 +619,27 @@ export class DashboardService {
     const url = this.ip + "createUserController";
     return this.http.post(url, filter);
   }
+
+
+  updateChillerPlanograms(obj) {
+    const url = this.ip + "updateChillerPlanogram"; //----------> UpdateChillerPlanogramController
+    return this.http.post(url, obj);
+  }
+  getChillerPlanogramList(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj); // ---------> ChillerPlanogramListController
+    const url = this.ip + "chillerPlanogramList";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
+  insertChillerPlanogram(obj) {
+    const url = this.ip + "insert-chiller-planogram"; // -----------> InsertChillerPlanogramController
+    return this.http.post(url, obj);
+  }
+
+  getPlanogramTypeList() {
+    const filter = JSON.stringify({ act: 34});
+    const url = this.ip + '/loadFilters';
+    return this.http.post(url, filter);
+  }
   
 
 }

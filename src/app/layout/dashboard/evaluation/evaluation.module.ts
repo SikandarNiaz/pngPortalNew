@@ -5,16 +5,16 @@ import { EvaluationRoutingModule } from "./evaluation-routing.module";
 import { HomeComponent } from "./home/home.component";
 import { DetailsPageComponent } from "./details-page/details-page.component";
 import { MainPageComponent } from "./main-page/main-page.component";
-import { ModalModule } from "ngx-bootstrap";
+
 import { SectionOneViewComponent } from "./section-one-view/section-one-view.component";
 import { SectionTwoViewComponent } from "./section-two-view/section-two-view.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatRadioModule } from "@angular/material/radio";
 import { SectionThreeViewComponent } from "./section-three-view/section-three-view.component";
-import { AccordionModule } from "ngx-bootstrap";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { SectionFourViewComponent } from "./section-four-view/section-four-view.component";
-import { MatCardModule, MatFormFieldModule } from "@angular/material";
+import { MatCardModule } from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSliderModule } from "@angular/material/slider";
 import { NgxImageZoomModule } from "ngx-image-zoom";
@@ -30,20 +30,20 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle,
 } from "@angular/material/datepicker";
-import {
-  MatButtonModule,
-  MatIconModule,
-  MatTableModule,
-  MatSelectModule,
-  MatPaginatorModule,
-  MatNativeDateModule,
-  MatMenuModule,
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTableModule } from "@angular/material/table";
 import { SectionNineViewComponent } from "./section-nine-view/section-nine-view.component";
 import { SectionOneDetailComponent } from "./section-one-detail/section-one-detail.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { CommentboxComponent } from "./commentbox/commentbox.component";
 import { SectionTenComponent } from "./section-ten/section-ten.component";
+import { ModalModule } from "ngx-bootstrap/modal";
+import { AccordionModule } from "ngx-bootstrap/accordion";
 
 @NgModule({
   declarations: [
@@ -68,13 +68,14 @@ import { SectionTenComponent } from "./section-ten/section-ten.component";
     CommonModule,
     EvaluationRoutingModule,
     ModalModule.forRoot(),
+    // ModalModule,
     FormsModule,
     MatRadioModule,
     AccordionModule.forRoot(),
     MatCardModule,
     MatCheckboxModule,
     MatSliderModule,
-    NgxImageZoomModule.forRoot(),
+    NgxImageZoomModule,
     NgxPaginationModule,
     ResizableModule,
     Ng5SliderModule,

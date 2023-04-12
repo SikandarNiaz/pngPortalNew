@@ -5,8 +5,8 @@ import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from 'src/assets/config';
-import { ModalDirective } from 'ngx-bootstrap';
-import {MatPaginator} from '@angular/material';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-survey-shop-list',

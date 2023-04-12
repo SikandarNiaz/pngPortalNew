@@ -7,10 +7,10 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { environment } from "src/environments/environment";
 import { Config } from "src/assets/config";
-import { forEach } from "@angular/router/src/utils/collection";
+// import { forEach } from "@angular/router/src/utils/collection";
 
 @Component({
   selector: "section-two-view",

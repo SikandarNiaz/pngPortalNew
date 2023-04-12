@@ -8,7 +8,7 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
 import { EvaluationService } from "../evaluation.service";

@@ -12,7 +12,7 @@ import { Config } from "src/assets/config";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { EvaluationService } from "../evaluation.service";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { KeyValuePipe } from "@angular/common";
 
 @Component({

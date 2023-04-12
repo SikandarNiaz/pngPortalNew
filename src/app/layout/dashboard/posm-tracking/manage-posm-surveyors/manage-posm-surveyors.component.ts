@@ -8,7 +8,7 @@ import {
   FormBuilder,
 } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 
 @Component({
   selector: "app-manage-posm-surveyors",

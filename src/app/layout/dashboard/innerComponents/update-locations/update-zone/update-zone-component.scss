@@ -1,0 +1,30 @@
+:host ::ng-deep .p-cell-editing {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+// :host ::ng-deep .p-table{
+//     z-index: 20000 !important;
+// }
+
+td {
+    table-layout: fixed;
+    width: auto;
+    word-break: break-all !important;
+    white-space: nowrap;
+    white-space: pre-wrap;
+  }
+
+  :host ::ng-deep .modal-backdrop {
+    z-index: -5 !important;
+  }
+
+  :host ::ng-deep .modal {
+    background: rgba(0, 0, 0, 0.5); 
+    position: absolute;
+    z-index: 2000000 !important;
+  }
+//   .modal-backdrop {
+//     display: none !important;
+//     z-index: 0 !important;
+//   }

@@ -1,57 +1,50 @@
+
+
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatIconModule,
-  MatTableModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule,
-  MatNativeDateModule,
-  MatRadioModule,
-  MatCheckboxModule,
-  MatMenuModule,
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTableModule } from "@angular/material/table";
 import { MatGridListModule } from "@angular/material/grid-list";
 import {
   MatDatepickerModule,
   MatDatepickerToggle,
 } from "@angular/material/datepicker";
-
+// import { ChartsModule, ChartsModule as Ng2Charts } from "ng2-charts";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTabsModule } from "@angular/material/tabs";
 import { StatModule } from "../../shared/modules/stat/stat.module";
 import { DashboardRoutingModule } from "./dashboard-routing.module";
 import { DashboardComponent } from "./dashboard.component";
-import { HttpClientModule } from "@angular/common/http";
 import { HomeComponent } from "./innerComponents/home/home.component";
 import { ShopListComponent } from "./innerComponents/shop-list/shop-list.component";
 import { SummaryComponent } from "./innerComponents/summary/summary.component";
 import { ProductivityComponent } from "./innerComponents/productivity/productivity.component";
 import { FilterBarComponent } from "./innerComponents/filter-bar/filter-bar.component";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DetailsComponent } from "./innerComponents/details/details.component";
 import { DailyVisitReportComponent } from "./innerComponents/daily-visit-report/daily-visit-report.component";
 import { ShopDetailComponent } from "./innerComponents/shop-detail/shop-detail.component";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { MslDashboardComponent } from "./innerComponents/msl-dashboard/msl-dashboard.component";
 import { ProductivityDashboardComponent } from "./innerComponents/productivity-dashboard/productivity-dashboard.component";
-import { ChartsModule as Ng2Charts } from "ng2-charts";
 import { TposmDeploymentReportComponent } from "./innerComponents/tposm-deployment-report/tposm-deployment-report.component";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { LineChartComponent } from "./innerComponents/home/line-chart/line-chart.component";
 import { UpdatePasswordComponent } from "./user/update-password/update-password.component";
 import { RawDataComponent } from "./raw-data/raw-data.component";
 import { MatTableComponent } from "./innerComponents/mat-table/mat-table.component";
-import { Ng2OrderModule } from "ng2-order-pipe";
-import { ButtonsModule } from "ngx-bootstrap";
 import { MerchandiserListComponent } from "./innerComponents/merchandiser-list/merchandiser-list.component";
 import { AbnormalityComponent } from "./innerComponents/abnormality/abnormality.component";
 import { TimeAnalysisReportComponent } from "./innerComponents/time-analysis-report/time-analysis-report.component";
-import { NgxPaginationModule } from "ngx-pagination";
 import { MerchandiserAttendanceComponent } from "./innerComponents/merchandiser-attendance/merchandiser-attendance.component";
 import { DailyEvaluationReportComponent } from "./innerComponents/daily-evaluation-report/daily-evaluation-report.component";
-import { BsDropdownModule } from "ngx-bootstrap";
 import { EmailManagerComponent } from "./innerComponents/email-manager/email-manager.component";
 import { MessageStatusListComponent } from "./innerComponents/email-manager/childComponents/message-status-list/message-status-list.component";
 import { AddNewMessageComponent } from "./innerComponents/email-manager/childComponents/add-new-message/add-new-message.component";
@@ -63,7 +56,6 @@ import { AddDeviceComponent } from "./innerComponents/add-device/add-device.comp
 import { SupervisorWwwrSummaryComponent } from "./innerComponents/supervisor-wwwr-summary/supervisor-wwwr-summary.component";
 import { ShopListReportComponent } from "./innerComponents/shop-list-report/shop-list-report.component";
 import { MerchandiserRoasterComponent } from "./innerComponents/merchandiser-roaster/merchandiser-roaster.component";
-import { MatTabsModule } from "@angular/material/tabs";
 import { EvaluationModule } from "./evaluation/evaluation.module";
 import { MerchandiserScoreComponent } from "./innerComponents/merchandiser-score/merchandiser-score.component";
 import { TableauHelperComponent } from "./Tableau/tableau-helper/tableau-helper.component";
@@ -88,6 +80,7 @@ import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
+import { ButtonsModule } from "ngx-bootstrap/buttons";
 
 
 import { CurrentRoutesReportComponent } from "./innerComponents/operations/current-routes-report/current-routes-report.component";
@@ -107,6 +100,32 @@ import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/up
 import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor-change-log-report/supervisor-change-log-report.component";
 import { RoleManagementComponent } from "./innerComponents/change_menu/role_management.component";
 import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop-list-report/abnormal-shop-list-report.component";
+import { AttendanceReportComponent } from "./innerComponents/attendance-report/attendance-report.component";
+import { ManagePlanogramComponent } from "./innerComponents/manage-vd/manage-vd/manage-planogram.component";
+import { UpdatePlanogramsComponent } from "./innerComponents/manage-vd/update-vd-planograms/update-planograms.component";
+import { UpdateLocationComponent } from "./innerComponents/update-locations/update-location-component";
+import { UpdateClusterComponent } from "./innerComponents/update-locations/update-cluster/update-cluster-component";
+import { UpdateZoneComponent } from "./innerComponents/update-locations/update-zone/update-zone-component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { Ng2OrderModule } from "ng2-order-pipe";
+import { NgxPaginationModule } from "ngx-pagination";
+import { ModalModule } from "ngx-bootstrap/modal";
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { ChartsModule, ChartsModule as Ng2Charts } from "ng2-charts";
+import {TableModule} from 'primeng/table';
+import {ToastModule} from 'primeng/toast';
+import {CalendarModule as CModule} from 'primeng/calendar';
+import {SliderModule} from 'primeng/slider';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {ContextMenuModule} from 'primeng/contextmenu';
+import {DialogModule} from 'primeng/dialog';
+import {ButtonModule} from 'primeng/button';
+import {DropdownModule} from 'primeng/dropdown';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {InputTextModule} from 'primeng/inputtext';
+import { ProductService } from "./innerComponents/update-locations/update-zone/productservice";
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   imports: [
@@ -130,6 +149,7 @@ import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop
     MatIconModule,
     FlexLayoutModule.withConfig({ addFlexToParent: false }),
     ModalModule.forRoot(),
+    // ModalModule,
     Ng2Charts,
     Ng2OrderModule,
     ButtonsModule.forRoot(),
@@ -144,6 +164,18 @@ import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    TableModule,
+    CModule,
+    SliderModule,
+		DialogModule,
+		MultiSelectModule,
+		ContextMenuModule,
+		DropdownModule,
+		ButtonModule,
+		ToastModule,
+    InputTextModule,
+    ProgressBarModule,
+    TabViewModule
   ],
   declarations: [
     ManageSurveyorsComponent,
@@ -211,6 +243,13 @@ import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop
     SupervisorProductivityComponent,
     SearchBoxComponent,
     MerchandiserAttendanceMapViewComponent,
+    AttendanceReportComponent,
+    ManagePlanogramComponent,
+    UpdatePlanogramsComponent,
+    UpdateLocationComponent,
+    UpdateClusterComponent,
+    UpdateZoneComponent
   ],
+  providers: [ProductService]
 })
 export class DashboardModule {}

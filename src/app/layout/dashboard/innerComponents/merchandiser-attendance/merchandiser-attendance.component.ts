@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import * as moment from "moment";
 import { Router } from "@angular/router";
 import { DashboardService } from "../../dashboard.service";

@@ -50,6 +50,11 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("projectType", res.projectType);
 
         localStorage.setItem("RolesIdsList", res.RolesIdsList);
+        
+        localStorage.setItem(
+          "labelProperties",
+          JSON.stringify(res.labelProperties)
+        );
 
         this.router.navigate(["/dashboard"]);
 

@@ -3,7 +3,7 @@ import { Location } from "@angular/common";
 import { EvaluationService } from "../evaluation.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "src/environments/environment";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { ToastrService } from "ngx-toastr";
 import { ResizeEvent } from "angular-resizable-element";
 import { Config } from "src/assets/config";

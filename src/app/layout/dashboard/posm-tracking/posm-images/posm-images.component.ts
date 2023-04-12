@@ -4,7 +4,7 @@ import { PosmTrackingServiceService } from "../posm-tracking-service.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Config } from "src/assets/config";
 import { NgModel } from "@angular/forms";
 

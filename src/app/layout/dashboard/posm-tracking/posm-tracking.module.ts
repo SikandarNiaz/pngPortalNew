@@ -1,10 +1,11 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { ModalModule } from "ngx-bootstrap";
+import { ModalModule } from "ngx-bootstrap/modal";
 import { MatRadioModule } from "@angular/material/radio";
-import { AccordionModule } from "ngx-bootstrap";
-import { MatCardModule, MatFormFieldModule } from "@angular/material";
+import { AccordionModule } from "ngx-bootstrap/accordion";
+import { MatCardModule } from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSliderModule } from "@angular/material/slider";
 import { NgxImageZoomModule } from "ngx-image-zoom";
@@ -13,15 +14,13 @@ import { ResizableModule } from "angular-resizable-element";
 import { Ng5SliderModule } from "ng5-slider";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {
-  MatButtonModule,
-  MatIconModule,
-  MatTableModule,
-  MatSelectModule,
-  MatNativeDateModule,
-  MatMenuModule,
-  MatListModule,
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSelectModule } from "@angular/material/select";
+import { MatTableModule } from "@angular/material/table";
 import {
   MatDatepickerModule,
   MatDatepickerToggle,

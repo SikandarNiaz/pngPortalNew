@@ -4,10 +4,10 @@ import { EvaluationService } from "../evaluation.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Alert } from "selenium-webdriver";
 import { Config } from "src/assets/config";
-import { MatPaginator } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: "app-details-page",

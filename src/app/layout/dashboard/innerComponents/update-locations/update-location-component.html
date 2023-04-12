@@ -1,0 +1,213 @@
+<mat-card class="mb-20">
+  <mat-card-content>
+    <mat-card-title> Update Location </mat-card-title>
+    <section class="example-section">
+      <!-- <ng-container
+        *ngIf="routesList?.length > 0 && projectType == 'Coke_Audit'"
+      >
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="Fold"
+            [(ngModel)]="route"
+            (ngModelChange)="prepareObject()"
+          >
+            <mat-option *ngFor="let r of routesList" [value]="r">{{
+              r.route_title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container> -->
+
+      <!-- <ng-container *ngIf="clusterList?.length > 0">
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="{{ labels.clusterLabel }}"
+            name="cluster"
+            [(ngModel)]="selectedCluster"
+            (ngModelChange)="getZoneByCluster()"
+          >
+            <mat-option [value]="cluster" *ngFor="let cluster of clusterList">{{
+              cluster.title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="zones?.length > 0">
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="{{ labels.zoneLabel }}"
+            name="zone"
+            [(ngModel)]="selectedZone"
+            (ngModelChange)="zoneChange()"
+          >
+            <mat-option [value]="zone" *ngFor="let zone of zones">{{
+              zone.title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <mat-form-field
+        *ngIf="regions.length > 0"
+        class="example-margin mr-10-IMP"
+      >
+        <mat-select
+          placeholder="{{ labels.regionLabel }}"
+          name="region"
+          [(ngModel)]="selectedRegion"
+          (ngModelChange)="regionChange()"
+        >
+          <mat-option [value]="region" *ngFor="let region of regions">{{
+            region.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      <!-- <mat-form-field *ngIf="areas.length > 0" class="example-margin mr-10-IMP">
+        <mat-select
+          placeholder="{{ labels.areasLabel }}"
+          name="areas"
+          [(ngModel)]="selectedArea"
+          (ngModelChange)="prepareObject()"
+        >
+          <mat-option [value]="area" *ngFor="let area of areas">{{
+            area.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+       
+
+      <!-- <mat-form-field class="example-full-width mr-10-IMP">
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [matDatepicker]="picker0"
+          [(ngModel)]="startDate"
+          (ngModelChange)="prepareObject()"
+          placeholder="Choose a start date"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker0"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker0></mat-datepicker>
+      </mat-form-field> -->
+      
+    </section>
+
+    <!-- <section class="example-section">
+      <button mat-raised-button color="warn" (click)="VisitBaseReport()">
+        Submit
+      </button>
+    </section> -->
+  </mat-card-content>
+</mat-card>
+
+
+<!-- <mat-card>
+  <mat-card-content> -->
+    <mat-tab-group class="demo-tab-group" (selectedTabChange)="tabChanged($event)" #tabGroup>
+      <mat-tab label="Clutser">
+        <app-cluster-location  
+       
+        *ngIf="clusterList?.length > 0"
+        >
+        </app-cluster-location>
+      </mat-tab>
+    
+      <mat-tab label="Zone"> 
+        <app-zone-location 
+        (showModal)="showInsertModal($event)"
+        >
+        </app-zone-location>
+      </mat-tab>
+
+      <mat-tab label="Region"> 
+        No content 
+      </mat-tab>
+      <mat-tab label="Areas"> 
+        No content 
+      </mat-tab>
+      <mat-tab label="City"> 
+        No content 
+      </mat-tab>
+      <mat-tab label="Distribution"> 
+        No content 
+      </mat-tab>
+    </mat-tab-group>
+  <!-- </mat-card-content>
+</mat-card> -->
+
+<!-- <p-tabView>
+  <p-tabPanel header="Header 1">
+    <app-zone-location 
+        (showModal)="showInsertModal($event)"
+        >
+        </app-zone-location>
+  </p-tabPanel>
+  <p-tabPanel header="Header 2">
+      Content 2
+  </p-tabPanel>
+  <p-tabPanel header="Header 3">
+      Content 3
+  </p-tabPanel>
+</p-tabView> -->
+
+
+
+<div
+  bsModal
+  #insertModal="bs-modal"
+  class="modal fade"
+  [config]="{ backdrop: 'static', keyboard: false}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+  data-backdrop="false"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          Edit zoneEmail
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideInsertModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form [formGroup]="insertForm" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="zoneEmail">zoneEmail</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="zoneEmail"
+            />
+          </div>
+       
+
+          <div class="modal-footer">
+            <button
+              (click)="saveZoneEmail(insertForm.value)"
+              class="mr-1"
+              mat-raised-button
+              color="primary"
+            >
+              <i
+                [ngClass]="{ 'fa fa-spinner fa-spin': loadingModalButton }"
+              ></i>
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

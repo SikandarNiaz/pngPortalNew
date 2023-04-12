@@ -59,6 +59,9 @@ import { UploadRoutesNewComponent } from "./innerComponents/upload-routes-new/up
 import { SupervisorChangeLogReportComponent } from "./innerComponents/supervisor-change-log-report/supervisor-change-log-report.component";
 import { RoleManagementComponent } from "./innerComponents/change_menu/role_management.component";
 import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop-list-report/abnormal-shop-list-report.component";
+import { AttendanceReportComponent } from "./innerComponents/attendance-report/attendance-report.component";
+import { ManagePlanogramComponent } from "./innerComponents/manage-vd/manage-vd/manage-planogram.component";
+import { UpdateLocationComponent } from "./innerComponents/update-locations/update-location-component";
 
 const routes: Routes = [
   {
@@ -79,6 +82,9 @@ const routes: Routes = [
       { path: "manage_surveyors", component: ManageSurveyorsComponent },
       { path: "upload_routes_new", component: UploadRoutesNewComponent },
       { path: "role_management", component: RoleManagementComponent },
+      { path: "attendance-report", component: AttendanceReportComponent },
+      {path: "manage-planogram", component: ManagePlanogramComponent},
+      {path: "update-location", component: UpdateLocationComponent},
      
       
       {
@@ -184,11 +190,11 @@ const routes: Routes = [
 
   {
     path: "evaluation",
-    loadChildren: "./evaluation/evaluation.module#EvaluationModule",
+    loadChildren: () => import('./evaluation/evaluation.module').then(m => m.EvaluationModule),
   },
   {
     path: "posm-tracking",
-    loadChildren: "./posm-tracking/posm-tracking.module#PosmTrackingModule",
+    loadChildren: () => import('./posm-tracking/posm-tracking.module').then(m => m.PosmTrackingModule),
   },
   {
     path: "capturedAbnormalUnvisited",
