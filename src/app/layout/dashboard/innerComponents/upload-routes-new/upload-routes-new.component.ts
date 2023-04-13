@@ -58,6 +58,7 @@ export class UploadRoutesNewComponent implements OnInit {
   shopIds: any=[];
   selectedShape: any;
   selectedArea = 0;
+  currentWeek: String;
   colorType = Config.BASE_URI + "/images/map-marker-icons/";
   isRegionRequired = true;
   constructor(
@@ -65,6 +66,16 @@ export class UploadRoutesNewComponent implements OnInit {
     private httpService: DashboardService,
     public formBuilder: FormBuilder
   ) {
+
+    const currentWeek = moment(new Date(), "MMDDYYYY").isoWeek() % 2;
+    if (currentWeek == 0) {
+      this.currentWeek = "Second";
+    } else if (currentWeek == 1) {
+      this.currentWeek = "First";
+    } else {
+      this.currentWeek = "Default";
+    }
+
     this.form = formBuilder.group({
       selectedRegionUp: this.selectedRegionUp,
       selectedOption: this.selectedOption,
