@@ -67,7 +67,24 @@ export class UploadRoutesNewComponent implements OnInit {
     public formBuilder: FormBuilder
   ) {
 
-    const currentWeek = moment(new Date(), "MMDDYYYY").isoWeek() % 2;
+    // const currentWeek = (FLOOR((DAYOFMONTH(NOW()) - 1) / 7) + 1) % 2;
+
+    // var weekofYear = moment(new Date(), "MMDDYYYY").isoWeek(); // 19
+    // const currentWeek2 = moment(new Date(), "MMDDYYYY").isoWeek() % 2; //1
+
+    // var oneModtwo = 1%2; // 1
+    // var zeroModtwo = 0%2; // 0
+    
+    var dated = new Date();
+    // var dateOfMonth = dated.getDate();  // 12
+    // var dateOfMonthDivBy7 = dated.getDate()/7; // 1.714
+    // var dateOfMonthDivBy7Plus1Mod2= (dateOfMonthDivBy7+1)%2; // 0.714
+
+    //1-6= first, 7-13=2nd
+    // var currentWeek = ((0 | dated.getDate() / 7)+1)% 2;  // 0
+    
+    //1-7= first, 8-14=2nd
+    var currentWeek = (Math.floor((dated.getDate() - 1) / 7) + 1) % 2; // 0
     if (currentWeek == 0) {
       this.currentWeek = "Second";
     } else if (currentWeek == 1) {
