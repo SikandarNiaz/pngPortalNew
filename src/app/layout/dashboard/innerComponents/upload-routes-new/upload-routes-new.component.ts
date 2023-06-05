@@ -84,14 +84,38 @@ export class UploadRoutesNewComponent implements OnInit {
     // var currentWeek = ((0 | dated.getDate() / 7)+1)% 2;  // 0
     
     //1-7= first, 8-14=2nd
-    var currentWeek = (Math.floor((dated.getDate() - 1) / 7) + 1) % 2; // 0
-    if (currentWeek == 0) {
+
+
+    // current week old working
+    // var currentWeek = (Math.floor((dated.getDate() - 1) / 7) + 1) % 2; // 0
+    // if (currentWeek == 0) {
+    //   this.currentWeek = "Second";
+    // } else if (currentWeek == 1) {
+    //   this.currentWeek = "First";
+    // } else {
+    //   this.currentWeek = "Default";
+    // }
+
+
+    
+    // current week new working
+    const currentDate = moment();
+    const weekOfYear = currentDate.week();
+    const firstDateOfMonth = currentDate.startOf('month');
+    const weekOfFirstDate = firstDateOfMonth.week();
+    var currentWeek = ((weekOfYear - weekOfFirstDate)+1)%2;
+     if (currentWeek == 0) {
       this.currentWeek = "Second";
     } else if (currentWeek == 1) {
       this.currentWeek = "First";
     } else {
       this.currentWeek = "Default";
     }
+    // const customDate = moment('2023-06-15'); 
+    // const weekOfCustomDate = customDate.week();
+
+
+
 
     this.form = formBuilder.group({
       selectedRegionUp: this.selectedRegionUp,
@@ -338,9 +362,9 @@ export class UploadRoutesNewComponent implements OnInit {
     this.loadingData = true;
    this.httpService
       .getAllShops(this.zoneId || -1, this.regionId || -1)
-      .subscribe((res) =>{
+      .subscribe((res:any) =>{
         console.log("res ", res);
-        if(res <=0){
+        if(res.length <=0){
           this.toastr.error("Shop Not Found");
           
           this.loading = false;
