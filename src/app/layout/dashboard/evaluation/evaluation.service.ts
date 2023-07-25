@@ -55,7 +55,7 @@ export class EvaluationService {
 
   insertOOSComment(obj) {
     const urlencoded = this.UrlEncodeMaker(obj);
-    const url = this.ip + "insertOOSComment";
+    const url = this.ip + "insertOOSComment";    // InsertSkuCommentController
     return this.http.post(url, urlencoded, this.httpOptions);
   }
   updateMSLStatus(obj) {

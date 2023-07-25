@@ -135,7 +135,7 @@ export class DashboardService {
 
   getOOSProductivity(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
-    const url = this.ip + 'oosProductivityList';
+    const url = this.ip + 'oosProductivityList';   // OutOfStockProductivityController
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   getMerchandiserScore(obj) {

@@ -36,7 +36,7 @@ export class ShopDetailComponent implements OnInit {
   }
   goToEvaluation(id) {
     window.open(
-      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}&surveyorType=${this.shopObject.type}`,
+      `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}&surveyorType=${this.shopObject?.type || 1}`,
       "_blank"
     );
   }
