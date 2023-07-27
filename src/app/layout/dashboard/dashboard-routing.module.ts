@@ -62,6 +62,7 @@ import { AbnormalShopListReportComponent } from "./innerComponents/abnormal-shop
 import { AttendanceReportComponent } from "./innerComponents/attendance-report/attendance-report.component";
 import { ManagePlanogramComponent } from "./innerComponents/manage-vd/manage-vd/manage-planogram.component";
 import { UpdateLocationComponent } from "./innerComponents/update-locations/update-location-component";
+import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
 
 const routes: Routes = [
   {
@@ -172,6 +173,7 @@ const routes: Routes = [
       { path: "oos-detail-report", component: PngOosReportComponent },
       { path: "survey_shop_view", component: SurveyShopsSurveyorComponent },
       { path: "survey_shop_list", component: SurveyShopListComponent },
+      { path: "upload_desired_sos", component: UploadDesiredSosComponent },
       {
         path: "oos-productivity-list",
         component: OosProductivityListComponent,

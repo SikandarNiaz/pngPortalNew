@@ -126,6 +126,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
 import {InputTextModule} from 'primeng/inputtext';
 import { ProductService } from "./innerComponents/update-locations/update-zone/productservice";
 import { TabViewModule } from 'primeng/tabview';
+import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
 
 @NgModule({
   imports: [
@@ -248,7 +249,8 @@ import { TabViewModule } from 'primeng/tabview';
     UpdatePlanogramsComponent,
     UpdateLocationComponent,
     UpdateClusterComponent,
-    UpdateZoneComponent
+    UpdateZoneComponent,
+    UploadDesiredSosComponent
   ],
   providers: [ProductService]
 })

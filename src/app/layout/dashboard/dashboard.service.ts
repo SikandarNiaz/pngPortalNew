@@ -640,6 +640,17 @@ export class DashboardService {
     const url = this.ip + '/loadFilters';
     return this.http.post(url, filter);
   }
+
+  uploadSOS(obj) {
+    const url = this.ip + "update-desied-sos"; //  ---------> UploadDesiredSOSController
+    return this.http.post(url, obj);
+  }
+
+  getDesiredSOS(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "get_desired_sos";
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
   
 
 }
