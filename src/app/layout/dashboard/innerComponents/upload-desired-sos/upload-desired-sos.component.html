@@ -207,6 +207,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Shop Id</th>
           <th scope="col">Shop Code</th>
           <th scope="col">Shop Name</th>
           <th scope="col">Region</th>
@@ -219,6 +220,7 @@
       <tbody>
         <tr *ngFor="let count of hurdleRateList; let i = index">
           <th scope="col">{{ i + 1 }}</th>
+          <td>{{ count?.shop_id }}</td>
           <td>{{ count?.shop_code }}</td>
           <td>{{ count?.shop_title }}</td>
           <td>{{ count?.region_name }}</td>
