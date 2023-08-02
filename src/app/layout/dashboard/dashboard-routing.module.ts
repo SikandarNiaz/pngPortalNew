@@ -63,6 +63,7 @@ import { AttendanceReportComponent } from "./innerComponents/attendance-report/a
 import { ManagePlanogramComponent } from "./innerComponents/manage-vd/manage-vd/manage-planogram.component";
 import { UpdateLocationComponent } from "./innerComponents/update-locations/update-location-component";
 import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
+import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
 
 const routes: Routes = [
   {
@@ -174,6 +175,7 @@ const routes: Routes = [
       { path: "survey_shop_view", component: SurveyShopsSurveyorComponent },
       { path: "survey_shop_list", component: SurveyShopListComponent },
       { path: "upload_desired_sos", component: UploadDesiredSosComponent },
+      { path: "shop_location_approval", component: ShopLocationApprovalComponent },
       {
         path: "oos-productivity-list",
         component: OosProductivityListComponent,

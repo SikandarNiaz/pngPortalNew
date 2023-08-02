@@ -127,6 +127,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import { ProductService } from "./innerComponents/update-locations/update-zone/productservice";
 import { TabViewModule } from 'primeng/tabview';
 import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
+import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
 
 @NgModule({
   imports: [
@@ -250,7 +251,8 @@ import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/
     UpdateLocationComponent,
     UpdateClusterComponent,
     UpdateZoneComponent,
-    UploadDesiredSosComponent
+    UploadDesiredSosComponent,
+    ShopLocationApprovalComponent
   ],
   providers: [ProductService]
 })

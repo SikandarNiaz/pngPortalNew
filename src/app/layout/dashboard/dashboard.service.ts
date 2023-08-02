@@ -38,6 +38,14 @@ export class DashboardService {
     withCredentials: true,
   };
 
+  httpOptions2 = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }),
+    responseType: "json",
+    withCredentials: true
+  };
+
   updatedDownloadStatus(data) {
     this.dataSource.next(data);
   }
@@ -649,7 +657,26 @@ export class DashboardService {
   getDesiredSOS(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
     const url = this.ip + "get_desired_sos";
-    return this.http.post(url, urlEncode, this.httpOptions);
+  //   return this.http.post(url, urlEncode, {  headers: new HttpHeaders({
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     'Accept': 'application/json',
+  //   }),
+  //   responseType: "json",
+  //   withCredentials: true
+  // }
+  //   );
+  return this.http.post(url, urlEncode, this.httpOptions);
+  }
+
+  getShopLocationApprovalData(obj) {
+    const filter = JSON.stringify({ regionId: obj.regionId, zoneId: obj.zoneId });
+    const url = this.ip + "/shopLocationApprovalController";
+    return this.http.post(url, filter);
+  }
+  updateShopLocationApproval(obj){
+    const filter = JSON.stringify({obj: obj});
+    const url = this.ip + "/updateShopLocationApprovalController"; 
+    return this.http.post(url, filter);
   }
   
 
