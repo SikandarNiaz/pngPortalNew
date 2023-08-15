@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { Config } from "src/assets/config";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-shop-detail",
@@ -29,8 +30,11 @@ export class ShopDetailComponent implements OnInit {
   constructor(
     private router: Router,
     private httpService: DashboardService,
-    public activatedRoute: ActivatedRoute
-  ) {}
+    public activatedRoute: ActivatedRoute,
+    private readonly location : Location
+  ) {
+    this.location.replaceState("/dashboard/shop_detail");
+  }
   showChildModal(): void {
     this.childModal.show();
   }
@@ -58,11 +62,14 @@ export class ShopDetailComponent implements OnInit {
       this.remarksId = p.remark_id;
       if (p.viewType == "oos") {
         this.viewType = 2;
+        this.shopObject.type = 1;
         obj = {
           startDate: p.startDate,
           endDate: p.endDate,
           merchandiserId: id,
           viewType: this.viewType,
+
+          oosShops : p.oosShops || 'N'
         };
       } else {
         this.viewType = 1;
@@ -89,6 +96,7 @@ export class ShopDetailComponent implements OnInit {
     }
   }
   getTableData(obj) {
+    console.log("req obj: ", obj);
     this.loading = true;
     this.httpService.getTableList(obj).subscribe(
       (data) => {
