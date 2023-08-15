@@ -91,6 +91,7 @@
             <mat-form-field
               *ngIf="
                 parameter.populatedFrom == 'Area' &&
+                parameter.type == 'Single_Select' &&
                 reportData.areaList?.length > 0
               "
               class="example-margin mr-10-IMP"
@@ -108,6 +109,77 @@
                 >
               </mat-select>
             </mat-form-field>
+
+
+
+
+            <mat-form-field
+            *ngIf="
+              parameter.populatedFrom == 'Area' &&
+              parameter.type == 'Multi_Select' &&
+              reportData.areaList?.length > 0
+            "
+            class="example-margin mr-10-IMP"
+          >
+            <mat-select
+              placeholder="{{ parameter.title }}"
+              name="area"
+              [(ngModel)]="selectedAreaMulti"
+              multiple
+              #areaSelect="ngModel"
+              [compareWith]="equals"
+            >
+              <mat-option disabled="disabled" class="filter-option">
+                <button
+                  mat-raised-button
+                  class="mat-primary fill text-sm"
+                  (click)="selectAll(areaSelect, reportData.areaList)"
+                >
+                  Select All
+                </button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  class="ml-1 mat-accent fill text-sm"
+                  (click)="deselectAll(areaSelect)"
+                >
+                  Deselect All
+                </button>
+              </mat-option>
+
+              <mat-option
+                [value]="area"
+                *ngFor="let area of reportData.areaList"
+                >{{ area.title }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <!-- // city filter -->
+          <mat-form-field
+              *ngIf="
+                parameter.populatedFrom == 'City' &&
+                reportData.cityList?.length > 0
+              "
+              class="example-margin mr-10-IMP"
+            >
+              <mat-select
+                placeholder="{{ parameter.title }}"
+                name="city"
+                [(ngModel)]="selectedCity"
+                (ngModelChange)="setparamsVisibility(parameter.id)"
+              >
+                <mat-option
+                  [value]="city"
+                  *ngFor="let city of reportData.cityList"
+                  >{{ city.title }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+
+
+
             <mat-form-field
               *ngIf="
                 parameter.populatedFrom == 'Fold' &&

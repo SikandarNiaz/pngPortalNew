@@ -34,13 +34,16 @@ export class DashboardDataComponent implements OnInit {
   projectType: any;
   queryParams: any = [];
   selectedArea: any = {};
+  selectedCity : any = {};
   isDashboardDataRequest = true;
   areas: any = [];
+  cities : any = [];
   channels: any=[];
   selectedFold: any = {};
   selectedChannel: any = {};
   selectedCriteria: any={};
   selectedChannelMulti: any = [];
+  selectedAreaMulti: any = [];
   reportData: any = {};
 
   constructor(
@@ -166,12 +169,12 @@ export class DashboardDataComponent implements OnInit {
             ? localStorage.getItem('regionId')
             : this.selectedRegion.id
           : localStorage.getItem('regionId');
-      } else if (param.populatedFrom == 'Area') {
+      } else if (param.populatedFrom == 'Area' && param.type == 'Single_Select') {
         obj.Area = this.selectedArea.id
           ? this.selectedArea.id == -1
             ? localStorage.getItem('areaId')
             : this.selectedArea.id
-          : localStorage.getItem('areaId');
+          : localStorage.getItem('areaId') || -1;
       } else if (param.populatedFrom == 'start_date') {
         obj.start_date = moment(this.startDate).format('YYYY-MM-DD');
       } else if (param.populatedFrom == 'end_date') {
@@ -186,6 +189,16 @@ export class DashboardDataComponent implements OnInit {
       else if (param.populatedFrom == 'Channel' && param.type == 'Multi_Select') {
         obj.Channel = this.arrayAndStringMaker(this.selectedChannelMulti) || -1;
       }
+
+      else if (param.populatedFrom == 'Area' && param.type == 'Multi_Select'){
+        obj.Area = this.arrayAndStringMaker(this.selectedAreaMulti) || -1;
+      }
+
+      // city filter
+      else if (param.populatedFrom == 'City') {
+        obj.City = this.selectedCity.id || -1;
+      } 
+      
 
       
       // // brand filter
@@ -235,6 +248,9 @@ export class DashboardDataComponent implements OnInit {
     this.zones = this.reportData.zoneList;
     this.regions = this.reportData.regionList;
     this.areas = this.reportData.areaList;
+
+     // city filter
+    this.cities = this.reportData.cityList;
     // this.channels = this.reportData.channelList.length>0? this.reportData.channelList: [];
     this.channels = this.reportData.channelList;
     this.setparamsVisibility(-1);
@@ -271,6 +287,16 @@ export class DashboardDataComponent implements OnInit {
         this.selectedRegion.id === -1
           ? this.areas
           : this.areas.filter((a) => a.regionId === this.selectedRegion.id);
+    }
+
+     // city filter
+    else if (
+      this.selectedQuery.parameterList[index].populatedFrom == 'City'
+    ) {
+      this.reportData.cityList =
+        this.selectedRegion.id === -1
+          ? this.cities
+          : this.cities.filter((c) => c.regionId === this.selectedRegion.id);
     }
   }
 
