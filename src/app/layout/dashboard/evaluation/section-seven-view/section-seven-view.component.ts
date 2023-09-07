@@ -32,6 +32,7 @@ export class SectionSevenViewComponent implements OnInit {
   selectedShop: any = {};
   selectedImage: any = {};
   formData: any = [];
+  formDataNew: any = [];
   // ip=environment.ip;
   ip: any = Config.BASE_URI;
   hover = "hover";
@@ -86,7 +87,8 @@ export class SectionSevenViewComponent implements OnInit {
       this.visibilityData = this.data.genericTable || [];
       this.secondaryData = this.data.secondaryData || [];
       this.kbdData = this.data.kbdList || [];
-      this.formData = this.keyValuePipe.transform(this.data.formData) || [];
+      // this.formData = this.keyValuePipe.transform(this.data.formData) || [];
+      this.formDataNew = this.data.formData || [];
       if (this.products.length > 0) {
         this.availability = this.getAvailabilityCount(this.products);
         this.facing = this.getFacingCount(this.products);
