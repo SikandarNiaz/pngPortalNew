@@ -82,4 +82,10 @@ export class EvaluationService {
     const url = this.ip + "updateEvaluationData";
     return this.http.post(url, urlencoded, this.httpOptions);
   }
+
+  // IR service
+  saveRecognizedResult(obj) {
+    const url = this.ip + "/updateRecognizedResult";
+    return this.http.post(url, obj);
+  }
 }

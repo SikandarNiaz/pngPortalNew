@@ -344,6 +344,10 @@ export class SectionSevenViewComponent implements OnInit {
 
   showChildModal(shop): void {
     this.selectedShop = shop;
+
+    // IR Change
+    this.selectedShop.productList = this.products;
+
     this.showModal.emit(this.selectedShop);
     // this.childModal.show();
   }

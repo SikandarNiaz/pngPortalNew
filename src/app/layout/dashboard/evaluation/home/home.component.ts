@@ -10,12 +10,53 @@ import { Config } from "src/assets/config";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import * as moment from "moment";
 
+// IR imports
+import {
+  ImageCroppedEvent,
+  ImageTransform,
+  LoadedImage,
+} from "ngx-image-cropper";
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
+
+  // IR variables
+  transform: ImageTransform = {};
+  scale = 0.7;
+  cropperDisabled: boolean = true;
+  croppedData: any = [];
+  imageChangedEvent: any = "";
+  croppedImage: any = "";
+  isCroppingMode: boolean = false;
+  cropperPosition: any = {};
+  modeList: any = [
+    { id: 1, title: "SKU" },
+    { id: 2, title: "Block" },
+    { id: 3, title: "Shelf" },
+  ];
+
+  selectedProductId = -1;
+  selectedMode: any = {};
+
+  x1: number = 0;
+  x2: number = 111;
+  y1: number = 0;
+  y2: number = 111;
+
+  imageWidth: number;
+  imageHeight: number;
+  imageLeft: number;
+  imageTop: number;
+  // IR variables end
+
+  sortOrder: any = true;
+  sortBy: "is_competition";
+
+
   data: any = [];
   // ip = environment.ip;
   ip: any = Config.BASE_URI;
@@ -856,6 +897,19 @@ export class HomeComponent implements OnInit {
 
   showChildModal(shop): void {
     this.selectedShop = shop;
+        // this.resizeImage(400,700);
+        this.getImageDimensions();
+        this.selectedShop.recognizedResult = this.isJSONString(
+          shop.recognizedResult
+        )
+          ? JSON.parse(shop.recognizedResult)
+          : shop.recognizedResult;
+        this.croppedData = this.selectedShop.recognizedResult
+          ? this.selectedShop.recognizedResult.detectedSKU
+          : [];
+        this.setCroppedDataProperties();
+        this.setProductFacing();
+        this.setCompetition();
     this.rotationDegree = 0;
     this.childModal.show();
   }
@@ -1009,5 +1063,354 @@ export class HomeComponent implements OnInit {
       "YYYY-MM-DD HH:mm:ss"
     );
     this.startEvaluationModal.hide();
+  }
+
+
+
+
+  // IR working
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event;
+    // event.blob can be used to upload the cropped image
+  }
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
+  }
+  showCropper() {
+    this.isCroppingMode = true;
+  }
+  hideCropper() {
+    this.closeProductEditor();
+    this.isCroppingMode = false;
+    this.cropperDisabled = true;
+    this.cropperPosition = {};
+    this.selectedProductId = -1;
+  }
+
+  getCoordinates() {
+    // if sku is in editing mode, then save in existing object else add it in the list
+    let boundingBox = [];
+    const obj = {
+      tempId: Math.floor(Math.random() * 1000000000 + 1),
+      inEditingMode: false,
+      x: this.croppedImage.cropperPosition.x1  / this.scale,
+      y: this.croppedImage.cropperPosition.y1  / this.scale,
+      w: this.croppedImage.cropperPosition.x2 / this.scale,
+      h: this.croppedImage.cropperPosition.y2  / this.scale,
+      type: this.selectedMode,
+      active: "Y",
+    };
+    const index = this.croppedData.findIndex(
+      (e) => e.skuId == this.selectedProductId
+    );
+    if (index > -1) {
+      const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
+        (e) => e.inEditingMode == true
+      );
+      if (coordinateIndex > -1) {
+        this.croppedData[index].boundingBox[coordinateIndex].inEditingMode =
+          false;
+        this.croppedData[index].boundingBox[coordinateIndex].x =
+          this.croppedImage.cropperPosition.x1 / this.scale;
+        this.croppedData[index].boundingBox[coordinateIndex].y =
+          this.croppedImage.cropperPosition.y1 / this.scale;
+        this.croppedData[index].boundingBox[coordinateIndex].w =
+          this.croppedImage.cropperPosition.x2 / this.scale;
+        this.croppedData[index].boundingBox[coordinateIndex].h =
+          this.croppedImage.cropperPosition.y2 / this.scale;
+        this.croppedData[index].boundingBox[coordinateIndex].type =
+          this.selectedMode;
+      } else {
+        this.croppedData[index].boundingBox.push(obj);
+      }
+    } else {
+      const objLis : any =[];
+      objLis.push(obj);
+      const croppedDataObj = {
+        skuId: this.selectedProductId,
+        // boundingBox: obj,
+
+        boundingBox: objLis,
+      };
+      this.croppedData.push(croppedDataObj);
+    }
+    this.selectedShop.recognizedResult.detectedSKU = this.croppedData;
+    this.saveRecognizedResult();
+    this.cropperDisabled = true;
+    this.cropperPosition = {};
+    console.log(this.croppedData);
+  }
+  changeCropperStatus(event: MouseEvent) {
+    let cropperWidth = 100;
+    let cropperHeight = 150;
+    if (this.cropperDisabled) {
+      this.cropperDisabled = false;
+      const imgElement = event.target as HTMLImageElement;
+      const imgRect = imgElement.getBoundingClientRect();
+      const clickX = event.clientX - imgRect.left;
+      const clickY = event.clientY - imgRect.top;
+
+      // Calculate the cropper position based on the click coordinates
+      this.croppedData.forEach((element) => {
+        if (
+          element.skuId == this.selectedProductId &&
+          element.boundingBox?.length > 0
+        ) {
+          cropperWidth =
+            element.boundingBox[element.boundingBox.length - 1].w -
+            element.boundingBox[element.boundingBox.length - 1].x;
+          cropperHeight =
+            element.boundingBox[element.boundingBox.length - 1].h -
+            element.boundingBox[element.boundingBox.length - 1].y;
+        }
+      });
+      this.cropperPosition = {
+        x1: clickX - cropperWidth / 2,
+        y1: clickY - cropperHeight / 2,
+        x2: clickX + cropperWidth / 2,
+        y2: clickY + cropperHeight / 2,
+      };
+    }
+  }
+
+  selectProduct(productId, event) {
+    if (event.checked == true) {
+      this.selectedProductId = productId;
+    } else {
+      this.selectedProductId = -1;
+    }
+    this.closeProductEditor();
+  }
+
+  closeProductEditor() {
+    this.croppedData.forEach((element) => {
+      element.boundingBox.forEach((coordinate) => {
+        coordinate.inEditingMode = false;
+      });
+    });
+  }
+  showCropperOnImage(tempId) {
+    this.closeProductEditor();
+    const index = this.croppedData.findIndex(
+      (e) => e.skuId == this.selectedProductId
+    );
+    const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
+      (e) => e.tempId == tempId
+    );
+    this.croppedData[index].boundingBox[coordinateIndex].inEditingMode = true;
+    this.cropperPosition = {
+      x1: this.croppedData[index].boundingBox[coordinateIndex].x * this.scale,
+      x2: this.croppedData[index].boundingBox[coordinateIndex].w * this.scale,
+      y1: this.croppedData[index].boundingBox[coordinateIndex].y * this.scale,
+      y2: this.croppedData[index].boundingBox[coordinateIndex].h * this.scale,
+    };
+    this.cropperDisabled = false;
+  }
+
+  deleteImage(tempId) {
+    const index = this.croppedData.findIndex(
+      (e) => e.skuId == this.selectedProductId
+    );
+    const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
+      (e) => e.tempId == tempId
+    );
+    this.croppedData[index].boundingBox[coordinateIndex].active = "N";
+    this.croppedData[index].boundingBox[coordinateIndex].inEditingMode = false;
+    this.selectedShop.recognizedResult.detectedSKU = this.croppedData;
+    this.saveRecognizedResult();
+  }
+
+  setCroppedDataProperties() {
+    console.log("croppedData: ", this.croppedData);
+    this.croppedData?.forEach((sku) => {
+      sku.boundingBox.forEach((coordinate) => {
+        coordinate.tempId =
+          coordinate.tempId || Math.floor(Math.random() * 1000000000 + 1);
+        coordinate.inEditingMode = coordinate.inEditingMode || false;
+        coordinate.active = coordinate.active || "Y";
+      });
+    });
+    console.log(this.croppedData);
+  }
+  saveRecognizedResult() {
+    const obj = {
+      id: this.selectedShop.id,
+      recognizedResult: this.selectedShop.recognizedResult,
+    };
+
+    this.evaluationService.saveRecognizedResult(obj).subscribe(
+      (data: any) => {
+        debugger;
+        if (data.success) {
+          this.setProductFacing();
+          this.toastr.success("Data Updated Successfully");
+        } else {
+          this.toastr.error(data.message, "Update Data");
+        }
+      },
+      (error) => {
+        this.toastr.error(error.message, "Error");
+      }
+    );
+  }
+  setProductFacing() {
+    this.selectedShop.productList?.forEach((element) => {
+      const skuIndex = this.croppedData.findIndex(
+        (e) => e.skuId == element.product_id
+      );
+      if (skuIndex > -1) {
+        let totalActiveFacingData = this.croppedData[
+          skuIndex
+        ].boundingBox?.filter((a) => a.active == "Y");
+
+        element.skuCount = totalActiveFacingData?.length;
+      } else {
+        element.skuCount = 0;
+      }
+    });
+  }
+
+  setCompetition() {
+    this.selectedShop.productList?.forEach((element) => {
+      if (element?.is_competition == 1) {
+        element.competition = "N";
+      } else {
+        element.competition = "Y";
+      }
+    });
+  }
+
+  resizeImage(width: number, height: number) {
+    const img = new Image();
+    img.src = this.selectedShop?.url;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = width;
+      canvas.height = height;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      ctx.drawImage(img, 0, 0, width, height);
+      this.selectedShop.url = canvas.toDataURL("image/png");
+    };
+  }
+
+  getArrowType(key) {
+    if (key === this.sortBy) {
+      return this.sortOrder ? "arrow_upward" : "arrow_downward";
+    } else {
+      return "";
+    }
+  }
+
+  sortIt(key) {
+    this.sortBy = key;
+    this.sortOrder = !this.sortOrder;
+  }
+  zoomIn() {
+    this.scale = parseFloat((this.scale + 0.1).toFixed(1));
+    this.updateImagePosition();
+  }
+
+  // Function to handle zoom out
+  zoomOut() {
+    this.scale = parseFloat((this.scale - 0.1).toFixed(1));
+    this.updateImagePosition();
+  }
+
+  // Function to update the image position based on zoom level
+  updateImagePosition(): void {
+    const w = this.imageWidth * this.scale;
+    const h = this.imageHeight * this.scale;
+    this.resizeImage(w, h);
+  }
+
+  getImageDimensions() {
+    const img = new Image();
+    img.src = this.selectedShop?.url;
+
+    img.onload = () => {
+      this.imageWidth = img.width;
+      this.imageHeight = img.height;
+
+      // Update the dimensions as needed or perform other actions with the dimensions
+      console.log(`Image Width: ${this.imageWidth}px`);
+      console.log(`Image Height: ${this.imageHeight}px`);
+    };
+  }
+
+  adjustOverlayImageSize(scaleFactor: number) {
+    const imageContainer: HTMLElement =
+      document.querySelector(".image-container");
+    const containerWidth = parseFloat(
+      imageContainer.getAttribute("data-width")
+    );
+    const containerHeight = parseFloat(
+      imageContainer.getAttribute("data-height")
+    );
+    imageContainer.style.width = containerWidth * this.scale + "px";
+    imageContainer.style.height = containerHeight * this.scale + "px";
+    const overlayImages = document.querySelectorAll(".rectangle-overlay"); // Get all overlay images
+
+    overlayImages.forEach((image: HTMLImageElement) => {
+      // Get the original size of the overlay image
+      const originalTop = parseFloat(image.getAttribute("data-top"));
+      const originalLeft = parseFloat(image.getAttribute("data-left"));
+      const originalWidth = parseFloat(image.getAttribute("data-width"));
+      const originalHeight = parseFloat(image.getAttribute("data-height"));
+
+      // Calculate the new size of the overlay image based on the zoom level
+      const newTop = originalTop * scaleFactor;
+      const newLeft = originalLeft * scaleFactor;
+      const newWidth = (originalWidth - newLeft) * scaleFactor;
+      const newHeight = (originalHeight - newTop) * scaleFactor;
+
+      // const positionAdjustmentX = (originalWidth - newWidth) / 2;
+      // const positionAdjustmentY = (originalHeight - newHeight) / 2;
+
+      // Update the style of the overlay image
+      image.style.top = newTop + "px";
+      image.style.left = newLeft + "px";
+      image.style.width = newWidth + "px";
+      image.style.height = newHeight + "px";
+    });
+  }
+
+  getTransformStyle(): string {
+    return `scale(${this.scale})`;
+  }
+
+  updateImageContainerSize() {
+    this.cropperPosition.resizeCanvas(
+      this.imageWidth * this.scale,
+      this.imageHeight * this.scale
+    );
+    const imageContainer: HTMLElement =
+      document.querySelector(".image-container");
+    const containerWidth = parseFloat(
+      imageContainer.getAttribute("data-width")
+    );
+    const containerHeight = parseFloat(
+      imageContainer.getAttribute("data-height")
+    );
+    imageContainer.style.width = containerWidth * this.scale + "px";
+    imageContainer.style.height = containerHeight * this.scale + "px";
+  }
+
+  isJSONString(value: string): boolean {
+    try {
+      JSON.parse(value);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

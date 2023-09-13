@@ -542,6 +542,8 @@
   role="dialog"
   aria-labelledby="dialog-child-name"
 >
+<div class="row">
+  <div class="col-md-4" *ngIf="!isCroppingMode">
   <div class="modal-dialog-cat">
     <div
       class="modal-content"
@@ -601,9 +603,232 @@
           src="{{ ip }}{{ selectedShop?.url }}"
           style="width: 100%; height: 650px"
         />
+        <button
+        *ngIf="selectedShop?.productList && croppedData?.length > 0"
+        type="button"
+        class="btn btn-primary btn-lg btn-block"
+        (click)="showCropper()"
+      >
+        Identify Brands
+      </button>
       </div>
     </div>
   </div>
+</div>
+
+<div class="col-md-12" *ngIf="isCroppingMode">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-8" style="padding: 0px">
+          <div
+            (click)="changeCropperStatus($event)"
+            class="image-container"
+            [style.width.px]="imageWidth * scale"
+            [style.height.px]="imageHeight * scale"
+            style="padding: 0px !important"
+          >
+            <image-cropper
+              style="padding: 0px"
+              [imageChangedEvent]="imageChangedEvent"
+              format="png"
+              [maintainAspectRatio]="false"
+              (imageCropped)="imageCropped($event)"
+              (imageLoaded)="imageLoaded($event)"
+              (cropperReady)="cropperReady()"
+              (loadImageFailed)="loadImageFailed()"
+              [imageURL]="selectedShop?.url"
+              [disabled]="cropperDisabled"
+              [cropper]="cropperPosition"
+              [alignImage]="'left'"
+            ></image-cropper>
+            <ng-container *ngIf="croppedData?.length > 0">
+              <ng-container *ngFor="let img of croppedData">
+                <ng-container *ngIf="img.skuId == selectedProductId">
+                  <ng-container *ngFor="let coordinates of img.boundingBox">
+                    <img
+                      class="rectangle-overlay"
+                      *ngIf="
+                        !coordinates.inEditingMode &&
+                        coordinates.active == 'Y'
+                      "
+                      src="assets/60896ff5f4388b1434005ce1"
+                      alt="Overlay Image"
+                      [style.left.px]="coordinates.x * scale"
+                      [style.top.px]="coordinates.y * scale"
+                      [style.width.px]="
+                        (coordinates.w - coordinates.x) * scale
+                      "
+                      [style.height.px]="
+                        (coordinates.h - coordinates.y) * scale
+                      "
+                      (click)="showCropperOnImage(coordinates.tempId)"
+                    />
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div style="height: 460px; overflow: scroll">
+            <table class="table table-bordered table-hover w-100">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th scope="col">Product Id</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Facing</th>
+                  <th
+                    scope="col"
+                    (click)="sortIt('is_competition')"
+                    style="cursor: pointer"
+                  >
+                    Competition
+                    <i class="material-icons arrow material-icons-arrow">
+                      {{ getArrowType("is_competition") }}
+                    </i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let product of selectedShop?.productList
+                      | orderBy : sortBy : sortOrder;
+                    let i = index
+                  "
+                >
+                  <td>
+                    <mat-checkbox
+                      color="primary"
+                      name="{{ product?.product_id }}"
+                      id="{{ product?.product_id }}"
+                      [checked]="selectedProductId == product?.product_id"
+                      (change)="selectProduct(product.product_id, $event)"
+                    >
+                    </mat-checkbox>
+                  </td>
+                  <td>{{ product?.product_id }}</td>
+                  <td>{{ product?.product_title }}</td>
+                  <td>{{ product?.skuCount }}</td>
+                  <td>{{ product?.competition }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="height: 170px; margin-top: 10px; overflow: scroll">
+            <table class="table table-bordered table-hover w-100">
+              <thead>
+                <tr>
+                  <th scope="col">Product Id</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngFor="let product of croppedData; let i = index"
+                >
+                  <ng-container
+                    *ngFor="let coordinate of product.boundingBox"
+                  >
+                    <tr
+                      *ngIf="
+                        product?.skuId == selectedProductId &&
+                        coordinate.active == 'Y'
+                      "
+                      (click)="showCropperOnImage(coordinate.tempId)"
+                    >
+                      <td
+                        style="cursor: pointer"
+                        [ngStyle]="{
+                          'background-color': coordinate.inEditingMode
+                            ? 'red'
+                            : 'lightgray'
+                        }"
+                      >
+                        {{ product?.skuId }}
+                      </td>
+                      <td>
+                        <a
+                          (click)="deleteImage(coordinate.tempId)"
+                          [routerLink]=""
+                        >
+                          <div style="height: 100%; width: 100%">
+                            Delete
+                          </div>
+                        </a>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <section>
+            <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              [(ngModel)]="selectedMode"
+            >
+              <ng-container *ngFor="let mode of modeList">
+                <mat-radio-button [value]="mode">
+                  {{ mode.title }}
+                </mat-radio-button>
+              </ng-container>
+            </mat-radio-group>
+
+            <button
+              style="margin-left: 10px"
+              color="primary"
+              mat-raised-button
+              [disabled]="
+                !selectedMode.title ||
+                !croppedImage.cropperPosition ||
+                selectedProductId == -1 ||
+                cropperDisabled
+              "
+              (click)="getCoordinates()"
+            >
+              Save
+            </button>
+            <button
+              style="margin-left: 10px"
+              color="primary"
+              mat-raised-button
+              (click)="hideCropper()"
+            >
+              Close
+            </button>
+          </section>
+          <section>
+            <button
+              [disabled]="scale == 0.5"
+              style="margin-left: 10px"
+              color="warn"
+              mat-raised-button
+              (click)="zoomOut()"
+            >
+              Zoom -
+            </button>
+            <button
+              [disabled]="scale == 1.0"
+              style="margin-left: 10px"
+              color="warn"
+              mat-raised-button
+              (click)="zoomIn()"
+            >
+              Zoom +
+            </button>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ </div> <!-- row end -->
+
 </div>
 
 <!-- remarks modal -->

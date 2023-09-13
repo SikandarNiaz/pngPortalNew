@@ -47,6 +47,7 @@
     "@ng-bootstrap/ng-bootstrap": "6.0.0",
     "ngx-csv": "^0.3.1",
     "ngx-image-zoom": "^0.6.0",
+    "ngx-image-cropper": "^5.0.0",
     "ngx-mat-select-search": "^3.3.0",
     "ngx-pagination": "^4.1.0",
     "ngx-toastr": "^10.0.0",
@@ -57,8 +58,11 @@
     "zone.js": "~0.10.2",
     "primeicons": "^6.0.1",
     "primeflex": "2.0.0",
-    "primeng": "^10.0.0"
-    
+    "primeng": "^10.0.0",
+    "@agm/core": "^1.0.0",
+    "@agm/js-marker-clusterer": "^1.1.0",
+    "@agm/snazzy-info-window": "^1.1.0",
+    "agm-direction": "^0.8.9"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.15",

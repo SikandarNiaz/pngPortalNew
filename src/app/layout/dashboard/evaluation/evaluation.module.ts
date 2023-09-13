@@ -45,6 +45,10 @@ import { SectionTenComponent } from "./section-ten/section-ten.component";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { AccordionModule } from "ngx-bootstrap/accordion";
 
+// IR module imports
+import { ImageCropperModule } from "ngx-image-cropper";
+import { Ng2OrderModule } from "ng2-order-pipe";
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -86,6 +90,8 @@ import { AccordionModule } from "ngx-bootstrap/accordion";
     MatSelectModule,
     MatPaginatorModule,
     ReactiveFormsModule,
+    ImageCropperModule,
+    Ng2OrderModule,
   ],
   exports: [DetailsPageComponent],
 })
