@@ -126,6 +126,8 @@ export class HomeComponent implements OnInit {
   @ViewChild("startEvaluationModal") startEvaluationModal: ModalDirective;
   surveyorType: any;
   rolesIdsList: string;
+  imageWidthStart: number;
+  imageHeightStart: number;
 
   constructor(
     private router: Router,
@@ -1083,6 +1085,9 @@ export class HomeComponent implements OnInit {
   }
   hideCropper() {
     this.closeProductEditor();
+   this.imageWidth = this.imageWidthStart;
+   this.imageHeight = this.imageHeightStart;
+   this.resizeImage(this.imageWidth, this.imageHeight);
     this.isCroppingMode = false;
     this.cropperDisabled = true;
     this.cropperPosition = {};
@@ -1193,6 +1198,9 @@ export class HomeComponent implements OnInit {
       });
     });
   }
+
+  
+
   showCropperOnImage(tempId) {
     this.closeProductEditor();
     const index = this.croppedData.findIndex(
@@ -1336,6 +1344,8 @@ export class HomeComponent implements OnInit {
 
     img.onload = () => {
       this.imageWidth = img.width;
+      this.imageWidthStart = img.width;
+      this.imageHeightStart = img.height;
       this.imageHeight = img.height;
 
       // Update the dimensions as needed or perform other actions with the dimensions
