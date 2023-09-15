@@ -23,7 +23,6 @@ import {
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-
   // IR variables
   transform: ImageTransform = {};
   scale = 0.7;
@@ -55,7 +54,6 @@ export class HomeComponent implements OnInit {
 
   sortOrder: any = true;
   sortBy: "is_competition";
-
 
   data: any = [];
   // ip = environment.ip;
@@ -277,7 +275,7 @@ export class HomeComponent implements OnInit {
       if (this.rolesIdsList) {
         //let temp: any = this.rolesIdsList.split(",");
         let temp: any = this.rolesIdsList.split(/[ ,]+/); // spaces trimmed, empty values skipped
-       // String[] list=str.split("\\s*,\\s*");       // in JAVA spaces trimmed,
+        // String[] list=str.split("\\s*,\\s*");       // in JAVA spaces trimmed,
 
         for (let roleId of temp) {
           if (roleId == this.userType) {
@@ -897,19 +895,19 @@ export class HomeComponent implements OnInit {
 
   showChildModal(shop): void {
     this.selectedShop = shop;
-        // this.resizeImage(400,700);
-        this.getImageDimensions();
-        this.selectedShop.recognizedResult = this.isJSONString(
-          shop.recognizedResult
-        )
-          ? JSON.parse(shop.recognizedResult)
-          : shop.recognizedResult;
-        this.croppedData = this.selectedShop.recognizedResult
-          ? this.selectedShop.recognizedResult.detectedSKU
-          : [];
-        this.setCroppedDataProperties();
-        this.setProductFacing();
-        this.setCompetition();
+    // this.resizeImage(400,700);
+    this.getImageDimensions();
+    this.selectedShop.recognizedResult = this.isJSONString(
+      shop.recognizedResult
+    )
+      ? JSON.parse(shop.recognizedResult)
+      : shop.recognizedResult;
+    this.croppedData = this.selectedShop.recognizedResult
+      ? this.selectedShop.recognizedResult.detectedSKU
+      : [];
+    this.setCroppedDataProperties();
+    this.setProductFacing();
+    this.setCompetition();
     this.rotationDegree = 0;
     this.childModal.show();
   }
@@ -1065,9 +1063,6 @@ export class HomeComponent implements OnInit {
     this.startEvaluationModal.hide();
   }
 
-
-
-
   // IR working
 
   imageCropped(event: ImageCroppedEvent) {
@@ -1096,14 +1091,14 @@ export class HomeComponent implements OnInit {
 
   getCoordinates() {
     // if sku is in editing mode, then save in existing object else add it in the list
-    let boundingBox = [];
+    const scaleAdjustment = 1 - this.scale + 1;
     const obj = {
       tempId: Math.floor(Math.random() * 1000000000 + 1),
       inEditingMode: false,
-      x: this.croppedImage.cropperPosition.x1  / this.scale,
-      y: this.croppedImage.cropperPosition.y1  / this.scale,
-      w: this.croppedImage.cropperPosition.x2 / this.scale,
-      h: this.croppedImage.cropperPosition.y2  / this.scale,
+      x: this.croppedImage.cropperPosition.x1 * scaleAdjustment,
+      y: this.croppedImage.cropperPosition.y1 * scaleAdjustment,
+      w: this.croppedImage.cropperPosition.x2 * scaleAdjustment,
+      h: this.croppedImage.cropperPosition.y2 * scaleAdjustment,
       type: this.selectedMode,
       active: "Y",
     };
@@ -1118,20 +1113,20 @@ export class HomeComponent implements OnInit {
         this.croppedData[index].boundingBox[coordinateIndex].inEditingMode =
           false;
         this.croppedData[index].boundingBox[coordinateIndex].x =
-          this.croppedImage.cropperPosition.x1 / this.scale;
+          this.croppedImage.cropperPosition.x1 * scaleAdjustment;
         this.croppedData[index].boundingBox[coordinateIndex].y =
-          this.croppedImage.cropperPosition.y1 / this.scale;
+          this.croppedImage.cropperPosition.y1 * scaleAdjustment;
         this.croppedData[index].boundingBox[coordinateIndex].w =
-          this.croppedImage.cropperPosition.x2 / this.scale;
+          this.croppedImage.cropperPosition.x2 * scaleAdjustment;
         this.croppedData[index].boundingBox[coordinateIndex].h =
-          this.croppedImage.cropperPosition.y2 / this.scale;
+          this.croppedImage.cropperPosition.y2 * scaleAdjustment;
         this.croppedData[index].boundingBox[coordinateIndex].type =
           this.selectedMode;
       } else {
         this.croppedData[index].boundingBox.push(obj);
       }
     } else {
-      const objLis : any =[];
+      const objLis: any = [];
       objLis.push(obj);
       const croppedDataObj = {
         skuId: this.selectedProductId,
@@ -1172,10 +1167,10 @@ export class HomeComponent implements OnInit {
         }
       });
       this.cropperPosition = {
-        x1: clickX - cropperWidth / 2,
-        y1: clickY - cropperHeight / 2,
-        x2: clickX + cropperWidth / 2,
-        y2: clickY + cropperHeight / 2,
+        x1: (clickX - cropperWidth / 2) * this.scale,
+        y1: (clickY - cropperHeight / 2) * this.scale,
+        x2: (clickX + cropperWidth / 2) * this.scale,
+        y2: (clickY + cropperHeight / 2) * this.scale,
       };
     }
   }
