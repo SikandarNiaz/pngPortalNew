@@ -1091,7 +1091,7 @@ export class HomeComponent implements OnInit {
 
   getCoordinates() {
     // if sku is in editing mode, then save in existing object else add it in the list
-    const scaleAdjustment = 1 - this.scale + 1;
+    const scaleAdjustment = 1 / this.scale;
     const obj = {
       tempId: Math.floor(Math.random() * 1000000000 + 1),
       inEditingMode: false,
@@ -1159,18 +1159,20 @@ export class HomeComponent implements OnInit {
           element.boundingBox?.length > 0
         ) {
           cropperWidth =
-            element.boundingBox[element.boundingBox.length - 1].w -
-            element.boundingBox[element.boundingBox.length - 1].x;
+            (element.boundingBox[element.boundingBox.length - 1].w -
+              element.boundingBox[element.boundingBox.length - 1].x) *
+            this.scale;
           cropperHeight =
-            element.boundingBox[element.boundingBox.length - 1].h -
-            element.boundingBox[element.boundingBox.length - 1].y;
+            (element.boundingBox[element.boundingBox.length - 1].h -
+              element.boundingBox[element.boundingBox.length - 1].y) *
+            this.scale;
         }
       });
       this.cropperPosition = {
-        x1: (clickX - cropperWidth / 2) * this.scale,
-        y1: (clickY - cropperHeight / 2) * this.scale,
-        x2: (clickX + cropperWidth / 2) * this.scale,
-        y2: (clickY + cropperHeight / 2) * this.scale,
+        x1: clickX - cropperWidth / 2,
+        y1: clickY - cropperHeight / 2,
+        x2: clickX + cropperWidth / 2,
+        y2: clickY + cropperHeight / 2,
       };
     }
   }
