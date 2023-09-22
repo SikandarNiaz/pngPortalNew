@@ -24,6 +24,8 @@ import {
 })
 export class HomeComponent implements OnInit {
   // IR variables
+  irImageLoading: boolean = false;
+  modalConfig = {};
   transform: ImageTransform = {};
   scale = 0.7;
   cropperDisabled: boolean = true;
@@ -128,6 +130,8 @@ export class HomeComponent implements OnInit {
   rolesIdsList: string;
   imageWidthStart: number;
   imageHeightStart: number;
+  base64Image: any;
+  selectedProductsIds: any = [];
 
   constructor(
     private router: Router,
@@ -895,10 +899,29 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  showChildModal(shop): void {
+ showChildModal(shop) {
+    this.modalConfig = { backdrop: true, keyboard: true };
+    // await this.getImage(shop?.url);
+
+    // for image proxy: not working
+    // console.log("Shop: ", shop);
+    // var hi = shop.url.replace("https://s3.us-east-1.wasabisys.com/png-android/", "/apibiz/")
+    // shop.url = hi;
+    // console.log("Shop: ", shop);
+
+    // working for font end base64- conversion not working due to cors
+    //  console.log("Shop 1: ", shop);
+    // this.convertImageUrlToBase64(shop.url);
+    //  console.log("Shop 2: ", shop);
+
+    // base64 image conversion using proxyServlet: working
     this.selectedShop = shop;
-    // this.resizeImage(400,700);
-    this.getImageDimensions();
+    this.getImageNew(shop.url);
+
+
+    
+    console.log("this. selectedShop in showChildModal: ", this.selectedShop);
+    // this.getImageDimensions();
     this.selectedShop.recognizedResult = this.isJSONString(
       shop.recognizedResult
     )
@@ -990,6 +1013,7 @@ export class HomeComponent implements OnInit {
           if (
             image.url.indexOf("amazonaws.com") >= 0 ||
             image.url.indexOf("http") >= 0
+            || image.url.indexOf("base64") >= 0
           ) {
             const i = data.imageList.findIndex(
               (e) => e.url == image.url && e.title == image.title
@@ -1069,8 +1093,10 @@ export class HomeComponent implements OnInit {
 
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event;
+  
     // event.blob can be used to upload the cropped image
   }
+
   imageLoaded(image: LoadedImage) {
     // show cropper
   }
@@ -1081,22 +1107,29 @@ export class HomeComponent implements OnInit {
     // show message
   }
   showCropper() {
+    console.log("this. selectedShop in showCropper|Identify Brands B: ", this.selectedShop);
     this.isCroppingMode = true;
+    this.modalConfig = { backdrop: "static", keyboard: false };
   }
   hideCropper() {
+    console.log("this. selectedShop in hideCropper|Close B: ", this.selectedShop);
+    this.modalConfig = { backdrop: true, keyboard: true };
     this.closeProductEditor();
-   this.imageWidth = this.imageWidthStart;
+    this.imageWidth = this.imageWidthStart;
    this.imageHeight = this.imageHeightStart;
    this.resizeImage(this.imageWidth, this.imageHeight);
     this.isCroppingMode = false;
     this.cropperDisabled = true;
     this.cropperPosition = {};
     this.selectedProductId = -1;
+    this.scale = 0.7;
   }
 
   getCoordinates() {
+    console.log('in getCoordinates');
     // if sku is in editing mode, then save in existing object else add it in the list
     const scaleAdjustment = 1 / this.scale;
+  
     const obj = {
       tempId: Math.floor(Math.random() * 1000000000 + 1),
       inEditingMode: false,
@@ -1145,9 +1178,30 @@ export class HomeComponent implements OnInit {
     this.saveRecognizedResult();
     this.cropperDisabled = true;
     this.cropperPosition = {};
-    console.log(this.croppedData);
+    console.log("this.croppedData in getCoordinates|Save B: ",this.croppedData);
   }
+
+  // to handle right click on image-container div
+  handleRightClick(event: MouseEvent) {
+    event.preventDefault(); // Prevent default context menu
+    console.log('handleRightClick');
+    if(
+      !this.cropperDisabled 
+      && this.selectedProductId!=-1
+      && this.selectedMode.title
+      && this.croppedImage.cropperPosition
+      ){
+      this.getCoordinates();
+    }
+    
+  }
+
   changeCropperStatus(event: MouseEvent) {
+    // if (event.button === 0) {
+    //   console.log('Left click');
+    // } else if (event.button === 2) {
+    //   console.log('Right click');
+    // }
     let cropperWidth = 100;
     let cropperHeight = 150;
     if (this.cropperDisabled) {
@@ -1198,9 +1252,6 @@ export class HomeComponent implements OnInit {
       });
     });
   }
-
-  
-
   showCropperOnImage(tempId) {
     this.closeProductEditor();
     const index = this.croppedData.findIndex(
@@ -1233,7 +1284,7 @@ export class HomeComponent implements OnInit {
   }
 
   setCroppedDataProperties() {
-    console.log("croppedData: ", this.croppedData);
+    console.log("croppedData setCroppedDataProperties: ", this.croppedData);
     this.croppedData?.forEach((sku) => {
       sku.boundingBox.forEach((coordinate) => {
         coordinate.tempId =
@@ -1242,7 +1293,7 @@ export class HomeComponent implements OnInit {
         coordinate.active = coordinate.active || "Y";
       });
     });
-    console.log(this.croppedData);
+    console.log("croppedData setCroppedDataProperties: ", this.croppedData);
   }
   saveRecognizedResult() {
     const obj = {
@@ -1252,7 +1303,6 @@ export class HomeComponent implements OnInit {
 
     this.evaluationService.saveRecognizedResult(obj).subscribe(
       (data: any) => {
-        debugger;
         if (data.success) {
           this.setProductFacing();
           this.toastr.success("Data Updated Successfully");
@@ -1294,17 +1344,26 @@ export class HomeComponent implements OnInit {
 
   resizeImage(width: number, height: number) {
     const img = new Image();
-    img.src = this.selectedShop?.url;
+    img.src = this.selectedShop?.base64Image;
+    console.log("this. selectedShop in resizeImage: ", this.selectedShop);
+    console.log(" img. src resizeImage: ",  img.src);
     img.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.error('Canvas 2D context not available.');
+        return;
+      }
       canvas.width = width;
       canvas.height = height;
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
       ctx.drawImage(img, 0, 0, width, height);
-      this.selectedShop.url = canvas.toDataURL("image/png");
+      this.selectedShop.base64Image = canvas.toDataURL("image/png");
+    };
+    img.onerror = (error) => {
+      console.error('Error loading image:', error);
     };
   }
 
@@ -1323,12 +1382,19 @@ export class HomeComponent implements OnInit {
   zoomIn() {
     this.scale = parseFloat((this.scale + 0.1).toFixed(1));
     this.updateImagePosition();
+    this.cropperDisabled= true;
+
+
+   
   }
 
   // Function to handle zoom out
   zoomOut() {
     this.scale = parseFloat((this.scale - 0.1).toFixed(1));
     this.updateImagePosition();
+    this.cropperDisabled= true;
+
+    
   }
 
   // Function to update the image position based on zoom level
@@ -1340,13 +1406,13 @@ export class HomeComponent implements OnInit {
 
   getImageDimensions() {
     const img = new Image();
-    img.src = this.selectedShop?.url;
+    img.src = this.selectedShop?.base64Image;
 
     img.onload = () => {
       this.imageWidth = img.width;
-      this.imageWidthStart = img.width;
-      this.imageHeightStart = img.height;
       this.imageHeight = img.height;
+      this.imageHeightStart = img.height;
+      this.imageWidthStart = img.width;
 
       // Update the dimensions as needed or perform other actions with the dimensions
       console.log(`Image Width: ${this.imageWidth}px`);
@@ -1420,4 +1486,55 @@ export class HomeComponent implements OnInit {
       return false;
     }
   }
+
+  onModalHide() {
+    this.selectedShop = {};
+  }
+
+  // base64 image conversion using proxyServlet : working
+  getImageNew(imageUrl: string){
+    this.irImageLoading = true;
+    const data = this.evaluationService.getImageNew(imageUrl).then((data: any) => {
+     console.log("imageProxyServlet res data.base64Image: ", data.base64Image);
+     this.selectedShop.base64Image =data.base64Image;
+     this.getImageDimensions();
+    
+    this.irImageLoading = false;
+ 
+   })
+   .catch(error => {
+     console.error("Error converting image:", error);
+   });
+   }
+
+  // converting to base64: not working due to cors issue
+  convertImageUrlToBase64(imageUrl: string){
+   const data = this.evaluationService.convertImageUrlToBase64(imageUrl).then((base64Image) => {
+    console.log("data:::: ", base64Image);
+   this.selectedShop.imageBase644 =base64Image;
+
+  })
+  .catch(error => {
+    console.error("Error converting image:", error);
+  });
+  }
+
+  // selectUnselectAllProduct(event, product){
+  //   if (event.checked == true) {
+  //     this.selectedProductsIds.push(product.product_id);
+  //     console.log(this.selectedProductsIds);
+
+  //     // this.selectedProductId = productId;
+  //   } else {
+  //     const i = this.selectedProductsIds.indexOf(product.product_id);
+  //     this.selectedProductsIds.splice(i, 1);
+
+  //     // this.selectedProductId = -1;
+  //   }
+  //   if(this.selectedProductsIds.length>1){
+  //     this.closeProductEditor();
+  //   this.cropperDisabled = true;
+  //   }
+    
+  // }
 }

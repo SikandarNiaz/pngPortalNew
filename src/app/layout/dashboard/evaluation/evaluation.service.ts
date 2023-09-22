@@ -88,4 +88,39 @@ export class EvaluationService {
     const url = this.ip + "/updateRecognizedResult";
     return this.http.post(url, obj);
   }
+
+  // base64 image conversion using proxyServlet : working
+  getImageNew(imageUrl) : Promise<string>{
+    const obj = {
+      imageUrl: imageUrl
+      }
+    const urlencoded = this.UrlEncodeMaker(obj);
+
+    // const url = "/api"+ "/imageProxyServletNew";
+    const url = this.ip + "/imageProxyServlet";
+    return this.http.post(url, urlencoded, this.httpOptions).toPromise()
+    .then((response:any) => {
+      // const base64Image = this.arrayBufferToBase64(response);
+      return response;
+    });
+  }
+
+  convertImageUrlToBase64(imageUrl: string): Promise<string> {
+    return this.http.get(imageUrl, { responseType: 'arraybuffer' })
+      .toPromise()
+      .then((response) => {
+        const base64Image = this.arrayBufferToBase64(response);
+        return `data:image/png;base64,${base64Image}`;
+      });
+  }
+
+  arrayBufferToBase64(buffer: ArrayBuffer): string {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
 }

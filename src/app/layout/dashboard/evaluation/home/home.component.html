@@ -541,6 +541,8 @@
   tabindex="-1"
   role="dialog"
   aria-labelledby="dialog-child-name"
+  (onHide)="onModalHide()"
+  [config]="modalConfig"
 >
 <div class="row">
   <div class="col-md-4" *ngIf="!isCroppingMode">
@@ -604,7 +606,7 @@
           style="width: 100%; height: 650px"
         />
         <button
-        *ngIf="selectedShop?.productList && croppedData?.length > 0"
+        *ngIf="selectedShop?.productList && selectedShop?.recognizedResult"
         type="button"
         class="btn btn-primary btn-lg btn-block"
         (click)="showCropper()"
@@ -618,11 +620,13 @@
 
 <div class="col-md-12" *ngIf="isCroppingMode">
   <div class="modal-content">
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-8" style="padding: 0px">
+    <div class="modal-body newModal-body">
+      <div class="row" *ngIf="!irImageLoading">
+        <div class="col-md-8" style="padding: 0px; overflow: scroll; max-height: 95vh;">
+          <!-- <div class="col-md-8" style="padding: 0px;"> -->
           <div
             (click)="changeCropperStatus($event)"
+            (contextmenu)="handleRightClick($event)"
             class="image-container"
             [style.width.px]="imageWidth * scale"
             [style.height.px]="imageHeight * scale"
@@ -637,11 +641,13 @@
               (imageLoaded)="imageLoaded($event)"
               (cropperReady)="cropperReady()"
               (loadImageFailed)="loadImageFailed()"
-              [imageURL]="selectedShop?.url"
+              [imageBase64]="selectedShop?.base64Image"
               [disabled]="cropperDisabled"
               [cropper]="cropperPosition"
               [alignImage]="'left'"
             ></image-cropper>
+            <!-- [imageUrl] = "selectedShop?.url"
+            [imageBase64]="selectedShop?.imageBase64" -->
             <ng-container *ngIf="croppedData?.length > 0">
               <ng-container *ngFor="let img of croppedData">
                 <ng-container *ngIf="img.skuId == selectedProductId">
@@ -652,7 +658,7 @@
                         !coordinates.inEditingMode &&
                         coordinates.active == 'Y'
                       "
-                      src="assets/60896ff5f4388b1434005ce1"
+                      src="assets/ir_images/{{img.skuId}}.png"
                       alt="Overlay Image"
                       [style.left.px]="coordinates.x * scale"
                       [style.top.px]="coordinates.y * scale"
@@ -675,7 +681,13 @@
             <table class="table table-bordered table-hover w-100">
               <thead>
                 <tr>
-                  <th></th>
+                  <th>
+                    <!-- <mat-checkbox
+                    color="primary"
+                    (change)="selectUnselectAllProduct($event)"
+                    >
+                    </mat-checkbox> -->
+                  </th>
                   <th scope="col">Product Id</th>
                   <th scope="col">Product Name</th>
                   <th scope="col">Facing</th>
@@ -764,6 +776,7 @@
                 </ng-container>
               </tbody>
             </table>
+           
           </div>
           <section>
             <mat-radio-group
@@ -792,13 +805,14 @@
               Save
             </button>
             <button
-              style="margin-left: 10px"
-              color="primary"
-              mat-raised-button
-              (click)="hideCropper()"
-            >
-              Close
-            </button>
+            style="margin-left: 10px"
+            color="primary"
+            mat-raised-button
+            (click)="hideCropper()"
+          >
+            Close
+          </button>
+           
           </section>
           <section>
             <button
@@ -820,6 +834,11 @@
               Zoom +
             </button>
           </section>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8" style="padding: 0px; margin: 20% 40%" *ngIf="irImageLoading">
+          <img src="assets/images/basicloader.gif" alt="" srcset="" />
         </div>
       </div>
     </div>

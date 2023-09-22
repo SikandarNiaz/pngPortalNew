@@ -39,9 +39,11 @@ export class ShopDetailComponent implements OnInit {
     this.childModal.show();
   }
   goToEvaluation(id) {
+    //  const chromeOptions = '--user-data-dir="C://Chrome dev session" --disable-web-security';
     window.open(
       `${environment.hash}dashboard/evaluation/list/details/${id}?location=shop&viewType=${this.viewType}&surveyorType=${this.shopObject?.type || 1}`,
       "_blank"
+      // "_blank",chromeOptions
     );
   }
   hideChildModal(): void {
