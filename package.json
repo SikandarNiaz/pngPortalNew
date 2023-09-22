@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --progress",
     "build": "ng build --prod",
+    "serve_proxy": "ng serve --proxy-config proxy.conf.json",
     "gitbuild": "ng build --prod --aot --build-optimizer --outputHashing=all /start-javascript/sb-admin-material/master/dist/",
     "test": "ng test",
     "lint": "ng lint",

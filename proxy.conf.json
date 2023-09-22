@@ -1,0 +1,18 @@
+{
+  "/api/*": {
+    "target": "https://png.rtdtradetracker.com/",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+  },
+  "/images/*": {
+    "target": "https://s3.us-east-1.wasabisys.com/",
+    "secure": false,
+    "pathRewrite": {
+      "^/images": ""
+    },
+    "changeOrigin": true
+  }
+}
