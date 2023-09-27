@@ -650,7 +650,7 @@
             [imageBase64]="selectedShop?.imageBase64" -->
             <ng-container *ngIf="croppedData?.length > 0">
               <ng-container *ngFor="let img of croppedData">
-                <ng-container *ngIf="img.skuId == selectedProductId">
+                <ng-container *ngIf="selectedProductsIds.includes(img.skuId?.toString())">
                   <ng-container *ngFor="let coordinates of img.boundingBox">
                     <img
                       class="rectangle-overlay"
@@ -682,11 +682,11 @@
               <thead>
                 <tr>
                   <th>
-                    <!-- <mat-checkbox
+                    <mat-checkbox
                     color="primary"
                     (change)="selectUnselectAllProduct($event)"
                     >
-                    </mat-checkbox> -->
+                    </mat-checkbox>
                   </th>
                   <th scope="col">Product Id</th>
                   <th scope="col">Product Name</th>
@@ -716,8 +716,8 @@
                       color="primary"
                       name="{{ product?.product_id }}"
                       id="{{ product?.product_id }}"
-                      [checked]="selectedProductId == product?.product_id"
-                      (change)="selectProduct(product.product_id, $event)"
+                      (change)="selectProduct(product, checked)"
+                      #checked
                     >
                     </mat-checkbox>
                   </td>
@@ -746,7 +746,7 @@
                   >
                     <tr
                       *ngIf="
-                        product?.skuId == selectedProductId &&
+                       selectedProductsIds.includes(product?.skuId?.toString()) &&
                         coordinate.active == 'Y'
                       "
                       (click)="showCropperOnImage(coordinate.tempId)"
@@ -765,8 +765,9 @@
                         <a
                           (click)="deleteImage(coordinate.tempId)"
                           [routerLink]=""
+                          [class.disabled-link]="selectedProductsIds.length>1"
                         >
-                          <div style="height: 100%; width: 100%">
+                          <div style="height: 100%; width: 100%; color:red">
                             Delete
                           </div>
                         </a>
@@ -784,41 +785,52 @@
               [(ngModel)]="selectedMode"
             >
               <ng-container *ngFor="let mode of modeList">
-                <mat-radio-button [value]="mode">
+                <mat-radio-button [value]="mode" style="margin-left: 10px;">
                   {{ mode.title }}
                 </mat-radio-button>
               </ng-container>
             </mat-radio-group>
 
             <button
-              style="margin-left: 10px"
-              color="primary"
+              style="margin-left: 10px;"
+            
               mat-raised-button
               [disabled]="
                 !selectedMode.title ||
                 !croppedImage.cropperPosition ||
-                selectedProductId == -1 ||
+               
                 cropperDisabled
+                || selectedProductsIds.length>1
               "
+            
               (click)="getCoordinates()"
+              [ngClass]="
+                !selectedMode.title || !croppedImage.cropperPosition || cropperDisabled || 
+                selectedProductsIds.length > 1 ? 'enabled-button' : 'disabled-button'
+              "
+              
             >
+            
               Save
+              <i [ngClass]="{ 'fa fa-spinner fa-spin': loadingData }"></i>
             </button>
             <button
-            style="margin-left: 10px"
+            style="margin-left: 10px; background:crimson; color: white;"
             color="primary"
             mat-raised-button
             (click)="hideCropper()"
           >
+         
             Close
           </button>
+          <!-- <i [ngClass]="{ 'fa fa-cog fa-spin fa-2x': loadingData }" style="margin-left: 10px; margin-top: 10px;"></i> -->
            
           </section>
           <section>
             <button
               [disabled]="scale == 0.5"
               style="margin-left: 10px"
-              color="warn"
+              class="btn-primary"
               mat-raised-button
               (click)="zoomOut()"
             >
@@ -828,6 +840,7 @@
               [disabled]="scale == 1.0"
               style="margin-left: 10px"
               color="warn"
+              class="btn-primary"
               mat-raised-button
               (click)="zoomIn()"
             >
