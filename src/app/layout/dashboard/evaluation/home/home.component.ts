@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { Location } from "@angular/common";
 import { EvaluationService } from "../evaluation.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -24,8 +24,6 @@ import {
 })
 export class HomeComponent implements OnInit {
   // IR variables
-  loadingData = false;
-  @ViewChildren("checked") private myCheckbox: any;
   irImageLoading: boolean = false;
   modalConfig = {};
   transform: ImageTransform = {};
@@ -1123,7 +1121,7 @@ export class HomeComponent implements OnInit {
     this.isCroppingMode = false;
     this.cropperDisabled = true;
     this.cropperPosition = {};
-    this.selectedProductsIds = [];
+    this.selectedProductId = -1;
     this.scale = 0.7;
   }
 
@@ -1143,7 +1141,7 @@ export class HomeComponent implements OnInit {
       active: "Y",
     };
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductsIds[0]
+      (e) => e.skuId == this.selectedProductId
     );
     if (index > -1) {
       const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
@@ -1169,7 +1167,7 @@ export class HomeComponent implements OnInit {
       const objLis: any = [];
       objLis.push(obj);
       const croppedDataObj = {
-        skuId: this.selectedProductsIds[0],
+        skuId: this.selectedProductId,
         // boundingBox: obj,
 
         boundingBox: objLis,
@@ -1189,7 +1187,7 @@ export class HomeComponent implements OnInit {
     console.log('handleRightClick');
     if(
       !this.cropperDisabled 
-      &&  this.selectedProductsIds.length == 1
+      && this.selectedProductId!=-1
       && this.selectedMode.title
       && this.croppedImage.cropperPosition
       ){
@@ -1204,10 +1202,9 @@ export class HomeComponent implements OnInit {
     // } else if (event.button === 2) {
     //   console.log('Right click');
     // }
-    debugger;
     let cropperWidth = 100;
     let cropperHeight = 150;
-    if (this.cropperDisabled && this.selectedProductsIds.length==1) {
+    if (this.cropperDisabled) {
       this.cropperDisabled = false;
       const imgElement = event.target as HTMLImageElement;
       const imgRect = imgElement.getBoundingClientRect();
@@ -1217,7 +1214,7 @@ export class HomeComponent implements OnInit {
       // Calculate the cropper position based on the click coordinates
       this.croppedData.forEach((element) => {
         if (
-          element.skuId == this.selectedProductsIds[0] &&
+          element.skuId == this.selectedProductId &&
           element.boundingBox?.length > 0
         ) {
           cropperWidth =
@@ -1239,7 +1236,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
+  selectProduct(productId, event) {
+    if (event.checked == true) {
+      this.selectedProductId = productId;
+    } else {
+      this.selectedProductId = -1;
+    }
+    this.closeProductEditor();
+  }
 
   closeProductEditor() {
     this.croppedData.forEach((element) => {
@@ -1249,13 +1253,9 @@ export class HomeComponent implements OnInit {
     });
   }
   showCropperOnImage(tempId) {
-    debugger;
-    if(this.selectedProductsIds.length == 1){
-
-   
     this.closeProductEditor();
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductsIds[0]
+      (e) => e.skuId == this.selectedProductId
     );
     const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
       (e) => e.tempId == tempId
@@ -1269,11 +1269,10 @@ export class HomeComponent implements OnInit {
     };
     this.cropperDisabled = false;
   }
-  }
 
   deleteImage(tempId) {
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductsIds[0]
+      (e) => e.skuId == this.selectedProductId
     );
     const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
       (e) => e.tempId == tempId
@@ -1297,7 +1296,6 @@ export class HomeComponent implements OnInit {
     console.log("croppedData setCroppedDataProperties: ", this.croppedData);
   }
   saveRecognizedResult() {
-    this.loadingData = true;
     const obj = {
       id: this.selectedShop.id,
       recognizedResult: this.selectedShop.recognizedResult,
@@ -1311,11 +1309,9 @@ export class HomeComponent implements OnInit {
         } else {
           this.toastr.error(data.message, "Update Data");
         }
-        this.loadingData = false;
       },
       (error) => {
         this.toastr.error(error.message, "Error");
-        this.loadingData = false;
       }
     );
   }
@@ -1523,54 +1519,22 @@ export class HomeComponent implements OnInit {
   });
   }
 
-  selectProduct(item, event) {
-    if (event.checked == true) {
-      this.selectedProductsIds.push(item.product_id);
-      console.log(this.selectedProductsIds);
-      // this.selectedProductId = productId;
-    } else {
-      const i = this.selectedProductsIds.indexOf(item.product_id);
-       this.selectedProductsIds.splice(i, 1);
-      console.log(this.selectedProductsIds);
-      // this.selectedProductId = -1;
-    }
-    this.cropperDisabled = true;
-    this.cropperPosition = {};
-    this.closeProductEditor();
-  }
+  // selectUnselectAllProduct(event, product){
+  //   if (event.checked == true) {
+  //     this.selectedProductsIds.push(product.product_id);
+  //     console.log(this.selectedProductsIds);
 
-  // yahan se
-  selectUnselectAllProduct(event, product){
-    if (event.checked === true) {
-      for (let i = 0; i < this.selectedShop.productList.length; i++) {
-        if (
-          this.selectedProductsIds.indexOf(this.selectedShop.productList[i].product_id) ==
-          -1
-        ) {
-          this.selectedProductsIds.push(this.selectedShop.productList[i].product_id);
-          console.log(this.selectedProductsIds);
-        }
-      }
-      for (let index = 0; index < this.myCheckbox._results.length; index++) {
-        this.myCheckbox._results[index]._checked = true;
-      }
-    } else {
-      for (let i = 0; i < this.selectedShop.productList.length; i++) {
-        const i = this.selectedProductsIds.indexOf("product_id");
-        this.selectedProductsIds.splice(i, 1);
-        console.log(this.selectedProductsIds);
-        this.selectedProductsIds = [];
-        console.log(this.selectedProductsIds);
-      }
-      for (let index = 0; index < this.myCheckbox._results.length; index++) {
-        this.myCheckbox._results[index]._checked = false;
-      }
-    }
+  //     // this.selectedProductId = productId;
+  //   } else {
+  //     const i = this.selectedProductsIds.indexOf(product.product_id);
+  //     this.selectedProductsIds.splice(i, 1);
+
+  //     // this.selectedProductId = -1;
+  //   }
+  //   if(this.selectedProductsIds.length>1){
+  //     this.closeProductEditor();
+  //   this.cropperDisabled = true;
+  //   }
     
-    this.closeProductEditor();
-    this.cropperDisabled = true;
-  
-    this.cropperPosition = {};
-    
-  }
+  // }
 }
