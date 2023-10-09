@@ -33,7 +33,7 @@ export class ShopDetailComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private readonly location : Location
   ) {
-    this.location.replaceState("/dashboard/shop_detail");
+    // this.location.replaceState("/dashboard/shop_detail");
   }
   showChildModal(): void {
     this.childModal.show();

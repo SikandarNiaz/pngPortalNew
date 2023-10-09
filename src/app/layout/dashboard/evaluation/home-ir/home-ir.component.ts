@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren } from "@angular/core";
 import { Location } from "@angular/common";
 import { EvaluationService } from "../evaluation.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -18,16 +18,19 @@ import {
 } from "ngx-image-cropper";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  selector: "app-home-ir",
+  templateUrl: "./home-ir.component.html",
+  styleUrls: ["./home-ir.component.scss"],
 })
-export class HomeComponent implements OnInit {
+export class HomeIRComponent implements OnInit {
   // IR variables
+  loadingData = false;
+  @ViewChildren("checked") private myCheckbox: any;
   irImageLoading: boolean = false;
   modalConfig = {};
   transform: ImageTransform = {};
-  scale = 0.7;
+  // scale = 0.7;
+  scale = 1.0;
   cropperDisabled: boolean = true;
   croppedData: any = [];
   imageChangedEvent: any = "";
@@ -132,6 +135,10 @@ export class HomeComponent implements OnInit {
   imageHeightStart: number;
   base64Image: any;
   selectedProductsIds: any = [];
+  obj: any = {};
+  newObj: any;
+  showButton: boolean = false;
+  showButtonTitle: string = 'Show';
 
   constructor(
     private router: Router,
@@ -146,24 +153,16 @@ export class HomeComponent implements OnInit {
     this.rolesIdsList = localStorage.getItem("RolesIdsList");
 
     this.activatedRoutes.queryParams.subscribe((q) => {
-      if (q.viewType) {
-        this.viewType = q.viewType;
-        this.surveyorType = q.surveyorType || 1;
-      }
+      console.log("q: ",q);
+       this.newObj = q;
+        this.obj.assetTypeId = q.assetTypeId || -1;
+        this.obj.surveyId = q.surveyId;
+        this.obj.surveyorType = q.surveyorType || 1;
+        this.obj.userTypeId= localStorage.getItem("user_type") || -1;
+     
     });
-    this.activatedRoutes.params.subscribe((params) => {
-      this.p = params;
-      this.surveyId = params.id;
-
-      const obj = {
-        surveyId: this.surveyId,
-        userTypeId: localStorage.getItem("user_type"),
-        viewType: this.viewType,
-        surveyorType: this.surveyorType,
-      };
-
-      this.getData(obj);
-    });
+    console.log("newObj: ",this.newObj);
+    this.getData(this.obj);
   }
   value = 5;
   options: any = {
@@ -211,15 +210,16 @@ export class HomeComponent implements OnInit {
     }
   }
   getData(obj) {
-    this.httpService.getShopDetails(obj).subscribe(
+    this.httpService.getShopDetailsIR(obj).subscribe(
       (data) => {
         if (data) {
           this.data = data;
-          this.surveyDetails = this.data.shopDetails.sectionMap;
-          document.title =
-            this.surveyDetails.surveyorName +
-            " - " +
-            this.surveyDetails.shopTitle;
+          this.surveyDetails = this.data.shopDetails?.sectionMap;
+          // document.title =
+          //   this.surveyDetails?.surveyorName +
+          //   " - " +
+          //   this.surveyDetails?.shopTitle;
+          document.title ='IR Image View';
           this.setImageUrl();
           if (this.data.criteria) {
             this.evaluationArray = this.data.criteria;
@@ -259,7 +259,7 @@ export class HomeComponent implements OnInit {
   }
 
   setViewForEvaluation() {
-    if (this.surveyDetails.evaluationStatus == -1) {
+    if (this.surveyDetails?.evaluationStatus == -1) {
       this.setPSKUCriteria();
       this.isEditable = true;
       this.showCriteria = true;
@@ -268,7 +268,7 @@ export class HomeComponent implements OnInit {
   }
 
   setViewForReeevaluation() {
-    if (this.surveyDetails.evaluationStatus != -1) {
+    if (this.surveyDetails?.evaluationStatus != -1) {
       this.showCriteria = true;
       this.isEditable = true;
       this.checkEvaluatedRemarks();
@@ -277,7 +277,7 @@ export class HomeComponent implements OnInit {
   }
 
   setDefaultView() {
-    if (this.surveyDetails.evaluationStatus != -1) {
+    if (this.surveyDetails?.evaluationStatus != -1) {
       if (this.rolesIdsList) {
         //let temp: any = this.rolesIdsList.split(",");
         let temp: any = this.rolesIdsList.split(/[ ,]+/); // spaces trimmed, empty values skipped
@@ -296,7 +296,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkEvaluatedRemarks() {
-    if (this.existingRemarks.length > 0) {
+    if (this.existingRemarks?.length > 0) {
       this.existingRemarks.forEach((element1) => {
         if (element1.id > 0) {
           const obj = {
@@ -407,7 +407,7 @@ export class HomeComponent implements OnInit {
   }
 
   setRemarksForReEvaluation() {
-    if (this.existingRemarks.length > 0) {
+    if (this.existingRemarks?.length > 0) {
       for (const element1 of this.existingRemarks) {
         for (const element of this.cloneArray) {
           if (element1.criteriaId === element.id) {
@@ -597,7 +597,7 @@ export class HomeComponent implements OnInit {
 
   getTotalAchieveScore() {
     let score = 0;
-    this.cloneArray.forEach((element) => {
+    this.cloneArray?.forEach((element) => {
       if (element.achievedScore >= 0) {
         score = score + element.achievedScore;
       }
@@ -934,7 +934,12 @@ export class HomeComponent implements OnInit {
     this.setProductFacing();
     this.setCompetition();
     this.rotationDegree = 0;
-    this.childModal.show();
+
+
+    // to remove middle modal
+    // this.childModal.show();
+    this.showCropper();
+    
   }
 
   hideChildModal(): void {
@@ -1109,20 +1114,38 @@ export class HomeComponent implements OnInit {
   showCropper() {
     console.log("this. selectedShop in showCropper|Identify Brands B: ", this.selectedShop);
     this.isCroppingMode = true;
+
+
+    // to remove middle modal
+    this.childModal.show();
+
+
     this.modalConfig = { backdrop: "static", keyboard: false };
   }
   hideCropper() {
+
+    // to remove middle modal
+    this.childModal.hide();
+    // this.isCroppingMode = false;
+
+
+    this.showButton = false;
+    this.showButtonTitle = 'Show';
     console.log("this. selectedShop in hideCropper|Close B: ", this.selectedShop);
     this.modalConfig = { backdrop: true, keyboard: true };
     this.closeProductEditor();
     this.imageWidth = this.imageWidthStart;
    this.imageHeight = this.imageHeightStart;
    this.resizeImage(this.imageWidth, this.imageHeight);
-    this.isCroppingMode = false;
+    
     this.cropperDisabled = true;
     this.cropperPosition = {};
-    this.selectedProductId = -1;
-    this.scale = 0.7;
+    this.selectedProductsIds = [];
+    // this.scale = 0.7;
+    this.scale = 1.0;
+
+
+    
   }
 
   getCoordinates() {
@@ -1141,7 +1164,7 @@ export class HomeComponent implements OnInit {
       active: "Y",
     };
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductId
+      (e) => e.skuId == this.selectedProductsIds[0]
     );
     if (index > -1) {
       const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
@@ -1167,7 +1190,7 @@ export class HomeComponent implements OnInit {
       const objLis: any = [];
       objLis.push(obj);
       const croppedDataObj = {
-        skuId: this.selectedProductId,
+        skuId: this.selectedProductsIds[0],
         // boundingBox: obj,
 
         boundingBox: objLis,
@@ -1187,7 +1210,7 @@ export class HomeComponent implements OnInit {
     console.log('handleRightClick');
     if(
       !this.cropperDisabled 
-      && this.selectedProductId!=-1
+      &&  this.selectedProductsIds.length == 1
       && this.selectedMode.title
       && this.croppedImage.cropperPosition
       ){
@@ -1202,9 +1225,10 @@ export class HomeComponent implements OnInit {
     // } else if (event.button === 2) {
     //   console.log('Right click');
     // }
+    debugger;
     let cropperWidth = 100;
     let cropperHeight = 150;
-    if (this.cropperDisabled) {
+    if (this.cropperDisabled && this.selectedProductsIds.length==1) {
       this.cropperDisabled = false;
       const imgElement = event.target as HTMLImageElement;
       const imgRect = imgElement.getBoundingClientRect();
@@ -1214,7 +1238,7 @@ export class HomeComponent implements OnInit {
       // Calculate the cropper position based on the click coordinates
       this.croppedData.forEach((element) => {
         if (
-          element.skuId == this.selectedProductId &&
+          element.skuId == this.selectedProductsIds[0] &&
           element.boundingBox?.length > 0
         ) {
           cropperWidth =
@@ -1236,14 +1260,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  selectProduct(productId, event) {
-    if (event.checked == true) {
-      this.selectedProductId = productId;
-    } else {
-      this.selectedProductId = -1;
-    }
-    this.closeProductEditor();
-  }
+
 
   closeProductEditor() {
     this.croppedData.forEach((element) => {
@@ -1253,9 +1270,13 @@ export class HomeComponent implements OnInit {
     });
   }
   showCropperOnImage(tempId) {
+    debugger;
+    if(this.selectedProductsIds.length == 1){
+
+   
     this.closeProductEditor();
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductId
+      (e) => e.skuId == this.selectedProductsIds[0]
     );
     const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
       (e) => e.tempId == tempId
@@ -1269,10 +1290,11 @@ export class HomeComponent implements OnInit {
     };
     this.cropperDisabled = false;
   }
+  }
 
   deleteImage(tempId) {
     const index = this.croppedData.findIndex(
-      (e) => e.skuId == this.selectedProductId
+      (e) => e.skuId == this.selectedProductsIds[0]
     );
     const coordinateIndex = this.croppedData[index].boundingBox.findIndex(
       (e) => e.tempId == tempId
@@ -1296,6 +1318,7 @@ export class HomeComponent implements OnInit {
     console.log("croppedData setCroppedDataProperties: ", this.croppedData);
   }
   saveRecognizedResult() {
+    this.loadingData = true;
     const obj = {
       id: this.selectedShop.id,
       recognizedResult: this.selectedShop.recognizedResult,
@@ -1309,9 +1332,11 @@ export class HomeComponent implements OnInit {
         } else {
           this.toastr.error(data.message, "Update Data");
         }
+        this.loadingData = false;
       },
       (error) => {
         this.toastr.error(error.message, "Error");
+        this.loadingData = false;
       }
     );
   }
@@ -1417,8 +1442,9 @@ export class HomeComponent implements OnInit {
       // Update the dimensions as needed or perform other actions with the dimensions
       console.log(`Image Width: ${this.imageWidth}px`);
       console.log(`Image Height: ${this.imageHeight}px`);
+      // this.updateImagePosition();
     };
-    // this.updateImagePosition();
+
   }
 
   adjustOverlayImageSize(scaleFactor: number) {
@@ -1505,6 +1531,7 @@ export class HomeComponent implements OnInit {
    })
    .catch(error => {
      console.error("Error converting image:", error);
+     this.toastr.error("Something Went Wrong! Try Again")
    });
    }
 
@@ -1520,22 +1547,62 @@ export class HomeComponent implements OnInit {
   });
   }
 
-  // selectUnselectAllProduct(event, product){
-  //   if (event.checked == true) {
-  //     this.selectedProductsIds.push(product.product_id);
-  //     console.log(this.selectedProductsIds);
+  selectProduct(item, event) {
+    if (event.checked == true) {
+      this.selectedProductsIds.push(item.product_id);
+      console.log(this.selectedProductsIds);
+      // this.selectedProductId = productId;
+    } else {
+      const i = this.selectedProductsIds.indexOf(item.product_id);
+       this.selectedProductsIds.splice(i, 1);
+      console.log(this.selectedProductsIds);
+      // this.selectedProductId = -1;
+    }
+    this.cropperDisabled = true;
+    this.cropperPosition = {};
+    this.closeProductEditor();
+  }
 
-  //     // this.selectedProductId = productId;
-  //   } else {
-  //     const i = this.selectedProductsIds.indexOf(product.product_id);
-  //     this.selectedProductsIds.splice(i, 1);
-
-  //     // this.selectedProductId = -1;
-  //   }
-  //   if(this.selectedProductsIds.length>1){
-  //     this.closeProductEditor();
-  //   this.cropperDisabled = true;
-  //   }
+  // yahan se
+  selectUnselectAllProduct(){
+    if(this.showButton){
+      this.showButton = false;
+      this.showButtonTitle = 'Show';
+    }
+    else{
+      this.showButton = true;
+      this.showButtonTitle = 'Hide';
+    }
+    if (this.showButton == true) {
+      for (let i = 0; i < this.selectedShop.productList.length; i++) {
+        if (
+          this.selectedProductsIds.indexOf(this.selectedShop.productList[i].product_id) ==
+          -1
+        ) {
+          this.selectedProductsIds.push(this.selectedShop.productList[i].product_id);
+          console.log(this.selectedProductsIds);
+        }
+      }
+      for (let index = 0; index < this.myCheckbox._results.length; index++) {
+        this.myCheckbox._results[index]._checked = true;
+      }
+    } else {
+      for (let i = 0; i < this.selectedShop.productList.length; i++) {
+        const i = this.selectedProductsIds.indexOf("product_id");
+        this.selectedProductsIds.splice(i, 1);
+        console.log(this.selectedProductsIds);
+        this.selectedProductsIds = [];
+        console.log(this.selectedProductsIds);
+      }
+      for (let index = 0; index < this.myCheckbox._results.length; index++) {
+        this.myCheckbox._results[index]._checked = false;
+      }
+    }
     
-  // }
+    this.closeProductEditor();
+    this.cropperDisabled = true;
+  
+    this.cropperPosition = {};
+    
+  }
 }

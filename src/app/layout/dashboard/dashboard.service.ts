@@ -135,6 +135,20 @@ export class DashboardService {
     // );
   }
 
+  getTableListIR(obj) {
+    const body = this.UrlEncodeMaker(obj);
+    // `zoneId=${obj.zoneId}&regionId=${obj.regionId}&endDate=${obj.endDate}&startDate=${obj.startDate}&merchandiserId=${obj.merchandiserId}`;
+    const url = this.ip + 'irCompletedShopListController';
+    return this.http.post(url, body, this.httpOptions);
+    // .pipe(
+    //   timeout(60000),
+    //   catchError(e => {
+    //     this.toastr.error('Due to limited connectivity your request could not be completed, please try again', 'Request Timeout');
+    //     return of(null);
+    //   })
+    // );
+  }
+
   getMerchandiserListForEvaluation(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
     const url = this.ip + 'merchandiserList';

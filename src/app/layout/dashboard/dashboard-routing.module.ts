@@ -64,6 +64,7 @@ import { ManagePlanogramComponent } from "./innerComponents/manage-vd/manage-vd/
 import { UpdateLocationComponent } from "./innerComponents/update-locations/update-location-component";
 import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
 import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
+import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
 
 const routes: Routes = [
   {
@@ -191,6 +192,8 @@ const routes: Routes = [
   },
   // { path: 'shop_detail/:id', component: ShopDetailComponent },
   { path: "shop_detail/:id", component: ShopDetailComponent },
+  { path: "shop_detail_ir", component: ShopDetailIRAssetTypesComponent },
+  
 
   {
     path: "evaluation",

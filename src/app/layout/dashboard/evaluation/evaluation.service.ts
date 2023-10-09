@@ -48,6 +48,12 @@ export class EvaluationService {
     return this.http.post(url, urlencoded, this.httpOptions);
   }
 
+  getShopDetailsIR(obj) {
+    const urlencoded = this.UrlEncodeMaker(obj);
+    const url = this.ip + "irevaluationManager";
+    return this.http.post(url, urlencoded, this.httpOptions);
+  }
+
   evaluateShop(obj) {
     const url = this.ip + "evaluateShopNew";  //EvaluationShopControllerNew
     return this.http.post(url, obj);

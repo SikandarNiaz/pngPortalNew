@@ -48,10 +48,14 @@ import { AccordionModule } from "ngx-bootstrap/accordion";
 // IR module imports
 import { ImageCropperModule } from "ngx-image-cropper";
 import { Ng2OrderModule } from "ng2-order-pipe";
+import { HomeIRComponent } from "./home-ir/home-ir.component";
+import { SectionSeventyIRViewComponent } from "./section-seventy-ir-view/section-seventy-ir-view.component";
 
 @NgModule({
   declarations: [
     HomeComponent,
+    HomeIRComponent,
+    SectionSeventyIRViewComponent,
     DetailsPageComponent,
     MainPageComponent,
     SectionOneViewComponent,

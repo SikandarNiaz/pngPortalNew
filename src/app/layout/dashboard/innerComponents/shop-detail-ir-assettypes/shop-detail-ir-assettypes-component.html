@@ -1,0 +1,361 @@
+<mat-card class="mb-20">
+  <mat-card-content>
+    <mat-card-title>
+      {{ tableTitle | uppercase }} {{ title | uppercase }}
+    </mat-card-title>
+      <ng-container *ngIf="clusterList?.length > 0">
+        <mat-form-field class="example-margin mr-10-IMP">
+          <mat-select
+            placeholder="{{ labels.clusterLabel }}"
+            name="cluster"
+            [(ngModel)]="selectedCluster"
+            (ngModelChange)="getZoneByCluster();"
+          >
+            <mat-option [value]="cluster" *ngFor="let cluster of clusterList">{{
+              cluster.title
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <mat-form-field class="example-margin mr-10-IMP">
+        <mat-select
+          placeholder="Zone"
+          name="zone"
+          [(ngModel)]="selectedZone"
+          (ngModelChange)="zoneChange();"
+        >
+          <mat-option [value]="zone" *ngFor="let zone of zones">{{
+            zone.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+     
+
+     
+
+      <mat-form-field
+        *ngIf="regions.length > 0"
+        class="example-margin mr-10-IMP"
+      >
+        <mat-select
+          placeholder="Region"
+          name="region"
+          [(ngModel)]="selectedRegion"
+        >
+          <mat-option [value]="region" *ngFor="let region of regions">{{
+            region.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <!-- <mat-form-field
+        *ngIf="channels?.length > 0"
+        class="example-margin mr-10-IMP"
+      >
+        <mat-select
+          placeholder="Channel"
+          name="channel"
+          [(ngModel)]="selectedChannel"
+          multiple
+          #channelSelect="ngModel"
+          [compareWith]="equals"
+        >
+          <mat-option disabled="disabled" class="filter-option">
+            <button
+              mat-raised-button
+              class="mat-primary fill text-sm"
+              (click)="selectAll(channelSelect, channels)"
+            >
+              Select All
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              class="ml-1 mat-accent fill text-sm"
+              (click)="deselectAll(channelSelect)"
+            >
+              Deselect All
+            </button>
+          </mat-option>
+
+          <mat-option [value]="channel" *ngFor="let channel of channels">{{
+            channel.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        *ngIf="supervisorList?.length > 0"
+        class="example-margin mr-10-IMP"
+      >
+        <mat-select
+          placeholder="Supervisor"
+          name="supervisor"
+          [(ngModel)]="selectedSupervisor"
+          multiple
+          #supSelect="ngModel"
+          [compareWith]="equals"
+        >
+          <mat-option disabled="disabled" class="filter-option">
+            <button
+              mat-raised-button
+              class="mat-primary fill text-sm"
+              (click)="selectAll(supSelect, supervisorList)"
+            >
+              Select All
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              class="ml-1 mat-accent fill text-sm"
+              (click)="deselectAll(supSelect)"
+            >
+              Deselect All
+            </button>
+          </mat-option>
+
+          <mat-option [value]="sup" *ngFor="let sup of supervisorList">{{
+            sup.m_code
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+     
+
+      <!-- <mat-form-field class="example-full-width">
+        <mat-label>Search Shop Code</mat-label>
+        <input matInput placeholder="Shop Code" [(ngModel)]="shopCode">
+      </mat-form-field> -->
+
+
+
+      <mat-form-field class="example-full-width mr-10-IMP">
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [matDatepicker]="picker0"
+          [(ngModel)]="startDate"
+          placeholder="Choose a start date"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker0"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker0></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="example-full-width mr-10-IMP">
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [matDatepicker]="picker1"
+          [(ngModel)]="endDate"
+          placeholder="Choose a end date"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker1"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+
+
+   
+
+
+      <!-- <section> -->
+        
+        <!-- </section> -->
+
+      
+      
+           <button style="margin-left: 10px;"
+            mat-raised-button color="warn"
+            [disabled]="loading "
+            (click)="getTableData()"
+          >
+          <i
+          [ngClass]="{ 'fa fa-spinner fa-spin': loading }"
+        ></i>
+            Display 
+          </button>
+  </mat-card-content>
+</mat-card>
+
+
+
+
+
+
+<div
+  bsModal
+  #childModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          {{ selectedItem.shopName }}
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideChildModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          *ngIf="!isExternalUrl"
+          src="{{ ip }}{{ selectedItem.shopFullImg }}"
+          alt=""
+          style="width: 100%; height: 500px"
+        />
+        <img
+          *ngIf="isExternalUrl"
+          src="{{ selectedItem.shopFullImg }}"
+          alt=""
+          style="width: 100%; height: 500px"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-card class="mb-20" *ngIf="!loading && tableData?.length == 0">
+  <mat-card-content>
+    <mat-card-title>
+      <!-- {{ tableTitle | uppercase }} {{ title | uppercase }}
+      <i [ngClass]="{ 'fa fa-cog fa-spin': loading }"></i> -->
+      <p >No data available</p>
+      <!-- <button type="button" class="btn btn-primary" >Open child modal</button> -->
+    </mat-card-title>
+
+    <!-- <section class="example-section">
+            <table class="table animated slideInLeft" *ngIf="tableData.length>0 ">
+                <thead>
+                    <tr>
+
+                        <th scope="col">Shop Code</th>
+                        <th scope="col">Shop Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">VO Code</th>
+
+                        <th scope="col">VO Name</th>
+
+                        <th scope="col">Visit Date</th>
+
+                        <th scope="col">Remarks</th>
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of tableData">
+                        <td scope="row">{{item.shop_code}}</td>
+                        <td>
+                            <a class="a-link" (click)="getPdf(item);" title="view shop details">{{item.shop_title}}</a>
+                        </td>
+                        <td class="fix-address">{{item.address}}</td>
+                        <td class="fix-width">{{item.m_code}}</td>
+                        <td class="fix-width">{{item.full_name}}</td>
+                        <td class="fix-width">{{item.visit_date}}</td>
+                        <td class="fix-width">{{item.description}}</td>
+
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+        </section> -->
+  </mat-card-content>
+</mat-card>
+
+<div class="container-fluid" *ngIf="tableData?.length > 0">
+  <div class="row"></div>
+  <div class="row js">
+    <ng-container *ngFor="let item of tableData; let i = index">
+      <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
+        <!-- <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title></mat-card-title>
+
+                </mat-card-header> -->
+        <!-- {{tableData.itemList |json}} -->
+        <!-- <img mat-card-image src="assets/images/LU-logo.png" height="300" alt=""  style="cursor:pointer"> -->
+
+        <div class="ribbon">
+          <img
+            *ngIf="!isExternalUrl"
+            mat-card-image
+            class="small"
+            src="{{ ip }}{{ item.shopFullImg }}"
+            width="250"
+            height="300"
+            alt=""
+            (click)="setSelectedItem(item); showChildModal()"
+          />
+          <img
+            *ngIf="isExternalUrl"
+            mat-card-image
+            class="small"
+            src="{{ item.shopFullImg }}"
+            width="250"
+            height="300"
+            alt=""
+            (click)="setSelectedItem(item); showChildModal()"
+          />
+          <span
+            *ngIf="item.evaluationStatus == 1"
+            class="ribbon-{{ item.score > 70 ? 'green' : 'red' }}"
+          >
+            <span>{{ item.score }}</span>
+          </span>
+        </div>
+
+        <!-- <div class="img-container">
+                    <img mat-card-image class="small" src="{{ip}}{{item.shopFullImg}}" width="250" height="300" alt="" (click)="setSelectedItem(item);showChildModal()">
+                    <div class="top-right-{{item.score>70?'green':'red'}}">Score: {{item?.score}}</div>
+                    
+                </div> -->
+
+        <mat-card-content>
+          <!-- <table class="table" (click)="getPdf(item);" style="cursor:pointer"> -->
+          <table class="table" style="cursor: pointer">
+            <tr
+              *ngFor="let item2 of tableData[i]?.itemList"
+              (click)="goToEvaluationIR(item.surveyId, item.assetTypeId)"
+            >
+              <!-- test -->
+              <th>{{ item2.heading }}</th>
+              <td>{{ item2.value }}</td>
+            </tr>
+            <!-- <hr> -->
+          </table>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions> -->
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

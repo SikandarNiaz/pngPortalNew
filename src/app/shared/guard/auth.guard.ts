@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
     if (
       (localStorage.getItem("isLoggedin") && t <= st) ||
       this.location.path().indexOf("/details/") > -1 ||
+      this.location.path().indexOf("/details_ir") > -1 ||
       this.location.path().indexOf("/image-view") > -1
       || this.location.path().indexOf('/list/home') > -1
     ) {

@@ -5,21 +5,18 @@
     </div>
   </div>
 
-  <div class="row animated slideInLeft" *ngIf="data?.section">
+  <div class="row " id="style-2" *ngIf="data?.section" style="justify-content: center; overflow-y: scroll !important;
+height: 90vh;">
     <div
-      id="style-2"
-      class="col"
-      [ngClass]="{ 'col-12': this.isDragging }"
-      style="
-        overflow-y: scroll !important;
-        overflow-x: hidden !important;
-        height: 90vh;
-        width: 100% !important;
-      "
-      mwlResizable
-      [enableGhostResize]="true"
-      [resizeEdges]="{ bottom: true, right: true, top: true, left: true }"
+      
+      class="col-md-9"
+    
+  
+    
     >
+    <!-- mwlResizable
+    [enableGhostResize]="true"
+    [resizeEdges]="{ bottom: true, right: true, top: true, left: true }" -->
       <!-- <div class="row">
                 <div class="col-11"></div>
                 <div class="col-1" style="text-align: end;">
@@ -34,7 +31,7 @@
                                 </button>
                 </div>
             </div> -->
-      <div class="icon-bar">
+      <!-- <div class="icon-bar">
         <button
           type="button"
           class="btn btn-primary"
@@ -47,7 +44,7 @@
             <i class="fa fa-arrow-left"></i>
           </span>
         </button>
-      </div>
+      </div> -->
       <div class="content">
         <div class="row justify-content-center-between">
           <!-- mwlResizable (resizeEnd)="onResizeEnd($event)"
@@ -79,8 +76,8 @@
               </section-one-detail>
             </ng-container>
 
-            <ng-container #sectionSeven *ngIf="sec?.imageViewType === 7">
-              <section-seven-view
+            <ng-container #sectionSeven *ngIf="sec?.imageViewType === 70">
+              <section-seventy-ir-view
                 [data]="sec"
                 class="width-100"
                 [isEditable]="isEditable"
@@ -88,7 +85,7 @@
                 (showModal)="showChildModal($event)"
                 [viewType]="viewType"
                 (showCommentModal)="showCommentModal($event)"
-              ></section-seven-view>
+              ></section-seventy-ir-view>
             </ng-container>
             <!-- (assetTypeId)="calculateFacing($event)" -->
             <ng-container *ngIf="sec?.imageViewType === 9">
@@ -382,7 +379,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="!isEditable">
+    <!-- <ng-container *ngIf="!isEditable">
       <div class="col-md-3">
         <div class="card">
           <div
@@ -401,7 +398,7 @@
                     <th>Achieved</th>
                   </tr>
                 </thead>
-                <!-- {{cloneArray[0] | json }} -->
+                
                 <tbody>
                   <tr
                     *ngFor="let item of cloneArray; let i = index"
@@ -530,7 +527,7 @@
           </div>
         </div>
       </div>
-    </ng-container>
+    </ng-container> -->
   </div>
 </div>
 
@@ -611,28 +608,28 @@
         class="btn btn-primary btn-lg btn-block"
         (click)="showCropper()"
       >
-        Identify Brands
+        View Detected Brands
       </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="col-md-12" *ngIf="isCroppingMode">
+<div class="col-md-6" *ngIf="isCroppingMode">
   <div class="modal-content">
     <div class="modal-body newModal-body">
-      <div class="row" *ngIf="!irImageLoading">
-        <div class="col-md-8" style="padding: 0px; overflow: scroll; max-height: 95vh; ">
+      <!-- <div class="row" *ngIf="!irImageLoading" style="justify-content: center;"> -->
+        <div class="row" *ngIf="!irImageLoading" >
+        <div  style="padding: 0px; overflow: scroll; max-height: 95vh;">
           <!-- <div class="col-md-8" style="padding: 0px;"> -->
           <div
-            (click)="changeCropperStatus($event)"
-            (contextmenu)="handleRightClick($event)"
+           
             class="image-container"
             [style.width.px]="imageWidth * scale"
             [style.height.px]="imageHeight * scale"
-            style="padding: 0px !important; "
+            style="padding: 0px !important;"
           >
-            <image-cropper
+            <!-- <image-cropper
               style="padding: 0px"
               [imageChangedEvent]="imageChangedEvent"
               format="png"
@@ -644,13 +641,17 @@
               [imageBase64]="selectedShop?.base64Image"
               [disabled]="cropperDisabled"
               [cropper]="cropperPosition"
-              [alignImage]="'left'"
-            ></image-cropper>
+              [alignImage]="'center'"
+            ></image-cropper> -->
+            <img
+              style="padding: 0px"
+              [src]="selectedShop?.base64Image"
+            />
             <!-- [imageUrl] = "selectedShop?.url"
             [imageBase64]="selectedShop?.imageBase64" -->
             <ng-container *ngIf="croppedData?.length > 0">
               <ng-container *ngFor="let img of croppedData">
-                <ng-container *ngIf="img.skuId == selectedProductId">
+                <ng-container *ngIf="selectedProductsIds.includes(img.skuId?.toString())">
                   <ng-container *ngFor="let coordinates of img.boundingBox">
                     <img
                       class="rectangle-overlay"
@@ -676,17 +677,17 @@
             </ng-container>
           </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div style="height: 460px; overflow: scroll">
             <table class="table table-bordered table-hover w-100">
               <thead>
                 <tr>
                   <th>
-                    <!-- <mat-checkbox
+                    <mat-checkbox
                     color="primary"
                     (change)="selectUnselectAllProduct($event)"
                     >
-                    </mat-checkbox> -->
+                    </mat-checkbox>
                   </th>
                   <th scope="col">Product Id</th>
                   <th scope="col">Product Name</th>
@@ -716,8 +717,8 @@
                       color="primary"
                       name="{{ product?.product_id }}"
                       id="{{ product?.product_id }}"
-                      [checked]="selectedProductId == product?.product_id"
-                      (change)="selectProduct(product.product_id, $event)"
+                      (change)="selectProduct(product, checked)"
+                      #checked
                     >
                     </mat-checkbox>
                   </td>
@@ -746,7 +747,7 @@
                   >
                     <tr
                       *ngIf="
-                        product?.skuId == selectedProductId &&
+                       selectedProductsIds.includes(product?.skuId?.toString()) &&
                         coordinate.active == 'Y'
                       "
                       (click)="showCropperOnImage(coordinate.tempId)"
@@ -765,8 +766,9 @@
                         <a
                           (click)="deleteImage(coordinate.tempId)"
                           [routerLink]=""
+                          [class.disabled-link]="selectedProductsIds.length>1"
                         >
-                          <div style="height: 100%; width: 100%">
+                          <div style="height: 100%; width: 100%; color:red">
                             Delete
                           </div>
                         </a>
@@ -784,41 +786,52 @@
               [(ngModel)]="selectedMode"
             >
               <ng-container *ngFor="let mode of modeList">
-                <mat-radio-button [value]="mode">
+                <mat-radio-button [value]="mode" style="margin-left: 10px;">
                   {{ mode.title }}
                 </mat-radio-button>
               </ng-container>
             </mat-radio-group>
 
             <button
-              style="margin-left: 10px"
-              color="primary"
+              style="margin-left: 10px;"
+            
               mat-raised-button
               [disabled]="
                 !selectedMode.title ||
                 !croppedImage.cropperPosition ||
-                selectedProductId == -1 ||
+               
                 cropperDisabled
+                || selectedProductsIds.length>1
               "
+            
               (click)="getCoordinates()"
+              [ngClass]="
+                !selectedMode.title || !croppedImage.cropperPosition || cropperDisabled || 
+                selectedProductsIds.length > 1 ? 'enabled-button' : 'disabled-button'
+              "
+              
             >
+            
               Save
+              <i [ngClass]="{ 'fa fa-spinner fa-spin': loadingData }"></i>
             </button>
             <button
-            style="margin-left: 10px"
+            style="margin-left: 10px; background:crimson; color: white;"
             color="primary"
             mat-raised-button
             (click)="hideCropper()"
           >
+         
             Close
           </button>
+           <i [ngClass]="{ 'fa fa-cog fa-spin fa-2x': loadingData }" style="margin-left: 10px; margin-top: 10px;"></i> 
            
           </section>
           <section>
             <button
               [disabled]="scale == 0.5"
               style="margin-left: 10px"
-              color="warn"
+              class="btn-primary"
               mat-raised-button
               (click)="zoomOut()"
             >
@@ -828,13 +841,39 @@
               [disabled]="scale == 1.0"
               style="margin-left: 10px"
               color="warn"
+              class="btn-primary"
               mat-raised-button
               (click)="zoomIn()"
             >
               Zoom +
             </button>
           </section>
-        </div>
+        </div> -->
+
+      <button
+        class="float"
+        mat-raised-button 
+        
+        color="warn"
+        (click)="selectUnselectAllProduct()"
+      >
+      <!-- [disabled]="!selectedShop.recognizedResult.detectedSKU" -->
+      <!-- <i
+      [ngClass]="{ 'fa fa-spinner fa-spin': loading }"
+      ></i> -->
+        {{showButtonTitle}} 
+      </button>
+      
+      
+      <!-- <button 
+      class="float2"
+      mat-raised-button 
+      
+      (click)="updateChannelSurveyDataStatus(2)"
+      >
+      Close 
+      </button> -->
+
       </div>
       <div class="row">
         <div class="col-md-8" style="padding: 0px; margin: 20% 40%" *ngIf="irImageLoading">
@@ -843,6 +882,14 @@
       </div>
     </div>
   </div>
+  <button 
+  class="float2"
+  mat-raised-button 
+  
+  (click)="hideCropper()"
+  >
+  Close 
+  </button>
 </div>
 
 

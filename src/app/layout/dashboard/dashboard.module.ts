@@ -128,6 +128,7 @@ import { ProductService } from "./innerComponents/update-locations/update-zone/p
 import { TabViewModule } from 'primeng/tabview';
 import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
 import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
+import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
 
 @NgModule({
   imports: [
@@ -252,7 +253,8 @@ import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-a
     UpdateClusterComponent,
     UpdateZoneComponent,
     UploadDesiredSosComponent,
-    ShopLocationApprovalComponent
+    ShopLocationApprovalComponent,
+    ShopDetailIRAssetTypesComponent
   ],
   providers: [ProductService]
 })
