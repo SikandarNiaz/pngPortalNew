@@ -849,6 +849,108 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  evaluateShopIR() {
+    const irBoolean = true
+    const user_id = localStorage.getItem("user_id");
+    this.loading = true;
+    const req = true;
+
+    if (req) {
+      for (const element of this.data.shopDetails.tagsList) {
+        // tslint:disable-next-line:triple-equals
+        if (element.heading == "surveyorId") {
+          this.surveyorId = element.value;
+          // tslint:disable-next-line:triple-equals
+        } else if (element.heading == "Visit Date") {
+          this.visitDay = element.value;
+        }
+      }
+
+      // tslint:disable-next-line:triple-equals
+      if (this.userType == this.reevaluatorRole) {
+        const obj = {
+          criteria: this.cloneArray,
+          surveyId: this.surveyId,
+          evaluatorId: user_id,
+          surveyorId: this.surveyorId,
+          visitDate: this.visitDay,
+          evaluationRemark: this.selectedEvaluationRemark,
+          status: this.checkForSlectedRemarks(this.cloneArray),
+
+          // evaluationStartDateTime: this.evaluationStartDateTime,
+          // evaluationEndDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        };
+
+        this.evaluationService.evaluateShop(obj).subscribe(
+          (data: any) => {
+            // console.log('evaluated shop data',data);
+            this.loading = false;
+
+            // tslint:disable-next-line:triple-equals
+            if (data.success == "true") {
+              this.hideRemarksModalWithNoChange();
+              this.toastr.success("IR shop evaluated successfully ");
+            
+              setTimeout(() => {
+                window.close();
+              }, 2000);
+            } else {
+              this.toastr.error(data.errorMessage, "error");
+            }
+          },
+          (error) => {
+            // console.log('evaluated shop error',error)
+            // window.close()
+            this.loading = false;
+            this.toastr.error(error.message, "Error");
+          }
+        );
+      } else {
+        const obj = {
+          criteria: this.cloneArray,
+          surveyId: this.surveyId,
+          evaluatorId: user_id,
+          visitDate: this.visitDay,
+          surveyorId: this.surveyorId,
+          status: this.checkForSlectedRemarks(this.cloneArray),
+
+          evaluationStartDateTime: this.evaluationStartDateTime,
+          evaluationEndDateTime: moment(new Date()).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
+
+          // when IR Evaluate button is clicked
+          // for ir_evaluated_shop col change in merchandiser_survey_image_recognition
+          irBoolean : irBoolean ? irBoolean : false,
+        };
+
+        this.evaluationService.evaluateShop(obj).subscribe(
+          (data: any) => {
+            // console.log('evaluated shop data',data);
+            this.loading = false;
+
+            // tslint:disable-next-line:triple-equals
+            if (data.success == "true") {
+              this.toastr.success("IR shop evaluated successfully ")
+            
+              setTimeout(() => {
+                window.close();
+              }, 2000);
+            } else {
+              this.toastr.error(data.errorMessage, "error");
+            }
+          },
+          (error) => {
+            // console.log('evaluated shop error',error)
+            // window.close()
+            this.loading = false;
+            this.toastr.error(error.message, "Error");
+          }
+        );
+      }
+    }
+  }
+
   // setImageUrl(data, imageView) {
   //   for (const image of data.imageList) {
   //     if (image.url != null) {

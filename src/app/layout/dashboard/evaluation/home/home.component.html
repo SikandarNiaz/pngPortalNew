@@ -337,6 +337,22 @@
                     Evaluate
                   </button>
                 </div>
+                <div
+                *ngIf="surveyDetails.appVersion?.indexOf('IR') != -1"
+                class="col-md-12"
+                style="text-align: end; padding: 0 20px 5px 0"
+              >
+                <button
+                  [disabled]="loading"
+                  class="btn btn-primary"
+                  style="background-color: rgb(63, 63, 120);
+                  color: #fff;"
+                  (click)="evaluateShopIR()"
+                >
+                  <i [ngClass]="{ 'fa fa-spinner fa-spin': loading }"></i>
+                  Evaluate IR
+                </button>
+              </div>
               </div>
               <div class="row" *ngIf="userType == reevaluatorRole">
                 <div
