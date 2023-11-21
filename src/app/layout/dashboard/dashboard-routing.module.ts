@@ -65,6 +65,7 @@ import { UpdateLocationComponent } from "./innerComponents/update-locations/upda
 import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/upload-desired-sos.component";
 import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
 import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
+import { TableauHelperComponent } from "./Tableau/tableau-helper/tableau-helper.component";
 
 const routes: Routes = [
   {
@@ -73,6 +74,10 @@ const routes: Routes = [
     canActivate: [DashboardGuard],
     children: [
       { path: "", redirectTo: "home", pathMatch: "full" },
+      {
+        path: "tableau",
+        component: TableauHelperComponent,
+      },
       { path: "home", component: HomeComponent },
       { path: "daily_visit_report", component: DailyVisitReportComponent },
       { path: "oos_details_report", component: DetailsComponent },

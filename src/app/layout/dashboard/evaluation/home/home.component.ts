@@ -1276,6 +1276,7 @@ export class HomeComponent implements OnInit {
       };
       this.croppedData.push(croppedDataObj);
     }
+    this.selectedShop.recognizedResult = this.selectedShop.recognizedResult ? this.selectedShop.recognizedResult : {};
     this.selectedShop.recognizedResult.detectedSKU = this.croppedData;
     this.saveRecognizedResult();
     this.cropperDisabled = true;
