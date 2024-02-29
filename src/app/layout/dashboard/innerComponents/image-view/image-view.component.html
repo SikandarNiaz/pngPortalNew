@@ -33,7 +33,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-7">
-      <div style="position: relative">
+      <div style="position: relative; width: 100%; height: 450px;">
         <img
           *ngIf="!isExternalUrl"
           (click)="setSelectedItem(params); showChildModal()"
@@ -46,13 +46,24 @@
           (click)="setSelectedItem(params); showChildModal()"
           src="{{ params.url }}"
           class="img-fluid"
-          style="height: 450px; width: 100%"
+          style="height: 450px; width: 100%" 
+         
         />
-        <div class="imageDetails">
+        <!-- <canvas #canvasElement width="500" height="500"></canvas>
+        <button (click)="downloadImage(params)">Download Image</button> -->
+        <canvas #canvasElement style="position: absolute; top: 0; left: 0;"></canvas>
+        <!-- <div class="imageDetails">
           <p *ngIf="params?.visitDate">Visit Date: {{ params?.visitDate }}</p>
           <p *ngIf="params?.longitude">Longitude: {{ params?.longitude }}</p>
           <p *ngIf="params?.latitude">Latitude: {{ params?.latitude }}</p>
-        </div>
+        </div> -->
+        <div class="caption-bottom-modal">
+          <p>Lat: {{params?.latitude}}</p>
+         <p>Long: {{params?.longitude}}</p>
+         </div>
+         <div class="caption-top-modal">
+          {{params?.visitDate}}
+          </div>
       </div>
     </div>
   </div>
