@@ -653,21 +653,33 @@ export class DashboardService {
     return this.http.post(url, urlEncode, this.httpOptions);
   }
   insertChillerPlanogram(obj) {
-    const url = this.ip + "insert-chiller-planogram"; // -----------> InsertChillerPlanogramController
+    const url = this.ip + "insert-chiller-planogramNew"; // -----------> InsertChillerPlanogramNewController
     return this.http.post(url, obj);
   }
-
+  updatePlanogramStatus(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "updatestatusplanogram"; // -----------> UpdateStatusPlanogramController
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
+  getImageMetaData(obj) {
+    const urlEncode = this.UrlEncodeMaker(obj);
+    const url = this.ip + "getImageMetaData"; // -----------> PlanogramImageMetaDataController
+    return this.http.post(url, urlEncode, this.httpOptions);
+  }
   getPlanogramTypeList() {
     const filter = JSON.stringify({ act: 34});
     const url = this.ip + '/loadFilters';
     return this.http.post(url, filter);
   }
-
+  getShopTitleList() {
+    const filter = JSON.stringify({ act: 45});
+    const url = this.ip + '/loadFilters';
+    return this.http.post(url, filter);
+  }
   uploadSOS(obj) {
     const url = this.ip + "update-desied-sos"; //  ---------> UploadDesiredSOSController
     return this.http.post(url, obj);
   }
-
   getDesiredSOS(obj) {
     const urlEncode = this.UrlEncodeMaker(obj);
     const url = this.ip + "get_desired_sos";
@@ -690,6 +702,11 @@ export class DashboardService {
   updateShopLocationApproval(obj){
     const filter = JSON.stringify({obj: obj});
     const url = this.ip + "/updateShopLocationApprovalController"; 
+    return this.http.post(url, filter);
+  }
+  fetchData(obj){
+    const filter = JSON.stringify({obj: obj});
+    const url = this.ip + "/updatee"; 
     return this.http.post(url, filter);
   }
   

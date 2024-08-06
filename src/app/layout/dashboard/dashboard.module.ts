@@ -76,11 +76,13 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { CalendarHeaderComponent } from "./innerComponents/calender/calendar-header/calendar-header.component";
 import { ImageViewComponent } from "./innerComponents/image-view/image-view.component";
 
+
 import { UniqueBasedProductivityReportComponent } from "./innerComponents/unique-based-productivity-report/unique-based-productivity-report.component";
 import { OosProductivityListComponent } from "./innerComponents/oos-productivity-list/oos-productivity-list.component";
 import { SOSandSODComponent } from "./innerComponents/sos-and-sod/sos-and-sod.component";
 import { DashboardDataComponent } from "./dashboard-data/dashboard-data.component";
 import { ButtonsModule } from "ngx-bootstrap/buttons";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 import { CurrentRoutesReportComponent } from "./innerComponents/operations/current-routes-report/current-routes-report.component";
@@ -133,6 +135,7 @@ import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-i
 @NgModule({
   imports: [
     FormsModule,
+    MatAutocompleteModule,
     HttpClientModule,
     CommonModule,
     DashboardRoutingModule,

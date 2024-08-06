@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
 import { DashboardService } from "../../../dashboard.service";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Config } from "src/assets/config";
+import { ModalDirective } from "ngx-bootstrap/modal";
 
 @Component({
   selector: "app-update-planograms",
@@ -10,14 +11,17 @@ import { Config } from "src/assets/config";
   styleUrls: ["./update-planograms.component.scss"],
 })
 export class UpdatePlanogramsComponent implements OnInit {
-  @Input("planogramList") planogramList;
-  @Input("selectedChiller") selectedChiller;
-  @Input("selectedAssetType") selectedAssetType;
-  @Input("selectedChannel") selectedChannel;
-  ip = Config.BASE_URI;
+  @Input() planogramList: any[];
+  @Input() selectedAssetType: any;
+  @Input() selectedChannel: any;
+  @Output() openUploadModal = new EventEmitter<any>();
 
+  ip = Config.BASE_URI;
   loading: boolean;
   updatedPlanogramList: any = [];
+  @ViewChild("uploadModal") uploadModal: ModalDirective;
+  uploadForm: any;
+  img: any;
 
   constructor(
     private toastr: ToastrService,
@@ -66,5 +70,10 @@ export class UpdatePlanogramsComponent implements OnInit {
           : this.toastr.error(error.description, "Error");
       }
     );
+  }
+
+  onImageClick(img: any) {
+    console.log(img);
+    this.openUploadModal.emit(img);
   }
 }

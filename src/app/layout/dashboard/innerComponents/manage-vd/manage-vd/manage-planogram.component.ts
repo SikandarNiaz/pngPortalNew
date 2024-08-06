@@ -2,14 +2,11 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DashboardService } from "../../../dashboard.service";
 import { Router } from "@angular/router";
 import { Config } from "src/assets/config";
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-} from "@angular/forms";
+import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { ModalDirective } from "ngx-bootstrap/modal";
+import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: "app-manage-planogram",
@@ -17,238 +14,289 @@ import { ModalDirective } from "ngx-bootstrap/modal";
   styleUrls: ["./manage-planogram.component.scss"],
 })
 export class ManagePlanogramComponent implements OnInit {
+  selectedStatus: string;
+  selectedImage: any;
+  image: File | null = null;
+  selectedValue: any;
+  insertType: any;
+  assetTypesListForModel: any = [];
+  filterValue: any;
+  inputValue: any;
+  selectedShopTitle: any;
   chillerList: any = [];
   channelList: any = [];
-  assetTypesList: any =[];
+  assetTypesList: any = [];
   planogramTypeList: any = [];
   selectedChiller: any = {};
-  selectedAssetType: any ={};
-  selectedPlanogramType : any = {};
+  selectedAssetType: any = {};
+  selectedPlanogramType: any = {};
   selectedChannel: any = {};
-
   chillerProductList: any = [];
   codeVerification: any = ["Y", "N"];
-
+  isSelected: boolean = true;
   loadingData: boolean;
   loading: boolean;
   loadingModalButton: boolean;
-
   isUpdateRequest: boolean;
   operationType = "";
   ip = Config.BASE_URI;
-
   planogramList: any = [];
-  public image: any = File;
-
-  // @ViewChild("childModal", { static: true }) childModal: ModalDirective;
+  myControl = new FormControl('');
+  selectedShop: any;
+  picList: any = [];
   @ViewChild("uploadModal") uploadModal: ModalDirective;
 
   form: FormGroup;
   uploadForm: FormGroup;
+  imageSrc: string | ArrayBuffer = '';
+  shopTitleList: any[] = [];
+  filterShopTitleList: any[] = [];
+  searchValue: any;
+  selectedAssetTypeForModel: any;
+  selected: any;
+  excelFile: File | null = null;
+  data: any[] = [];
+  picList2: string;
+//  cdr: any;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private httpService: DashboardService,
     public router: Router,
     public formBuilder: FormBuilder
   ) {
-    this.assetTypesList = JSON.parse(localStorage.getItem("assetList"));
-    this.channelList = JSON.parse(localStorage.getItem("channelList"));
+    this.assetTypesList = JSON.parse(localStorage.getItem("assetList")) || [];
+    this.assetTypesListForModel = this.assetTypesList;
+    this.channelList = JSON.parse(localStorage.getItem("channelList")) || [];
     this.form = formBuilder.group({
       id: new FormControl(""),
       title: new FormControl("", [Validators.required]),
       channelId: new FormControl("", [Validators.required]),
+      selectedShop: new FormControl("", [Validators.required]),
       codeVerification: new FormControl("", [Validators.required]),
-      desiredShelves: new FormControl(""),
+      desiredShelves: new FormControl("")
     });
     this.uploadForm = formBuilder.group({
       title: new FormControl("", [Validators.required]),
-      // type: "Chiller_Verification",
       path: new FormControl("", [Validators.required]),
-      // chillerId: new FormControl("", [Validators.required]),
+      channelId: new FormControl("", [Validators.required]),
+      chillerId: new FormControl("", [Validators.required])
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getPlanogramTypeList();
+    this.getShopTitleList();
+    // this.loadData();
   }
 
-  // getChillerList() {
-  //   this.loadingData = true;
-  //   this.httpService.getChillerListNew(this.selectedChannel.id || -1).subscribe(
-  //     (data) => {
-  //       if (data) {
-  //         this.chillerList = data;
-  //         const i = this.chillerList.findIndex(
-  //           (p) => p.id == this.selectedChiller.id
-  //         );
-  //         if (i > -1) {
-  //           this.selectedChiller = this.chillerList[i];
-  //         } else {
-  //           this.selectedChiller = {};
-  //           this.chillerProductList = [];
-  //         }
-  //       }
-  //       this.loadingData = false;
-  //     },
-  //     (error) => {
-  //       error.status === 0
-  //         ? this.toastr.error("Please check Internet Connection", "Error")
-  //         : this.toastr.error(error.description, "Error");
-  //     }
-  //   );
-  // }
-
-  // getChillerProductList(productId) {
-  //   this.loadingData = true;
-  //   const obj = {
-  //     chillerId: this.selectedChiller.id,
-  //     productId: productId,
-  //   };
-  //   this.httpService.getChillerProductList(obj).subscribe(
-  //     (data: any) => {
-  //       if (data) {
-  //         this.chillerProductList = data;
-  //       }
-  //       this.loadingData = false;
-  //     },
-  //     (error) => {
-  //       error.status === 0
-  //         ? this.toastr.error("Please check Internet Connection", "Error")
-  //         : this.toastr.error(error.description, "Error");
-  //     }
-  //   );
-  // }
-
-  getChillerPlanogramList() {
+  getChillerPlanogramList(): void {
     this.loadingData = true;
     const obj = {
-      chillerId: this.selectedAssetType.id,
-      type : this.selectedPlanogramType.planogram_type,
-      channelId : this.selectedChannel.id
+      chillerId: this.selectedAssetType?.id,
+      type: this.selectedPlanogramType?.planogram_type,
+      channelId: this.selectedChannel?.id,
+      status: this.selectedStatus
     };
     this.httpService.getChillerPlanogramList(obj).subscribe(
       (data: any) => {
         if (data) {
           this.planogramList = data;
-        }
+        //  this.picList = data;
+        } 
         this.loadingData = false;
       },
       (error) => {
         error.status === 0
           ? this.toastr.error("Please check Internet Connection", "Error")
           : this.toastr.error(error.description, "Error");
+        this.loadingData = false; 
       }
     );
   }
 
-  // hideChildModal() {
-  //   this.form.reset();
-  //   this.childModal.hide();
-  // }
-
-  // showInsertModal() {
-  //   this.isUpdateRequest = false;
-  //   this.operationType = "Create";
-  //   this.form.patchValue({
-  //     id: -1,
-  //     channelId: this.selectedChannel.id,
-  //   });
-  //   this.childModal.show();
-  // }
-
-  // showUpdateModal() {
-  //   this.operationType = "Update";
-  //   this.isUpdateRequest = true;
-  //   this.form.patchValue({
-  //     id: this.selectedChiller.id,
-  //     title: this.selectedChiller.title,
-  //     codeVerification: this.selectedChiller.codeVerification,
-  //     desiredShelves: this.selectedChiller.desiredShelves,
-  //     channelId: this.selectedChannel.id,
-  //   });
-  //   this.childModal.show();
-  // }
-
-  showUploadModal() {
-    // this.uploadForm.patchValue({
-    //   chillerId: this.selectedChiller.id,
-    //   type: "Chiller_Verification",
-    // });
-     this.uploadForm.patchValue({
-      title: this.selectedAssetType.title
-    });
+  showUploadModal(img: any): void {
     this.uploadModal.show();
-  }
-  hideUploadModal() {
+   
     this.uploadForm.reset();
-    this.uploadModal.hide();
+    this.selectedShop = null;
+    this.selectedImage = img;
+    this.imageSrc = img?.src || '';
+    this.uploadForm.patchValue({
+    title: this.selectedAssetType?.title || ''
+    });
+    if (img.id) {
+      const obj = {
+          selectedImageId: img.id,
+      };
+      this.getImageMetaData(obj, '');
+  }
+}
+  // hideUploadModal(): void {
+  //   this.uploadForm.reset();
+  //   if (this.uploadModal) {
+  //     this.uploadForm.reset();
+  //     this.selectedShop = null;
+  //     this.uploadModal.hide(); 
+  //     this.selectedImage = null; 
+  //   }
+  // }
+  hideUploadModal(): void {
+    if (this.uploadForm) {
+      this.uploadForm.reset(); 
+      this.uploadForm.patchValue({
+      });
+    }
+    this.picList = null;
+    this.selectedShop = null;
+    this.selectedImage = null;
+    if (this.uploadModal) {
+      this.uploadModal.hide(); 
+    }
+    this.cdr.detectChanges();
   }
 
-  // insertData(data) {
-  //   this.loadingModalButton = true;
-  //   console.log("data of add vd:", data);
-  //   const formData = new FormData();
-  //   formData.append("formData", JSON.stringify(data));
-  //   const url = this.isUpdateRequest ? "update-chiller" : "insertChiller";
-  //   this.httpService.insertChiller(formData, url).subscribe((data: any) => {
-  //     if (data.success == "true") {
-  //       this.toastr.success(data.message);
-  //       if (this.selectedChannel.id) {
-  //         this.getChillerList();
-  //       }
-  //       this.hideChildModal();
-  //     } else {
-  //       this.toastr.error(data.message, "Error");
-  //     }
-  //     this.loadingModalButton = false;
-  //   });
-  // }
-  onSelectFile(event) {
-    if (event.target.files && event.target.files[0]) {
-      this.image = <File>event.target.files[0];
-      const file = event.target.files[0];
+  onSelectFile(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
       this.image = file;
-      console.log("this. image", this.image);
       const reader = new FileReader();
-      reader.readAsDataURL(this.image);
-      reader.onload = (_event) => {};
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageSrc = reader.result;
+      };
     }
   }
-  uploadPlanogram(post: any) {
+
+  selectPlanogramMeta(event: any): void {
+    this.excelFile = event.target.files[0] || null;
+    this.isSelected = false;
+  }
+
+  uploadPlanogram(post: any, status: string): void {
+    post.status = status;
+
+    if (this.selectedShop) {
+      const shopObj = this.shopTitleList.find(shop => shop.shop_title === this.selectedShop);
+      if (shopObj) {
+        post.shopId = shopObj.id;
+      }
+    }
+
     this.loadingModalButton = true;
     const formData = new FormData();
-    post.type = this.selectedPlanogramType.planogram_type || "Chiller_Verification";
-    post.chillerId = this.selectedAssetType.id;
-    post.channelId = this.selectedChannel.id || -1;
-    console.log("post", post);
+    post.type = this.selectedPlanogramType?.planogram_type || "Chiller_Verification";
+    
     formData.append("planogramData", JSON.stringify(post));
-    formData.append("path", this.image);
-    console.log("formdata", formData.get("planogramData"));
-    this.httpService.insertChillerPlanogram(formData).subscribe((data: any) => {
-      if (data.success == "true") {
-        this.toastr.success(data.message);
-        // if (this.planogramList.length > 0) {
-        //   const obj = {
-        //     id: data.id,
-        //     title: post.title,
-        //     type: post.type,
-        //     path: data.path,
-        //     chillerId: post.chillerId,
-        //     active: "Y",
-        //   };
-        //   this.planogramList.push(obj);
-        // }
-        this.getChillerPlanogramList();
-        this.hideUploadModal();
-      } else {
-        this.toastr.error(data.message, "Error");
+    if (this.image) formData.append("path", this.image);
+    if (this.excelFile) formData.append("uploadPlanogramMeta", this.excelFile);
+
+    this.httpService.insertChillerPlanogram(formData).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        if (data.success === "true") {
+          this.toastr.success(data.message);
+          this.getChillerPlanogramList();
+          this.hideUploadModal();
+        } else {
+          this.toastr.error(data.message, "Error");
+        }
+      },
+      error: (err) => {
+        this.toastr.error('An error occurred while uploading the planogram', 'Error');
+        console.error('Upload error:', err);
+      },
+      complete: () => {
+        this.loadingModalButton = false;
       }
-      this.loadingModalButton = false;
     });
   }
 
-  getPlanogramTypeList(){
+//   updatePlanogram(post: any, status: string): void {
+//     debugger;
+//     post.status = status;
+//     if (this.selectedImage?.id) {
+//         post.selectedImageId = this.selectedImage.id;
+//     }
+//     this.loadingModalButton = true;
+
+//     this.httpService.updatePlanogramStatus(post).subscribe((response: any) => {
+//        // console.log(response); 
+//         if (response.statusUpdateSuccess) {
+//            // this.picList = response.data;
+//            // console.log(this.picList); 
+//             this.toastr.success('Status updated successfully');
+//             this.getChillerPlanogramList();
+//             // this.hideUploadModal();
+//         } else {
+//             this.toastr.error('Status is not updated ');
+//            // this.picList = response.data;  
+//           //  console.log(this.picList);  
+//         }
+//         this.loadingModalButton = false;
+//     }, (error) => {
+//         this.toastr.error(error, "Error");
+//         this.loadingModalButton = false;
+//     });
+// }
+
+updatePlanogram(post: any, status: string) {
+  post.status = status;
+  if (this.selectedImage.id) {
+    post.selectedImageId = this.selectedImage.id;
+  }
+  this.loadingModalButton = true;
+
+  this.httpService.updatePlanogramStatus(post).subscribe(
+    (response: any) => {
+      if (response.statusUpdateSuccess) {
+        this.toastr.success("Status updated successfully");
+        this.getChillerPlanogramList();
+      } else {
+        this.toastr.error("Error updating status", "Error");
+      }
+      this.loadingModalButton = false;
+      this.hideUploadModal();
+    },
+    (error: any) => {
+      this.toastr.error("Error updating status", "Error");
+      this.loadingModalButton = false;
+      this.hideUploadModal();
+    }
+  );
+}
+
+onOptionSelected(event: MatAutocompleteSelectedEvent) {
+  this.selectedShop = event.option.value;
+}
+
+
+getImageMetaData(post: any, status: string): void {
+  if (this.selectedImage?.id) {
+      post.selectedImageId = this.selectedImage.id;
+  }
+  this.loadingModalButton = true;
+
+  this.httpService.getImageMetaData(post).subscribe((response: any) => {
+      console.log(response); 
+      if (response.statusUpdateSuccess) {
+          this.picList = response.data;
+          console.log(this.picList); 
+          this.getChillerPlanogramList();
+          // this.hideUploadModal();
+      } else {
+          this.picList = response.data;  
+          console.log(this.picList);  
+      }
+      this.loadingModalButton = false;
+  }, (error) => {
+      this.toastr.error(error, "Error");
+      this.loadingModalButton = false;
+  });
+}
+  getPlanogramTypeList(): void {
     this.loadingData = true;
     this.httpService.getPlanogramTypeList().subscribe(
       (data: any) => {
@@ -261,8 +309,41 @@ export class ManagePlanogramComponent implements OnInit {
         error.status === 0
           ? this.toastr.error("Please check Internet Connection", "Error")
           : this.toastr.error(error.description, "Error");
+        this.loadingData = false; 
       }
     );
+  }
 
+  getShopTitleList(): void {
+    this.httpService.getShopTitleList().subscribe(
+      (data: any) => {
+        if (data) {
+          this.shopTitleList = data;
+          this.filterShopTitleList = this.shopTitleList;
+        }
+      },
+      (error) => {
+        error.status === 0
+          ? this.toastr.error("Please check Internet Connection", "Error")
+          : this.toastr.error(error.description, "Error");
+      }
+    );
+  }
+
+  filterShops(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    if (!filterValue) {
+      this.filterShopTitleList = this.shopTitleList;
+    } else {
+      this.filterShopTitleList = this.shopTitleList.filter(option =>
+        option.shop_title.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    }
+  }
+
+  loadData(): void {
+    // Implement your data loading logic here
+    // Example:
+    this.getChillerPlanogramList();
   }
 }
