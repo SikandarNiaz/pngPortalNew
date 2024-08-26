@@ -81,17 +81,22 @@ export class ManagePlanogramComponent implements OnInit {
       title: new FormControl("", [Validators.required]),
       path: new FormControl("", [Validators.required]),
       channelId: new FormControl("", [Validators.required]),
-      chillerId: new FormControl("", [Validators.required])
+      chillerId: new FormControl("", [Validators.required]),
+      selectedShop: new FormControl("", [Validators.required]),
+
     });
+   
   }
 
   ngOnInit(): void {
     this.getPlanogramTypeList();
-    this.getShopTitleList();
+    //this.getShopTitleList();
     // this.loadData();
   }
 
   getChillerPlanogramList(): void {
+        this.getShopTitleList();
+
     this.loadingData = true;
     const obj = {
       chillerId: this.selectedAssetType?.id,
@@ -119,12 +124,15 @@ export class ManagePlanogramComponent implements OnInit {
   showUploadModal(img: any): void {
     this.uploadModal.show();
    
-    this.uploadForm.reset();
+   // this.uploadForm.reset();
     this.selectedShop = null;
     this.selectedImage = img;
     this.imageSrc = img?.src || '';
     this.uploadForm.patchValue({
-    title: this.selectedAssetType?.title || ''
+    title: this.selectedAssetType?.title || '',
+    channelId:this.selectedChannel?.title || '',
+    chillerId:this.selectedAssetType?.title || '',
+    selectedShop:this.shopTitleList[1]?.shop_title
     });
     if (img.id) {
       const obj = {
@@ -314,12 +322,36 @@ getImageMetaData(post: any, status: string): void {
     );
   }
 
+  // getShopTitleList(): void {
+  //   this.httpService.getShopTitleList().subscribe(
+  //     (data: any) => {
+  //       if (data) {
+  //         this.shopTitleList = data;
+  //         this.filterShopTitleList = this.shopTitleList;
+  //       }
+  //     },
+  //     (error) => {
+  //       error.status === 0
+  //         ? this.toastr.error("Please check Internet Connection", "Error")
+  //         : this.toastr.error(error.description, "Error");
+  //     }
+  //   );
+  // }
+
+
   getShopTitleList(): void {
-    this.httpService.getShopTitleList().subscribe(
+    if (!this.selectedChannel) {
+      this.toastr.error("Please select a channel", "Error");
+      return;
+    }
+  
+    this.httpService.getShopTitleList(this.selectedChannel.parnetChannelId).subscribe(
       (data: any) => {
         if (data) {
           this.shopTitleList = data;
           this.filterShopTitleList = this.shopTitleList;
+          console.log('filterShopTitleList:', this.filterShopTitleList);
+
         }
       },
       (error) => {
@@ -329,6 +361,8 @@ getImageMetaData(post: any, status: string): void {
       }
     );
   }
+
+  
 
   filterShops(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;

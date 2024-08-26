@@ -66,6 +66,7 @@ import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/
 import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
 import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
 import { TableauHelperComponent } from "./Tableau/tableau-helper/tableau-helper.component";
+import { UploadPlanogramComponent } from "./innerComponents/upload-planogram/upload-planogram.component";
 
 const routes: Routes = [
   {
@@ -93,6 +94,7 @@ const routes: Routes = [
       { path: "attendance-report", component: AttendanceReportComponent },
       {path: "manage-planogram", component: ManagePlanogramComponent},
       {path: "update-location", component: UpdateLocationComponent},
+      {path: "upload-planogram", component: UploadPlanogramComponent},
      
       
       {

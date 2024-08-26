@@ -88,7 +88,7 @@
       >
         Submit
       </button>
-      <button
+      <!-- <button
         class="example-margin mr-10-IMP" 
         mat-raised-button
         color="primary"
@@ -97,7 +97,7 @@
       >
         Upload Planogram
         <mat-icon>cloud_upload</mat-icon>
-      </button>
+      </button> -->
     </section>
   </mat-card-content>
 </mat-card>
@@ -148,140 +148,115 @@
 
       <form [formGroup]="uploadForm" enctype="multipart/form-data">
          <div class="modal-body">
-          <div class="form-group">
-            <label for="title">Planogram Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              formControlName="title"
-            />
-            <div
-              *ngIf="
-                uploadForm.controls.title.errors &&
-                (uploadForm.controls.title.touched ||
-                  uploadForm.controls.title.dirty)
-              "
-            >
-              <mat-error
-                *ngIf="uploadForm.hasError('required', 'title')"
-                class="invalid-feedback"
+         <div style="display: flex; justify-content: space-between;">
+
+            <div class="form-group" style="width: 48%">
+              <label for="title">Planogram Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="title"
+              />
+              <div
+                *ngIf="
+                  uploadForm.controls.title.errors &&
+                  (uploadForm.controls.title.touched ||
+                    uploadForm.controls.title.dirty)
+                "
               >
-                Valid Planogram Name is required.
-              </mat-error>
-            </div>
-          </div>         
-        <div>
-          <div>
-            <div>
-  <div class="form-group" style="display: flex; justify-content: space-between;align-items: center;">
-            <input 
-          (change)="onSelectFile($event)"
-           id="input-file-btn"
-         type="file"
-        name="file"/>
-           <label for="input-file-btn" class="input-file-text">Choose Image</label>
-          <div>
-            </div>
-            <div>
-              <div style="margin-right: 50px;display: inline-block;">
-                <mat-form-field
-          *ngIf="channelList.length > 0"
-          class="example-margin mr-10-IMP"
-        >
-          <mat-select
-            placeholder="Select Channel"
-            name="channelId"
-            formControlName="channelId"
-            >
-            <mat-option [value]="-1">
-              All
-               </mat-option>
-            <ng-container *ngFor="let channel of channelList">
-              <mat-option [value]="channel.id">{{ channel.title }}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-            </div>
+                <mat-error
+                  *ngIf="uploadForm.hasError('required', 'title')"
+                  class="invalid-feedback"
+                >
+                  Valid Planogram Name is required.
+                </mat-error>
+              </div>
+            </div>        
+
+            <div class="form-group"  style="width: 48%">
+              <label for="title">Select Channel</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="channelId"
+              />
+              <div
+                *ngIf="
+                  uploadForm.controls.title.errors &&
+                  (uploadForm.controls.title.touched ||
+                    uploadForm.controls.title.dirty)
+                "
+              >
+                <mat-error
+                  *ngIf="uploadForm.hasError('required', 'title')"
+                  class="invalid-feedback"
+                >
+                  Valid Planogram Name is required.
+                </mat-error>
+              </div>
+            </div>                  
+         </div>
+
+         <div style="display: flex; justify-content: space-between;">
+
+            <div class="form-group" style="width: 48%">
+              <label for="title">Asset Type</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="chillerId"
+              />
+              <div
+                *ngIf="
+                  uploadForm.controls.title.errors &&
+                  (uploadForm.controls.title.touched ||
+                    uploadForm.controls.title.dirty)
+                "
+              >
+                <mat-error
+                  *ngIf="uploadForm.hasError('required', 'title')"
+                  class="invalid-feedback"
+                >
+                  Valid Planogram Name is required.
+                </mat-error>
+              </div>
+            </div>        
+
+            <div class="form-group" style="width: 48%">
+              <label for="title">Shop Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="selectedShop"
+              />
+              <div
+                *ngIf="
+                  uploadForm.controls.title.errors &&
+                  (uploadForm.controls.title.touched ||
+                    uploadForm.controls.title.dirty)
+                "
+              >
+                <mat-error
+                  *ngIf="uploadForm.hasError('required', 'title')"
+                  class="invalid-feedback"
+                >
+                  Valid Planogram Name is required.
+                </mat-error>
+              </div>
+            </div>        
           </div>
 
-      <mat-form-field
-        *ngIf="assetTypesList.length > 0"
-        class="example-margin mr-10-IMP"
-      >
-        <mat-select
-        [(value)]="selected"
-          placeholder="Asset Type"
-          name="assetTypeId"
-          formControlName="chillerId"
-        >
-        <!-- <mat-option selected *ngIf="selectedImage" [value]="selectedImage.assetTypeId">{{selectedImage.title }}</mat-option>
-        <mat-option [value]="-1"> -->
-          <!-- <mat-option *ngIf="selectedImage" [value]="selectedImage.assetTypeId">{{ selectedImage.title }}</mat-option> -->
-          <mat-option [value]="-1">All</mat-option>
-         
-          <mat-option [value]="assetType.id" *ngFor="let assetType of assetTypesList">{{assetType.title}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-            </div>
-          </div> 
-          <div class="form-group" style="display: flex; justify-content: space-between;align-items: center;">
-            <input 
-          (change)="selectPlanogramMeta($event)"
-           id="input-file-btn2"
-         type="file"
-        name="file"/>
-           <label for="input-file-btn2" class="input-file-text2">Choose Planogram Meta</label>
-        
-            </div>
-        </div>
-          
-        <div
-        *ngIf="
-          uploadForm.controls.path.errors &&
-          (uploadForm.controls.path.touched ||
-            uploadForm.controls.path.dirty)
-        "
-      >
-        <mat-error
-          *ngIf="uploadForm.hasError('required', 'path')"
-          class="invalid-feedback"
-        >
-          Please select an image
-        </mat-error>
-      </div>
-    </div>
        <div style="display: flex;justify-content: space-between; ">
         <div style="margin: 20px; width: 40%;" >
           <img style="border: 3px rgb(79, 77, 77) solid; border-radius: 10px;" [src]="imageSrc" height="150" *ngIf="imageSrc"> 
           <img style="border: 3px rgb(79, 77, 77) solid; border-radius: 10px;" *ngIf="selectedImage" src="{{ip}}{{selectedImage.path}}" height="150" >
-
           </div>
-          <div style="width: 60%;">
-            <form class="example-form" style="width: 100%;">
-              <mat-form-field appearance="outline" class="example-full-width" style="width: 100%;">
-                <mat-label>Shop Name</mat-label>
-                <input
-                  type="text"
-                  placeholder="Pick one"
-                  aria-label="Number"
-                  matInput
-                  #myInput
-                  (input)="filterShops($event)"
-                  [matAutocomplete]="auto"
-                >
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-                  <mat-option *ngFor="let shop of filterShopTitleList" [value]="shop.shop_title">
-                    {{shop.shop_title}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </form> 
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            *ngIf="selectedImage; else upload"
+          <div>
+            <button
             (click)="updatePlanogram(uploadForm.value, 'Approve')"
             class="mr-1"
             mat-raised-button
@@ -298,17 +273,8 @@
           >
             Disapprove
           </button>
-          <ng-template #upload>
-            <button
-              (click)="uploadPlanogram(uploadForm.value, 'Approve')"
-              class="mr-1"
-              mat-raised-button
-              color="primary"
-            >
-              Upload
-            </button>       
-           </ng-template>    
           </div>
+        </div>
           <div class="container mt-5">
             <table class="table table-striped">
               <thead>
@@ -327,9 +293,7 @@
               </tbody>
             </table>
           </div>
-          
-                    
-        </div>
+          </div>         
       </form>
     </div>
   </div>

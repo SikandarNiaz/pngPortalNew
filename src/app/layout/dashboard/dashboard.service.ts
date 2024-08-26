@@ -671,11 +671,20 @@ export class DashboardService {
     const url = this.ip + '/loadFilters';
     return this.http.post(url, filter);
   }
-  getShopTitleList() {
-    const filter = JSON.stringify({ act: 45});
+  // getShopTitleList() {
+  //   const filter = JSON.stringify({ act: 45});
+  //   const url = this.ip + '/loadFilters';
+  //   return this.http.post(url, filter);
+  // }
+  getShopTitleList(parnetChannelId: string) {
+    debugger;
+    const filter = JSON.stringify({ act: 45, channel: parnetChannelId });
     const url = this.ip + '/loadFilters';
     return this.http.post(url, filter);
   }
+  
+
+  
   uploadSOS(obj) {
     const url = this.ip + "update-desied-sos"; //  ---------> UploadDesiredSOSController
     return this.http.post(url, obj);
