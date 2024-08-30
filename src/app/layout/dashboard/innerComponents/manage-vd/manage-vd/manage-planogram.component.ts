@@ -93,33 +93,38 @@ export class ManagePlanogramComponent implements OnInit {
     //this.getShopTitleList();
     // this.loadData();
   }
+  
 
   getChillerPlanogramList(): void {
-        this.getShopTitleList();
-
+    this.getShopTitleList();
+    
     this.loadingData = true;
     const obj = {
-      chillerId: this.selectedAssetType?.id,
-      type: this.selectedPlanogramType?.planogram_type,
-      channelId: this.selectedChannel?.id,
+      chillerId: this.selectedAssetType === -1 ? -1 : this.selectedAssetType?.id,
+    type: this.selectedPlanogramType === -1 ? -1 : this.selectedPlanogramType?.planogram_type,
+    channelId: this.selectedChannel === -1 ? -1 : this.selectedChannel?.id,
       status: this.selectedStatus
     };
+  
     this.httpService.getChillerPlanogramList(obj).subscribe(
       (data: any) => {
+      //  console.log(obj , "pix data")
         if (data) {
           this.planogramList = data;
-        //  this.picList = data;
-        } 
+        }
+        console.log(this.planogramList , "planogramList")
+
         this.loadingData = false;
       },
       (error) => {
         error.status === 0
           ? this.toastr.error("Please check Internet Connection", "Error")
           : this.toastr.error(error.description, "Error");
-        this.loadingData = false; 
+        this.loadingData = false;
       }
     );
   }
+  
 
   showUploadModal(img: any): void {
     this.uploadModal.show();
@@ -132,8 +137,8 @@ export class ManagePlanogramComponent implements OnInit {
     title: this.selectedAssetType?.title || '',
     channelId:this.selectedChannel?.title || '',
     chillerId:this.selectedAssetType?.title || '',
-    selectedShop:this.shopTitleList[1]?.shop_title
     });
+
     if (img.id) {
       const obj = {
           selectedImageId: img.id,
@@ -282,6 +287,7 @@ onOptionSelected(event: MatAutocompleteSelectedEvent) {
 
 
 getImageMetaData(post: any, status: string): void {
+  debugger
   if (this.selectedImage?.id) {
       post.selectedImageId = this.selectedImage.id;
   }
@@ -294,6 +300,11 @@ getImageMetaData(post: any, status: string): void {
           console.log(this.picList); 
           this.getChillerPlanogramList();
           // this.hideUploadModal();
+          // this.uploadForm.patchValue({
+          //   selectedShop:this.picList[0].shop_title        
+          //   });
+            console.log("picList",this.picList);  
+            console.log("shop_title",this.planogramList[0].shop_title);  
       } else {
           this.picList = response.data;  
           console.log(this.picList);  

@@ -8,63 +8,53 @@
 
 
       <mat-form-field
-      *ngIf="planogramTypeList.length > 0"
-      class="example-margin mr-10-IMP"
-    >
-      <mat-select
-        placeholder="Planogram Type"
-        name="planogramtype"
-        [(ngModel)]="selectedPlanogramType"
-      >
-        <mat-option [value]="planogramtype" *ngFor="let planogramtype of planogramTypeList">{{
-          planogramtype.planogram_type
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  *ngIf="planogramTypeList.length > 0"
+  class="example-margin mr-10-IMP"
+>
+  <mat-select
+    placeholder="Planogram Type"
+    name="planogramtype"
+    [(ngModel)]="selectedPlanogramType"
+  >
+    <mat-option [value]="-1">All</mat-option>
+    <mat-option [value]="planogramtype" *ngFor="let planogramtype of planogramTypeList">
+      {{planogramtype.planogram_type}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
 
-      <mat-form-field
-        *ngIf="channelList.length > 0"
-        class="example-margin mr-10-IMP"
-      >
-        <mat-select
-          placeholder="Select Channel"
-          name="channel"
-          [(ngModel)]="selectedChannel"
-        >
-          <ng-container *ngFor="let channel of channelList">
-            <mat-option [value]="channel">{{ channel.title }}</mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field
-        *ngIf="assetTypesList.length > 0"
-        class="example-margin mr-10-IMP"
-      >
-        <mat-select
-          placeholder="Asset Type"
-          name="assetType"
-          [(ngModel)]="selectedAssetType"
-        >
-          <mat-option [value]="assetType" *ngFor="let assetType of assetTypesList">{{
-            assetType.title
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field
-      *ngIf="assetTypesList.length > 0"
-      class="example-margin mr-10-IMP"
-    >
-      <mat-select
-        placeholder="Status"
-        name="status"
-        [(ngModel)]="selectedStatus"
-      >
-      <mat-option value="Approve">Approve</mat-option>
-      <mat-option value="pending">Pending</mat-option>
-      <mat-option value="Disapprove">Disapprove</mat-option>
-      </mat-select>
-    </mat-form-field>
+
+     <!-- Channel Selection -->
+<mat-form-field *ngIf="channelList.length > 0" class="example-margin mr-10-IMP">
+  <mat-select placeholder="Select Channel" name="channel" [(ngModel)]="selectedChannel">
+    <mat-option [value]="-1">All</mat-option>
+    <ng-container *ngFor="let channel of channelList">
+      <mat-option [value]="channel">{{ channel.title }}</mat-option>
+    </ng-container>
+  </mat-select>
+</mat-form-field>
+
+<!-- Asset Type Selection -->
+<mat-form-field *ngIf="assetTypesList.length > 0" class="example-margin mr-10-IMP">
+  <mat-select placeholder="Asset Type" name="assetType" [(ngModel)]="selectedAssetType">
+    <mat-option [value]="-1">All</mat-option>
+    <mat-option [value]="assetType" *ngFor="let assetType of assetTypesList">
+      {{ assetType.title }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<!-- Status Selection -->
+<mat-form-field *ngIf="assetTypesList.length > 0" class="example-margin mr-10-IMP">
+  <mat-select placeholder="Status" name="status" [(ngModel)]="selectedStatus">
+    <mat-option [value]="-1">All</mat-option>
+    <mat-option value="Approve">Approve</mat-option>
+    <mat-option value="Pending">Pending</mat-option>
+    <mat-option value="Disapprove">Disapprove</mat-option>
+  </mat-select>
+</mat-form-field>
+
       
       <!-- <button
         class="example-margin mr-10-IMP"
@@ -84,7 +74,7 @@
         mat-raised-button
         color="warn"
         (click)="getChillerPlanogramList()"
-        [disabled]="!selectedChannel?.id || !selectedAssetType?.id || !selectedPlanogramType?.planogram_type || !selectedStatus"
+        [disabled]=" !selectedStatus"
       >
         Submit
       </button>

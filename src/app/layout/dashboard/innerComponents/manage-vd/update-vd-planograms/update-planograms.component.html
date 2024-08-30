@@ -1,6 +1,7 @@
 <div class="row justify-content-center">
   <ng-container *ngFor="let img of planogramList">
-    <div class="col-md-4 text-center">
+    <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
+    <div class=" text-center">
       <label class="title" for="title">
         <input type="checkbox" [checked]="img.active == 'Y'"
           (change)="assignPlanograms(checked1, img)"
@@ -10,5 +11,50 @@
       </label>
       <img src="{{ip}}{{img.path}}" class="img-thumbnail img-item" (click)="onImageClick(img)">
     </div>
+    <mat-card-content>
+      <table class="table" style="cursor: pointer">
+        <tr>
+          <th>Planogram Type</th>
+          <td>{{ img?.type }}</td>
+        </tr>
+        <tr>
+          <th>Asset Type</th>
+          <td>{{ img?.title }}</td>
+        </tr>
+        <tr>
+          <th>Channel</th>
+          <td>{{ img?.channel.title }}</td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
   </ng-container>
 </div>
+<!-- 
+<div class="row justify-content-center">
+<ng-container *ngFor="let img of planogramList">
+    <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
+   
+      <div class="ribbon">
+        <img src="{{ip}}{{img.path}}" class="img-thumbnail img-item" (click)="onImageClick(img)">
+      </div>
+      <mat-card-content>
+        <table class="table" style="cursor: pointer">
+          <tr>
+            <th>Planogram Type</th>
+            <td>{{ img?.type }}</td>
+          </tr>
+          <tr>
+            <th>Asset Type</th>
+            <td>{{ img?.title }}</td>
+          </tr>
+          <tr>
+            <th>Channel</th>
+            <td>{{ img?.channel.title }}</td>
+          </tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+</ng-container>
+</div> -->

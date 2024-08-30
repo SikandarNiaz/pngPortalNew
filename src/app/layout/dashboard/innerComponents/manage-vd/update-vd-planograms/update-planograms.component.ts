@@ -17,6 +17,8 @@ export class UpdatePlanogramsComponent implements OnInit {
   @Output() openUploadModal = new EventEmitter<any>();
 
   ip = Config.BASE_URI;
+  imgData: any;
+
   loading: boolean;
   updatedPlanogramList: any = [];
   @ViewChild("uploadModal") uploadModal: ModalDirective;
@@ -29,7 +31,9 @@ export class UpdatePlanogramsComponent implements OnInit {
     public router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+      // Perform any initialization or processing of planogramList here if needed
+    }
 
   assignPlanograms(event, item) {
     const obj = {
@@ -47,6 +51,9 @@ export class UpdatePlanogramsComponent implements OnInit {
       this.updatedPlanogramList.push(obj);
     }
     console.log(this.updatedPlanogramList);
+    console.log(this.planogramList);
+
+    
   }
 
   updateChillerPlanograms() {
@@ -56,6 +63,10 @@ export class UpdatePlanogramsComponent implements OnInit {
     };
     this.httpService.updateChillerPlanograms(obj).subscribe(
       (data: any) => {
+        console.log(data , "jhgfcg");
+        console.log(this.planogramList);
+
+
         if (data.success) {
           this.toastr.success("Planograms Updated Successfully");
           this.updatedPlanogramList = [];
@@ -71,9 +82,12 @@ export class UpdatePlanogramsComponent implements OnInit {
       }
     );
   }
+  
+  
+    onImageClick(img: any) {
+      this.imgData = img; // Assign the img data to imgData
+      this.openUploadModal.emit(this.imgData); // Emit imgData if needed
+      console.log(this.planogramList , "aadddddddd");
 
-  onImageClick(img: any) {
-    console.log(img);
-    this.openUploadModal.emit(img);
+    }
   }
-}
