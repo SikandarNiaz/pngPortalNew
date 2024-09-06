@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit {
   count: number;
   @ViewChild("scrollMe") private myScrollContainer: ElementRef;
   @ViewChild("childModal") childModal: ModalDirective;
+  @ViewChild("childModalNew") childModalNew: ModalDirective;
   @ViewChild("commentModal") commentModal: ModalDirective;
   @ViewChild("remarksModal") remarksModal: ModalDirective;
   @ViewChild("evaluationRemarksModal") evaluationRemarksModal: ModalDirective;
@@ -132,6 +133,7 @@ export class HomeComponent implements OnInit {
   imageHeightStart: number;
   base64Image: any;
   selectedProductsIds: any = [];
+  appVersion: any;
 
   constructor(
     private router: Router,
@@ -216,6 +218,7 @@ export class HomeComponent implements OnInit {
         if (data) {
           this.data = data;
           this.surveyDetails = this.data.shopDetails.sectionMap;
+          this.appVersion=this.surveyDetails.appVersion;
           document.title =
             this.surveyDetails.surveyorName +
             " - " +
@@ -1003,6 +1006,7 @@ export class HomeComponent implements OnInit {
 
  showChildModal(shop) {
     this.modalConfig = { backdrop: true, keyboard: true };
+    
     // await this.getImage(shop?.url);
 
     // for image proxy: not working
@@ -1018,10 +1022,16 @@ export class HomeComponent implements OnInit {
 
     // base64 image conversion using proxyServlet: working
     this.selectedShop = shop;
-    this.getImageNew(shop.url);
-
-
+    if(!this.appVersion?.includes("IR")){
+     
+    }
+    else{
+      this.getImageNew(shop.url);
+    }
     
+
+
+    console.log("this.appVersion: ",this.appVersion);
     console.log("this. selectedShop in showChildModal: ", this.selectedShop);
     // this.getImageDimensions();
     this.selectedShop.recognizedResult = this.isJSONString(
@@ -1036,11 +1046,24 @@ export class HomeComponent implements OnInit {
     this.setProductFacing();
     this.setCompetition();
     this.rotationDegree = 0;
-    this.childModal.show();
+
+   
+    if(!this.appVersion?.includes("IR")){
+      console.log("!this.appVersion?.includes(IR): ", this.appVersion?.includes("IR"));
+      this.childModalNew.show();
+    }
+    else{
+      this.childModal.show();
+    }
+    
   }
 
   hideChildModal(): void {
     this.childModal.hide();
+  }
+
+  hideChildModalNew(): void {
+    this.childModalNew.hide();
   }
 
   showSoSModal(item): void {

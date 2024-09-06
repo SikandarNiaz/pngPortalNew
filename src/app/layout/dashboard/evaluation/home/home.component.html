@@ -552,6 +552,72 @@
 
 <div
   bsModal
+  #childModalNew="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+  (onHide)="onModalHide()"
+  [config]="modalConfig"
+>
+<div class="row">
+  <div class="col-md-8" >
+  <div class="modal-dialog-cat">
+    <div
+      class="modal-content"
+      style="cursor: pointer"
+ 
+    >
+      <!-- {{rotationDegree}} -->
+
+      <!-- <div class="modal-header">
+                <h4 id="dialog-child-name" class="modal-title pull-left">{{selectedShop.title}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div> -->
+      <div class="modal-body" style="padding: 10px; height: 100vh;">
+        <!--  -->
+        <lib-ngx-image-zoom
+          *ngIf="!selectedShop?.isExternalUrl"
+          [zoomMode]="'hover'"
+          [resultStyle]=""
+          [imgStyle]=""
+          [lensStyle]=""
+          [containerStyle]=""
+          [magnification]="2"
+          [lensWidth]="230"
+          [lensHeight]="300"
+          [enableLens]="true"
+          [thumbImage]="ip + selectedShop?.url"
+          [fullImage]="ip + selectedShop?.url"
+        >
+        </lib-ngx-image-zoom>
+        <lib-ngx-image-zoom
+          *ngIf="selectedShop?.isExternalUrl"
+          [zoomMode]="'hover'"
+          [resultStyle]=""
+          [imgStyle]=""
+          [containerStyle]=""
+          [lensStyle]=""
+          [magnification]="2"
+          [lensWidth]="230"
+          [lensHeight]="300"
+          [enableLens]="true"
+          [thumbImage]="selectedShop?.url"
+          [fullImage]="selectedShop?.url"
+        >
+        </lib-ngx-image-zoom>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div
+  bsModal
   #childModal="bs-modal"
   class="modal fade"
   tabindex="-1"
