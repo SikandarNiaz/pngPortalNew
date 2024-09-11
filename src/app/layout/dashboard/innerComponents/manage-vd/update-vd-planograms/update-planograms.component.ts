@@ -88,6 +88,10 @@ export class UpdatePlanogramsComponent implements OnInit {
       this.imgData = img; // Assign the img data to imgData
       this.openUploadModal.emit(this.imgData); // Emit imgData if needed
       console.log(this.planogramList , "aadddddddd");
+      console.log(this.img , "cccccccccc");
+
+      console.log(this.imgData , "dddddddddd");
+
 
     }
   }

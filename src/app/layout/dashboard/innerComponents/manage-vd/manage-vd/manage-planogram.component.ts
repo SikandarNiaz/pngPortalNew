@@ -134,9 +134,11 @@ export class ManagePlanogramComponent implements OnInit {
     this.selectedImage = img;
     this.imageSrc = img?.src || '';
     this.uploadForm.patchValue({
-    title: this.selectedAssetType?.title || '',
-    channelId:this.selectedChannel?.title || '',
-    chillerId:this.selectedAssetType?.title || '',
+    title: this.selectedImage?.title || '',
+    channelId:this.selectedImage.channel?.title || '',
+    chillerId:this.selectedImage?.title || '',
+    selectedShop:this.selectedImage?.shopTitle || '',
+    
     });
 
     if (img.id) {
@@ -145,6 +147,8 @@ export class ManagePlanogramComponent implements OnInit {
       };
       this.getImageMetaData(obj, '');
   }
+  console.log("picListaaaaaaaa",img);  
+
 }
   // hideUploadModal(): void {
   //   this.uploadForm.reset();
@@ -303,8 +307,8 @@ getImageMetaData(post: any, status: string): void {
           // this.uploadForm.patchValue({
           //   selectedShop:this.picList[0].shop_title        
           //   });
-            console.log("picList",this.picList);  
-            console.log("shop_title",this.planogramList[0].shop_title);  
+            console.log("picList",this.selectedImage);  
+            console.log("shop_title",this.planogramList);  
       } else {
           this.picList = response.data;  
           console.log(this.picList);  
@@ -351,6 +355,7 @@ getImageMetaData(post: any, status: string): void {
 
 
   getShopTitleList(): void {
+    debugger
     if (!this.selectedChannel) {
       this.toastr.error("Please select a channel", "Error");
       return;

@@ -2,7 +2,7 @@
   <ng-container *ngFor="let img of planogramList">
     <mat-card class="col-md-3 example-card card2 ml-3 mt-3">
     <div class=" text-center">
-      <label class="title" for="title">
+      <label class="title" for="title" style="max-width: fit-content;padding: 0px 20px;">
         <input type="checkbox" [checked]="img.active == 'Y'"
           (change)="assignPlanograms(checked1, img)"
           data-toggle="toggle" data-onstyle="light" #checked1
