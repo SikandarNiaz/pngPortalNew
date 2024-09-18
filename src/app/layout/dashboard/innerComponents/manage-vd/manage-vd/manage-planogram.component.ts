@@ -93,7 +93,6 @@ export class ManagePlanogramComponent implements OnInit {
     //this.getShopTitleList();
     // this.loadData();
   }
-  
 
   getChillerPlanogramList(): void {
     this.getShopTitleList();
@@ -112,8 +111,6 @@ export class ManagePlanogramComponent implements OnInit {
         if (data) {
           this.planogramList = data;
         }
-        console.log(this.planogramList , "planogramList")
-
         this.loadingData = false;
       },
       (error) => {
@@ -125,11 +122,8 @@ export class ManagePlanogramComponent implements OnInit {
     );
   }
   
-
   showUploadModal(img: any): void {
-    this.uploadModal.show();
-   
-   // this.uploadForm.reset();
+    this.uploadModal.show(); 
     this.selectedShop = null;
     this.selectedImage = img;
     this.imageSrc = img?.src || '';
@@ -147,8 +141,6 @@ export class ManagePlanogramComponent implements OnInit {
       };
       this.getImageMetaData(obj, '');
   }
-  console.log("picListaaaaaaaa",img);  
-
 }
   // hideUploadModal(): void {
   //   this.uploadForm.reset();
@@ -163,7 +155,7 @@ export class ManagePlanogramComponent implements OnInit {
     if (this.uploadForm) {
       this.uploadForm.reset(); 
       this.uploadForm.patchValue({
-      });
+      })
     }
     this.picList = null;
     this.selectedShop = null;
@@ -194,7 +186,6 @@ export class ManagePlanogramComponent implements OnInit {
 
   uploadPlanogram(post: any, status: string): void {
     post.status = status;
-
     if (this.selectedShop) {
       const shopObj = this.shopTitleList.find(shop => shop.shop_title === this.selectedShop);
       if (shopObj) {
@@ -223,7 +214,6 @@ export class ManagePlanogramComponent implements OnInit {
       },
       error: (err) => {
         this.toastr.error('An error occurred while uploading the planogram', 'Error');
-        console.error('Upload error:', err);
       },
       complete: () => {
         this.loadingModalButton = false;
@@ -289,26 +279,18 @@ onOptionSelected(event: MatAutocompleteSelectedEvent) {
   this.selectedShop = event.option.value;
 }
 
-
 getImageMetaData(post: any, status: string): void {
-  debugger
+
   if (this.selectedImage?.id) {
       post.selectedImageId = this.selectedImage.id;
   }
   this.loadingModalButton = true;
 
-  this.httpService.getImageMetaData(post).subscribe((response: any) => {
-      console.log(response); 
+  this.httpService.getImageMetaData(post).subscribe((response: any) => { 
       if (response.statusUpdateSuccess) {
           this.picList = response.data;
           console.log(this.picList); 
           this.getChillerPlanogramList();
-          // this.hideUploadModal();
-          // this.uploadForm.patchValue({
-          //   selectedShop:this.picList[0].shop_title        
-          //   });
-            console.log("picList",this.selectedImage);  
-            console.log("shop_title",this.planogramList);  
       } else {
           this.picList = response.data;  
           console.log(this.picList);  
@@ -353,9 +335,7 @@ getImageMetaData(post: any, status: string): void {
   //   );
   // }
 
-
   getShopTitleList(): void {
-    debugger
     if (!this.selectedChannel) {
       this.toastr.error("Please select a channel", "Error");
       return;
@@ -367,7 +347,6 @@ getImageMetaData(post: any, status: string): void {
           this.shopTitleList = data;
           this.filterShopTitleList = this.shopTitleList;
           console.log('filterShopTitleList:', this.filterShopTitleList);
-
         }
       },
       (error) => {
@@ -377,8 +356,6 @@ getImageMetaData(post: any, status: string): void {
       }
     );
   }
-
-  
 
   filterShops(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -392,8 +369,6 @@ getImageMetaData(post: any, status: string): void {
   }
 
   loadData(): void {
-    // Implement your data loading logic here
-    // Example:
     this.getChillerPlanogramList();
   }
 }

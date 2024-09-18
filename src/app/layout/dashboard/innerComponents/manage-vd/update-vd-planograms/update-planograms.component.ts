@@ -32,7 +32,6 @@ export class UpdatePlanogramsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      // Perform any initialization or processing of planogramList here if needed
     }
 
   assignPlanograms(event, item) {
@@ -49,11 +48,7 @@ export class UpdatePlanogramsComponent implements OnInit {
       this.updatedPlanogramList.splice(i, 1, obj);
     } else {
       this.updatedPlanogramList.push(obj);
-    }
-    console.log(this.updatedPlanogramList);
-    console.log(this.planogramList);
-
-    
+    } 
   }
 
   updateChillerPlanograms() {
@@ -63,10 +58,6 @@ export class UpdatePlanogramsComponent implements OnInit {
     };
     this.httpService.updateChillerPlanograms(obj).subscribe(
       (data: any) => {
-        console.log(data , "jhgfcg");
-        console.log(this.planogramList);
-
-
         if (data.success) {
           this.toastr.success("Planograms Updated Successfully");
           this.updatedPlanogramList = [];
@@ -83,15 +74,8 @@ export class UpdatePlanogramsComponent implements OnInit {
     );
   }
   
-  
     onImageClick(img: any) {
-      this.imgData = img; // Assign the img data to imgData
-      this.openUploadModal.emit(this.imgData); // Emit imgData if needed
-      console.log(this.planogramList , "aadddddddd");
-      console.log(this.img , "cccccccccc");
-
-      console.log(this.imgData , "dddddddddd");
-
-
+      this.imgData = img;
+      this.openUploadModal.emit(this.imgData); 
     }
   }
