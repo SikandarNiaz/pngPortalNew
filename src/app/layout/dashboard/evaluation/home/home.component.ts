@@ -306,6 +306,7 @@ export class HomeComponent implements OnInit {
             id: element1.id,
             description: element1.description,
             criteriaId: element1.criteriaId,
+            remarkType: element1.remarkType,
             isChecked: element1.isChecked,
           };
           this.remarksList.forEach((element) => {
@@ -568,14 +569,30 @@ export class HomeComponent implements OnInit {
     this.criteriaDesireScore = 0;
   }
 
-  checkboxChange(event, id) {
-    console.log("checkbox event", !event.checked, id);
+  // checkboxChange(event, id) {
+  //   console.log("checkbox event", !event.checked, id);
+
+  //   if (!event.checked) {
+  //     this.selectedRemarksList.push(id);
+  //   } else {
+  //     for (let i = 0; i < this.selectedRemarksList.length; i++) {
+  //       if (this.selectedRemarksList[i] === id) {
+  //         this.selectedRemarksList.splice(i, 1);
+  //       }
+  //     }
+  //   }
+  //   // this.selectedRemarksList.pop(id)
+
+  //   console.log("remarks list", this.selectedRemarksList);
+  // }
+  checkboxChange(event, remark) {
+    console.log("checkbox event", !event.checked, remark.id);
 
     if (!event.checked) {
-      this.selectedRemarksList.push(id);
+      this.selectedRemarksList.push(remark);
     } else {
       for (let i = 0; i < this.selectedRemarksList.length; i++) {
-        if (this.selectedRemarksList[i] === id) {
+        if (this.selectedRemarksList[i].id === remark.id) {
           this.selectedRemarksList.splice(i, 1);
         }
       }
@@ -794,10 +811,11 @@ export class HomeComponent implements OnInit {
               this.evaluationArray = [];
               this.cloneArray = [];
               this.indexList = [];
-              setTimeout(() => {
-                window.close();
-              }, 2000);
-            } else {
+              // setTimeout(() => {
+              //   window.close();
+              // }, 2000);
+            } 
+            else {
               this.toastr.error(data.errorMessage, "error");
             }
           },
@@ -834,9 +852,9 @@ export class HomeComponent implements OnInit {
               this.evaluationArray = [];
               this.cloneArray = [];
               this.indexList = [];
-              setTimeout(() => {
-                window.close();
-              }, 2000);
+              // setTimeout(() => {
+              //   window.close();
+              // }, 2000);
             } else {
               this.toastr.error(data.errorMessage, "error");
             }
@@ -1076,12 +1094,24 @@ export class HomeComponent implements OnInit {
     this.sosModal.hide();
   }
 
+  // showRemarksModal() {
+  //   this.criteriaDesireScore = 0; // this.selectedCriteria.achievedScore;
+  //   if (this.existingRemarks.length > 0) {
+  //     this.existingRemarks.forEach((element) => {
+  //       if (element.criteriaId === this.selectedCriteria.id) {
+  //         this.selectedRemarksList.push(element.id);
+  //       }
+  //     });
+  //   }
+
+  //   this.remarksModal.show();
+  // }
   showRemarksModal() {
     this.criteriaDesireScore = 0; // this.selectedCriteria.achievedScore;
     if (this.existingRemarks.length > 0) {
       this.existingRemarks.forEach((element) => {
         if (element.criteriaId === this.selectedCriteria.id) {
-          this.selectedRemarksList.push(element.id);
+          this.selectedRemarksList.push(element);
         }
       });
     }

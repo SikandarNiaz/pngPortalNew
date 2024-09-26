@@ -963,7 +963,7 @@
             <section class="example-section">
               <mat-checkbox
                 *ngIf="remark.criteriaId == selectedCriteria.id"
-                (click)="checkboxChange(checkStatus, remark.id)"
+                (click)="checkboxChange(checkStatus, remark)"
                 [checked]="remark?.isChecked"
                 #checkStatus
                 class="example-margin"
