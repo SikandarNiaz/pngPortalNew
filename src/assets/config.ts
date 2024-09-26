@@ -4,12 +4,12 @@ export class Config {
 
 //png
 
-  // public static BASE_URI =  "https://png.rtdtradetracker.com/";
+   public static BASE_URI =  "https://png.rtdtradetracker.com/";
   // ip: "http://localhost:8080/audit/",
   //  ip: 'http://pg.concavetech.com/',
   // ip: "http://pghanger.concavetech.com/",
   // public static BASE_URI = window.location.origin + "/";
-    public static BASE_URI = 'http://localhost:8080/audit/';
+  //  public static BASE_URI = 'http://localhost:8080/audit/';
 
     // public static BASE_URI = "http://pampers.concavetech.com/";
     
