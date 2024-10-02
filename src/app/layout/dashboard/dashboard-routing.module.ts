@@ -67,6 +67,8 @@ import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-a
 import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
 import { TableauHelperComponent } from "./Tableau/tableau-helper/tableau-helper.component";
 import { UploadPlanogramComponent } from "./innerComponents/upload-planogram/upload-planogram.component";
+import { AlertManagerComponent } from "./innerComponents/alert-manager/alert-manager.component";
+import { VirtualViewService } from "./virtual-view/virtual-view.service";
 
 const routes: Routes = [
   {
@@ -156,6 +158,26 @@ const routes: Routes = [
         component: SingleRouteDetailComponent,
       },
       {
+        path: "virtual_view",
+        loadChildren: () =>
+          import("./virtual-view/virtual-view.module").then(
+            (m) => m.VirtualViewModule
+          ),
+      },
+    
+      {
+        path: "evaluation",
+        loadChildren: () =>
+          import("./evaluation/evaluation.module").then((m) => m.EvaluationModule),
+      },
+      {
+        path: "virtual_view",
+        loadChildren: () =>
+          import("./virtual-view/virtual-view.module").then(
+            (m) => m.VirtualViewModule
+          ),
+      },
+      {
         path: "upload_routes/shops_for_single_route",
         component: ShopsForSingleRouteComponent,
       },
@@ -214,6 +236,7 @@ const routes: Routes = [
     path: "capturedAbnormalUnvisited",
     component: UniqueBasedProductivityReportComponent,
   },
+  { path: "alert_manager", component: AlertManagerComponent },
 ];
 
 @NgModule({

@@ -719,5 +719,20 @@ export class DashboardService {
     return this.http.post(url, filter);
   }
   
+  getClientWiseShops(obj){
+    const filter = JSON.stringify({
+      act: 41,
+      regionId: obj.regionId
+    });
+    const url = this.ip + "loadFilters";
+    return this.http.post(url, filter);
+
+  }
+
+  sendMessage(obj) {
+    const body = this.UrlEncodeMaker(obj);
+    const url = this.ip + "/portal/sendAlert" + '?' + body;
+    return this.http.post(url, obj,  this.httpOptions);
+}
 
 }

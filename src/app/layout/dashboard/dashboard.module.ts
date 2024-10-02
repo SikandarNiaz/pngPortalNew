@@ -132,6 +132,8 @@ import { UploadDesiredSosComponent } from "./innerComponents/upload-desired-sos/
 import { ShopLocationApprovalComponent } from "./innerComponents/shop-location-approval/shop-location-approval.component";
 import { ShopDetailIRAssetTypesComponent } from "./innerComponents/shop-detail-ir-assettypes/shop-detail-ir-assettypes-component";
 import { UploadPlanogramComponent } from "./innerComponents/upload-planogram/upload-planogram.component";
+import { AlertManagerComponent } from "./innerComponents/alert-manager/alert-manager.component";
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   imports: [
@@ -182,7 +184,8 @@ import { UploadPlanogramComponent } from "./innerComponents/upload-planogram/upl
 		ToastModule,
     InputTextModule,
     ProgressBarModule,
-    TabViewModule
+    TabViewModule,
+    NgxSpinnerModule
   ],
   declarations: [
     ManageSurveyorsComponent,
@@ -260,6 +263,8 @@ import { UploadPlanogramComponent } from "./innerComponents/upload-planogram/upl
     ShopLocationApprovalComponent,
     ShopDetailIRAssetTypesComponent,
     UploadPlanogramComponent,
+    AlertManagerComponent,
+   
   ],
   providers: [ProductService]
 })

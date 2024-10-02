@@ -14,6 +14,11 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { ToastrModule } from "ngx-toastr";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { AgmCoreModule } from '@agm/core';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { Config } from 'src/assets/config';
+
 import {
   LocationStrategy,
   HashLocationStrategy,
@@ -52,6 +57,12 @@ export const createTranslateLoader = (http: HttpClient) => {
       countDuplicates: true,
       autoDismiss: true,
     }),
+    AgmCoreModule.forRoot({
+      apiKey: Config.API_KEY,
+      libraries: ['places', 'geometry']
+    }),
+    AgmJsMarkerClustererModule,
+    AgmSnazzyInfoWindowModule
   ],
 
   exports: [],
